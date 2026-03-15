@@ -2,6 +2,8 @@
 
 > **One app, two entry doors.** Turn any prescription or discharge summary into a structured, trackable care plan with automated reminders.
 
+**Market:** India-first, English-only. Built for Indian prescription formats and pharmacy workflows.
+
 ## Architecture at a Glance
 
 ```mermaid
@@ -9,10 +11,14 @@ graph TD
     A["Splash / Login"] --> B["Home Screen"]
     B --> C["Door A: Consult Doctor (v3)"]
     B --> D["Door B: Upload Prescription (v1)"]
-    D --> E["Camera / Gallery / PDF (Prescription + Medicine Photos)"]
-    E --> F["S3 Upload"]
-    F --> G["GPT-4 Vision (via Backend)"]
-    G --> H["Stitch MCP Server (Cross-Reference DB & EHR Sync)"]
+    D --> E1["Step 1: Prescription Photo (Camera/Gallery/PDF)"]
+    D --> E2["Step 2: Medicine Box/Strip Photos (1-10)"]
+    E1 --> F["Compress & Upload to S3"]
+    E2 --> F
+    F --> G1["GPT-4V: Extract from Packaging (Primary)"]
+    F --> G2["GPT-4V: Extract from Prescription (Context)"]
+    G1 --> H["Cross-Reference + Stitch MCP Validation"]
+    G2 --> H
     H --> I["User Confirmation Screen"]
     I --> J["Episode Created"]
     J --> K["Plan Tab"]
@@ -28,9 +34,10 @@ graph TD
 
 | Step | What Happens |
 |------|-------------|
-| **Capture** | User uploads a prescription photo, gallery image, or PDF (up to 10 pages). *Crucially*, they can also optionally upload photos of physical medicine packaging to help the AI cross-reference messy handwriting. |
-| **Extract & Stitch** | Backend sends all images to GPT-4 Vision. AI cross-references the text. The backend then queries the **Stitch MCP Server** to validate extracted medicines against external databases and push records to connected EMRs/EHRs. |
-| **Confirm** | User reviews extraction side-by-side with original image, edits any errors, confirms each medicine |
+| **Capture — Prescription** | User uploads the doctor's prescription (Camera, Gallery, or PDF). This provides context: doctor name, diagnosis, frequency, duration, timing instructions. |
+| **Capture — Medicines** | User photographs each medicine box/strip/bottle purchased from the pharmacy (1-10 photos). This is the **primary source of truth** — Indian medicine packaging has standardized printed text (brand name, generic name, strength, manufacturer, MRP, expiry) mandated by CDSCO. Far more reliable than handwritten prescriptions. |
+| **Extract & Cross-Reference** | Backend sends all images to GPT-4 Vision. Medicine packaging photos yield high-confidence drug data. Prescription photo yields frequency/duration context. Backend cross-references both, then validates via **Stitch MCP Server** against pharma databases. Each field gets a confidence score and source attribution (packaging vs prescription). |
+| **Confirm** | User reviews extraction with source badges ("From packaging" / "From prescription"). Amber warnings on low-confidence fields. Unmatched prescription items prompt manual entry. User must explicitly confirm each medicine. |
 | **Plan** | Episode + Medicines + Tasks created from confirmed data |
 | **Remind** | Push notifications fire at scheduled dose times with actionable buttons |
 | **Track** | Adherence %, symptom logs, history, and exportable PDF reports |

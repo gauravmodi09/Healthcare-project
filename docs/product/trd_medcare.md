@@ -21,15 +21,30 @@ The Technical Requirements Document (TRD) acts as the engineering contract for t
 
 ## 3. System Architecture & Constraints
 
-### 3.1 The "Magic Loop" AI Extraction Pipeline
-The core value feature—uploading a prescription and generating a structured `Medicine` list—must strictly enforce a **Human-In-The-Loop (HITL)** constraint at the database layer.
+### 3.1 The Dual-Capture AI Extraction Pipeline
+The core value feature uses a **dual-capture approach** optimized for Indian prescriptions: users photograph both the handwritten prescription AND the physical medicine packaging they purchased. This must strictly enforce a **Human-In-The-Loop (HITL)** constraint at the database layer.
 
-1.  **Image Upload:** The mobile client requests an AWS S3 Pre-Signed URL via `GET /episodes/:id/upload-url`. 
-2.  **AI Invocation:** The mobile client calls `POST /episodes/:id/extract { s3Key: "uuid" }`.
-3.  **Processing:** The backend streams the image to GPT-4V. The system prompt heavily penalizes hallucination and enforces a strict JSON schema output including a `confidence_score` (0.0 to 1.0) per array element.
-4.  **Middleware Verification:** The backend runs the extracted JSON against the Google Stitch MCP server. Stitch fuzzy-matches the raw AI string against verified pharmaceutical databases to correct spelling (e.g., "Azithromycin 500mh" -> "Azithromycin 500mg").
-5.  **Return State:** The API returns a transient JSON array to the mobile client. It does *not* persist these medicines to the `medicines` table yet.
-6.  **Explicit Confirmation:** The user UI displays the fields, flagging `confidence_score < 0.70` in amber. Only upon the explicit user action `POST /episodes/:id/confirm` are the records materialized in PostgreSQL and scheduled in Redis.
+**Why Dual-Capture for India:**
+- Indian prescriptions are 80%+ handwritten, mixing English, Hindi, and Latin abbreviations — difficult for OCR
+- Medicine packaging in India carries standardized printed text (brand name, generic name, composition, strength, MRP, expiry) mandated by CDSCO under the Drugs and Cosmetics Act — highly reliable for AI extraction
+- Cross-referencing both sources produces significantly higher accuracy than either source alone
+
+**Pipeline Steps:**
+
+1.  **Image Upload:** The mobile client requests multiple AWS S3 Pre-Signed URLs via `GET /episodes/:id/upload-urls?count=N`. Images are compressed client-side (target < 500KB each) before upload for Indian network conditions.
+2.  **AI Invocation:** The mobile client calls `POST /episodes/:id/upload { prescriptionKeys: [...], medicinePhotoKeys: [...] }`.
+3.  **Processing — Medicine Photos (Primary):** GPT-4V extracts brand name, generic/salt composition, strength, dosage form, manufacturer, MRP (INR), expiry date from printed packaging. High confidence.
+4.  **Processing — Prescription (Context):** GPT-4V extracts doctor name, frequency, duration, timing instructions from handwritten text. Variable confidence.
+5.  **Cross-Reference Merge:** Backend matches prescription line items to medicine packaging. Builds unified records with per-field source attribution and confidence scores. Unmatched prescription items flagged for manual input.
+6.  **Middleware Verification:** The backend runs the merged JSON against the Google Stitch MCP server. Stitch fuzzy-matches against Indian pharmaceutical databases to correct spelling (e.g., "Azithromycin 500mh" -> "Azithromycin 500mg").
+7.  **Return State:** The API returns a transient JSON array with `sourceBreakdown` per field and `unmatchedPrescriptionItems`. It does *not* persist to the `medicines` table yet.
+8.  **Explicit Confirmation:** The user UI displays fields with source badges ("From packaging" / "From prescription"), flagging `confidence_score < 0.70` in amber. Only upon `POST /episodes/:id/confirm` are records materialized in PostgreSQL and scheduled in Redis.
+
+**Performance Targets:**
+- Image compression + upload: p95 < 10s per image on 3G
+- GPT-4V extraction (all images): p95 < 12s
+- Stitch MCP validation: p95 < 2s
+- Total pipeline (upload to response): p95 < 20s
 
 ## 4. Security & Compliance Requirements
 

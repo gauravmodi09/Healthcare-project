@@ -10,16 +10,18 @@ Before building, I reviewed all four documents for consistency. Here is a summar
 
 | Area | Finding | Resolution |
 |---|---|---|
-| **Database schema** | LLD is missing `tasks` and `symptom_logs` tables defined in the original PRD | Add both tables in Sprint 2 migration |
-| **Episode fields** | LLD `episodes` table lacks `source`, `doctor_name`, `follow_up_date` columns present in PRD | Add missing columns to schema |
-| **API naming** | HLD uses `/upload`, TRD uses `/extract` for the same endpoint | Standardize: `POST /episodes/:id/upload` triggers extraction |
+| **Database schema** | LLD updated with `episode_images` table for dual-capture (prescription + medicine photos) | ✅ Resolved |
+| **Episode fields** | LLD `episodes` table updated with `source`, `doctor_name`, `follow_up_date` columns | ✅ Resolved |
+| **Medicine fields** | LLD `medicines` table updated with `generic_name`, `manufacturer`, `expiry_date`, `mrp`, `packaging_image_id` for packaging extraction | ✅ Resolved |
+| **API naming** | All docs standardized: `POST /episodes/:id/upload` triggers extraction with dual-capture payload | ✅ Consistent |
 | **Confirmation API** | All docs agree on `POST /episodes/:id/confirm` as the HITL gate | ✅ Consistent |
+| **Dual-capture flow** | PRD, HLD, LLD, TRD all describe dual-capture (prescription + medicine photos) as core flow | ✅ Consistent |
 | **Offline support** | PRD & TRD both require offline dose logging; LLD describes SwiftData cache | ✅ Consistent |
-| **Stitch MCP role** | HLD/TRD describe Stitch as pharma DB validator; PRD omits Stitch | PRD is the product view; Stitch is an implementation detail. No change needed. |
-| **Token lifecycle** | TRD specifies 15m access / 30d refresh; LLD does not mention | LLD will inherit TRD spec |
+| **Token lifecycle** | TRD specifies 15m access / 30d refresh; LLD will inherit TRD spec | ✅ Consistent |
+| **India market** | All docs updated: English-only, India-first, DPDP Act compliance, INR pricing | ✅ Consistent |
 
 > [!IMPORTANT]
-> The LLD database schema needs two additional tables (`tasks`, `symptom_logs`) and three columns on `episodes` before it matches the PRD. These are addressed in Sprint 2 below.
+> LLD still needs `tasks` and `symptom_logs` tables added in Sprint 2 migration. The `episode_images` table is new and must be included in `002_episodes_medicines.sql`.
 
 ---
 
@@ -59,9 +61,9 @@ graph LR
 #### Sprint 2 — Auth & Core Data Layer
 | Item | Details |
 |---|---|
-| **Auth** | Implement OTP flow: `POST /auth/send-otp`, `POST /auth/verify-otp`. Integrate Twilio/MSG91. JWT access (15m) + refresh (30d) tokens per TRD. |
-| **iOS Auth** | Build `SplashView`, `PhoneEntryView`, `OTPVerificationView`. Store JWT in Keychain. |
-| **Database** | Migration `002_episodes_medicines.sql`: `episodes` (with `source`, `doctor_name`, `follow_up_date`), `medicines`, `dose_logs`, `tasks`, `symptom_logs`. |
+| **Auth** | Implement OTP flow: `POST /auth/send-otp`, `POST /auth/verify-otp`. Integrate MSG91 (primary, India) with Twilio fallback. JWT access (15m) + refresh (30d) tokens per TRD. Phone number entry pre-fills +91. |
+| **iOS Auth** | Build `SplashView`, `PhoneEntryView` (+91 default), `OTPVerificationView`. Store JWT in Keychain. |
+| **Database** | Migration `002_episodes_medicines.sql`: `episodes` (with `source`, `doctor_name`, `follow_up_date`), `episode_images` (new — for prescription + medicine photos), `medicines` (with `generic_name`, `manufacturer`, `expiry_date`, `mrp`, `packaging_image_id`), `dose_logs`, `tasks`, `symptom_logs`. |
 | **Profile** | `POST /profiles`, `GET /profiles`. iOS `ProfileSetupView` with name, age, gender. |
 | ✅ **Done when** | User can sign up via OTP, create a profile, and see an empty Home Screen. |
 
@@ -77,28 +79,32 @@ graph LR
 
 ### Phase B: The "Magic" Loop (Weeks 4-6)
 
-#### Sprint 4 — Prescription Upload & S3
+#### Sprint 4 — Dual-Capture Upload & S3
 | Item | Details |
 |---|---|
-| **Backend** | `GET /episodes/:id/upload-url` returns a pre-signed S3 PUT URL. Configure S3 bucket with SSE-S3 encryption, private ACLs, and `aws:SecureTransport` policy per TRD. |
-| **iOS** | Build `CaptureView`: Camera, Gallery picker, PDF import. Optional medicine-photo prompt. Upload binary directly to S3 via pre-signed URL. |
-| ✅ **Done when** | User can photograph a prescription and it appears encrypted in S3. |
+| **Backend** | `GET /episodes/:id/upload-urls?count=N` returns multiple pre-signed S3 PUT URLs. Configure S3 bucket with SSE-S3 encryption, private ACLs, and `aws:SecureTransport` policy per TRD. Create `episode_images` records on upload completion. |
+| **iOS — Prescription Capture** | Build `PrescriptionCaptureView`: Camera, Gallery picker, PDF import for the doctor's prescription. |
+| **iOS — Medicine Scan** | Build `MedicineScanView`: Dedicated screen prompting user to photograph each medicine box/strip/bottle they purchased. Shows guide image. Grid layout with "+" button (1-10 photos). "I don't have medicines yet" skip option with lower confidence warning. |
+| **iOS — Upload** | `ImageUploadRepository` compresses images (target < 500KB) and uploads to S3 via pre-signed URLs with progressive upload + resume for unreliable Indian networks. `UploadProgressView` shows per-image progress. |
+| ✅ **Done when** | User can photograph a prescription + medicine boxes, all images appear encrypted in S3 with correct `image_type` metadata. |
 
-#### Sprint 5 — AI Extraction Pipeline (GPT-4V + Stitch)
+#### Sprint 5 — Dual-Capture AI Extraction Pipeline (GPT-4V + Stitch)
 | Item | Details |
 |---|---|
-| **Backend** | `POST /episodes/:id/upload` triggers: (1) Fetch image from S3, (2) Send to GPT-4 Vision with structured prompt enforcing JSON schema + confidence scores, (3) Pipe result through Stitch MCP for pharma DB validation, (4) Return transient JSON to client. |
-| **Safety** | The API must **never** write to `medicines` table at this step. This is a hard architectural constraint from all four documents. |
-| **iOS** | Build `ConfirmationView` per Stitch mockup: side-by-side prescription image + extracted cards. Amber warning on fields with `confidenceScore < 0.70`. |
-| ✅ **Done when** | User uploads a prescription photo, sees extracted medicine data with confidence indicators. |
+| **Backend — Medicine Extraction** | `POST /episodes/:id/upload` with `{ prescriptionKeys, medicinePhotoKeys }`. GPT-4V extracts from medicine packaging photos (primary): brand name, generic name, strength, manufacturer, MRP, expiry. High confidence (printed text). |
+| **Backend — Prescription Extraction** | GPT-4V extracts from prescription photo (context): doctor name, frequency, duration, timing instructions. Variable confidence (handwritten). |
+| **Backend — Cross-Reference** | Merge both extractions. Match prescription line items to medicine packaging. Per-field `sourceBreakdown` and `confidenceScore`. Flag `unmatchedPrescriptionItems`. Pipe through Stitch MCP for pharma DB validation. |
+| **Safety** | The API must **never** write to `medicines` table at this step. This is a hard architectural constraint. |
+| **iOS** | Build `ConfirmationView`: all uploaded images + extracted cards with source badges ("From packaging" / "From prescription"). Amber warning on fields with `confidenceScore < 0.70`. "Needs Your Input" section for unmatched items. Medicine photo thumbnails on each card. |
+| ✅ **Done when** | User uploads prescription + medicine photos, sees cross-referenced extraction with source attribution and confidence indicators. |
 
 #### Sprint 6 — Confirmation & Plan Activation
 | Item | Details |
 |---|---|
-| **Backend** | `POST /episodes/:id/confirm` accepts the user-curated `confirmedMedicines[]` array. Creates `Medicine` rows, generates 30-day `DoseLog` projections, creates `Task` rows from extracted non-medicine items. |
-| **iOS** | `ConfirmationViewModel` validates all medicines are explicitly confirmed. Enable CTA only when complete. Navigate to `EpisodeDetailView` (Plan tab) on success. |
+| **Backend** | `POST /episodes/:id/confirm` accepts the user-curated `confirmedMedicines[]` array with `doctorName`. Creates `Medicine` rows (with `generic_name`, `manufacturer`, `expiry_date`, `mrp`, `packaging_image_id`), generates 30-day `DoseLog` projections, creates `Task` rows from extracted non-medicine items. |
+| **iOS** | `ConfirmationViewModel` validates all medicines are explicitly confirmed (including any manually added from unmatched items). Enable CTA only when complete. Navigate to `EpisodeDetailView` (Plan tab) on success. |
 | **Disclaimer** | Medical disclaimer text visible on Confirmation screen per PRD Section 6. |
-| ✅ **Done when** | Full "Upload → Extract → Confirm → Plan Created" loop works end-to-end. |
+| ✅ **Done when** | Full "Prescription + Medicine Photos → Extract → Cross-Reference → Confirm → Plan Created" loop works end-to-end. |
 
 ---
 
@@ -161,8 +167,8 @@ graph LR
 graph TD
     S1[Sprint 1: Scaffolding] --> S2[Sprint 2: Auth & Data]
     S2 --> S3[Sprint 3: Home & Episodes]
-    S3 --> S4[Sprint 4: Upload & S3]
-    S4 --> S5[Sprint 5: AI Extraction]
+    S3 --> S4[Sprint 4: Dual-Capture & S3]
+    S4 --> S5[Sprint 5: Dual-Capture AI Extraction]
     S5 --> S6[Sprint 6: Confirmation]
     S6 --> S7[Sprint 7: Reminders]
     S7 --> S8[Sprint 8: Dose Logging]
@@ -185,11 +191,13 @@ graph TD
 
 | # | Risk | Impact | Mitigation |
 |---|---|---|---|
-| 1 | GPT-4V hallucinating wrong medicine names | **Critical** — Patient safety | Stitch MCP pharma DB validation + mandatory user confirmation (HITL) |
-| 2 | Handwritten prescriptions unreadable by OCR | High — Poor user experience | Optional medicine-photo feature to cross-reference. Fallback to manual entry. |
-| 3 | Push notification delivery unreliable | High — Core value broken | Use FCM high-priority channel. Local iOS `UNNotificationRequest` as fallback. |
+| 1 | GPT-4V hallucinating wrong medicine names | **Critical** — Patient safety | Dual-capture cross-reference (packaging is primary source) + Stitch MCP pharma DB validation + mandatory user confirmation (HITL) |
+| 2 | Handwritten prescriptions unreadable by OCR | **Mitigated** — No longer primary source | Medicine packaging photos are the primary extraction source (printed text). Prescription is used only for context (frequency, duration). Unmatched items prompt manual entry. |
+| 3 | Push notification delivery unreliable on Indian Android OEMs | High — Core value broken | Use FCM high-priority channel. Local iOS `UNNotificationRequest` as fallback. Consider WhatsApp reminders in v2. |
 | 4 | App Store rejection for medical claims | Medium — Launch delay | Strict disclaimer language. AI is "extraction only", never "diagnosis". |
-| 5 | S3 pre-signed URL expiry during slow upload | Low — UX friction | Set URL expiry to 15 minutes. Retry logic in `EpisodeRepository`. |
+| 5 | S3 upload fails on slow Indian networks (2G/3G) | Medium — UX friction | Image compression (< 500KB), progressive upload with resume, 15-minute URL expiry, retry logic in `ImageUploadRepository`. |
+| 6 | User doesn't photograph all medicines | Medium — Incomplete care plan | Show clear count ("3 medicines on prescription, 2 photographed"). Prompt for missing ones. Allow manual entry for the rest. |
+| 7 | Cross-reference fails to match prescription to packaging | Low — Extra manual work | Fuzzy matching on medicine names. Unmatched items shown in "Needs Your Input" section with manual entry form. |
 
 ---
 

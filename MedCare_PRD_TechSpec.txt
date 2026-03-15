@@ -1,0 +1,666 @@
+MedCare
+Smart Health Companion App
+Product Requirements Document  +  Technical Specification
+Field
+Detail
+Version
+1.0 — v1 Scope
+Platforms
+iOS (SwiftUI) + Android (Jetpack Compose)
+Date
+2025
+Status
+Planning / Pre-Build
+
+1. Product Overview
+1.1 Vision
+MedCare is a unified health companion app that helps users follow through on medical advice — whether they received it from an in-app teleconsultation or from an outside doctor or hospital. The core value proposition is turning a prescription or discharge summary into a structured, trackable care plan with automated reminders.
+
+1.2 The Two Entry Doors
+The home screen presents two clear paths. Both feed into the same care plan engine underneath.
+
+Door A — Consult a Doctor
+Door B — Upload Prescription / Discharge
+For users who need to see a doctor first.
+	•	Fever, cough, stomach issues
+	•	Minor infections
+	•	Chronic condition follow-ups
+Phase 2 feature.
+For users who already have a plan.
+	•	Visited a doctor outside the app
+	•	Post-hospitalisation discharge
+	•	Post-surgery recovery plans
+v1 primary focus.
+
+1.3 Target Users
+	•	Urban individuals aged 25–55 managing their own or family health
+	•	Caregivers managing medications for elderly parents
+	•	Chronic patients (diabetes, hypertension, thyroid) on long-term medication
+	•	Post-hospitalisation patients who need structured recovery plans
+	•	Parents tracking children's acute illness care plans
+
+1.4 Phase Roadmap
+Phase
+Timeline
+Scope
+v1 — Core
+Month 1–3
+Prescription upload → AI extraction → care plan → reminders + tracking. No teleconsult.
+v2 — Wearables
+Month 4–6
+Apple HealthKit + Android Health Connect integration. Passive symptom tracking. Adherence vs health trends.
+v3 — Teleconsult
+Month 7–12
+In-app doctor consultations. Doctor-generated care plans. RMP verification + payment rails.
+
+2. User Flows & Screens
+2.1 Onboarding Flow
+	•	Splash screen → App name + tagline ("Your care plan, always with you")
+	•	Sign up / Log in — Phone number OTP (Indian market standard)
+	•	Profile setup — Name, age, gender, known conditions (optional)
+	•	Home screen — Two primary CTAs
+	•	Permissions — Notification permission prompt (critical for reminders)
+
+Design Note
+Onboarding must be under 60 seconds. Do not ask for health history upfront — this creates friction. Collect it lazily as users create episodes.
+
+2.2 Core Flow: Upload Prescription (v1 Primary)
+Step 1 — Capture
+	•	User taps 'Upload Prescription' or 'Upload Discharge Summary'
+	•	Options: Camera capture (live), Gallery upload, PDF upload
+	•	Support multi-page uploads for discharge summaries (up to 10 pages)
+
+Step 2 — AI Extraction
+	•	Backend sends image to OCR + AI extraction pipeline
+	•	Extracts: Medicine names, dosage, frequency, duration, doctor name, date
+	•	For discharge summaries: also extracts tests ordered, lifestyle instructions, follow-up date
+	•	Returns structured JSON to the app
+
+Critical Safety Rule
+NEVER auto-confirm extracted data. Always route to the manual confirmation screen first. Show original image alongside extracted data. Any field with low confidence score must be flagged with a warning icon. The user must explicitly tap 'Confirm' on every medicine before the plan is created.
+
+Step 3 — User Confirmation Screen
+	•	Side-by-side view: original prescription image + extracted data
+	•	Each medicine listed as an editable card: name, dose, frequency, duration
+	•	User can edit any field directly
+	•	Low-confidence extractions highlighted in amber
+	•	'Add medicine manually' option always visible
+	•	'Confirm and create plan' CTA at the bottom
+
+Step 4 — Plan Created
+	•	Episode created with all confirmed medicines and tasks
+	•	User lands on the Episode Detail screen (Plan tab active)
+	•	Notification permission prompt if not already granted
+	•	Onboarding tooltip: 'Your first reminder is set — here is what to expect'
+
+2.3 Episode Detail Screen (4 Tabs)
+Tab
+Contents
+Key Actions
+Plan
+Medicines, non-medicine tasks (tests, physio, wound care), follow-up date
+Edit medicine, mark task done, add task manually
+Reminders
+Daily timeline view showing all doses for today and upcoming days
+Snooze, mark taken, mark skipped, mark out-of-stock
+Symptoms
+Daily check-in card, symptom log history, trend charts (v2+)
+Log symptom, severity rating, free text note
+History
+Adherence % by day and week, skipped doses, symptom trends linked to adherence
+Export report (PDF), share with doctor
+
+2.4 Family / Caregiver Flow
+	•	One account supports multiple profiles (e.g. Self, Mum, Dad, Child)
+	•	Each profile has its own episodes, medicines, and reminders
+	•	Caregiver view: single dashboard showing all profiles' today schedule
+	•	Push notifications go to the account owner's phone for all profiles
+	•	Caregiver can mark doses taken on behalf of family member
+
+Scope Note — v1
+In v1, all profiles are local to one device/account. Multi-device shared caregiving (e.g. spouse + adult child both managing mum's plan) is a v2 feature requiring real-time sync.
+
+3. Data Models & Schema
+3.1 Core Entities
+The following entities form the foundation of the app. Designed to support both acute (episode-based) and chronic (ongoing) use cases from day one.
+
+Entity: User
+Field
+Type
+Required
+Notes
+user_id
+UUID
+Yes
+Primary key
+phone_number
+String
+Yes
+Used for OTP auth
+name
+String
+Yes
+Display name
+created_at
+Timestamp
+Yes
+Account creation date
+subscription_tier
+Enum
+Yes
+free | pro
+subscription_expiry
+Date
+No
+Null for free tier
+
+Entity: Profile
+One user can have multiple profiles (self + family members).
+Field
+Type
+Required
+Notes
+profile_id
+UUID
+Yes
+Primary key
+user_id
+UUID (FK)
+Yes
+Owner account
+name
+String
+Yes
+Profile name e.g. 'Mum'
+relation
+Enum
+No
+self | parent | child | spouse | other
+age
+Integer
+No
+Used for dosage context
+known_conditions
+String[]
+No
+Chronic conditions list
+is_default
+Boolean
+Yes
+True for the user's own profile
+
+Entity: Episode
+An episode is one illness or condition being managed. This is the top-level container. Chronic patients have a long-running episode that never ends.
+Field
+Type
+Required
+Notes
+episode_id
+UUID
+Yes
+Primary key
+profile_id
+UUID (FK)
+Yes
+Which profile
+title
+String
+Yes
+e.g. 'Fever & Cough', 'Diabetes'
+type
+Enum
+Yes
+acute | chronic | post_discharge
+source
+Enum
+Yes
+uploaded_prescription | uploaded_discharge | manual | teleconsult
+start_date
+Date
+Yes
+When episode started
+end_date
+Date
+No
+Null = still active
+follow_up_date
+Date
+No
+Next doctor appointment
+status
+Enum
+Yes
+active | completed | paused
+doctor_name
+String
+No
+Extracted or entered
+original_doc_url
+String
+No
+S3 URL of uploaded image/PDF
+created_at
+Timestamp
+Yes
+
+
+Entity: Medicine
+Field
+Type
+Required
+Notes
+medicine_id
+UUID
+Yes
+Primary key
+episode_id
+UUID (FK)
+Yes
+Parent episode
+name
+String
+Yes
+e.g. 'Azithromycin 500mg'
+dose_amount
+String
+Yes
+e.g. '1 tablet', '5ml'
+frequency
+Enum
+Yes
+once_daily | twice_daily | thrice_daily | every_X_hours | as_needed
+timing_instructions
+String
+No
+e.g. 'After food', 'Before sleep'
+start_date
+Date
+Yes
+
+end_date
+Date
+No
+Null = ongoing (chronic)
+is_chronic
+Boolean
+Yes
+Drives refill prediction logic
+refill_reminder_days
+Integer
+No
+Days before running out to alert (default: 7)
+stock_count
+Integer
+No
+Current pills remaining
+source
+Enum
+Yes
+extracted | manual
+confidence_score
+Float
+No
+AI extraction confidence 0.0–1.0
+
+Entity: DoseLog
+One record per scheduled dose. This is the source of truth for adherence tracking.
+Field
+Type
+Required
+Notes
+dose_id
+UUID
+Yes
+Primary key
+medicine_id
+UUID (FK)
+Yes
+
+scheduled_at
+Timestamp
+Yes
+When dose was due
+status
+Enum
+Yes
+pending | taken | skipped | out_of_stock
+logged_at
+Timestamp
+No
+When user responded
+notes
+String
+No
+Optional free text from user
+wearable_hr_at_time
+Integer
+No
+Heart rate from wearable (v2+)
+
+Entity: Task
+Non-medicine items in the care plan: lab tests, physiotherapy exercises, wound care checks, lifestyle instructions, follow-up appointments.
+Field
+Type
+Required
+Notes
+task_id
+UUID
+Yes
+Primary key
+episode_id
+UUID (FK)
+Yes
+
+type
+Enum
+Yes
+test | exercise | wound_care | lifestyle | followup | other
+title
+String
+Yes
+e.g. 'HbA1c blood test'
+description
+String
+No
+Additional instructions
+due_date
+Date
+No
+For one-time tasks
+recurrence
+Enum
+No
+none | daily | weekly
+status
+Enum
+Yes
+pending | done | snoozed
+completed_at
+Timestamp
+No
+
+
+Entity: SymptomLog
+Field
+Type
+Required
+Notes
+log_id
+UUID
+Yes
+Primary key
+episode_id
+UUID (FK)
+Yes
+
+logged_at
+Timestamp
+Yes
+
+symptoms
+String[]
+Yes
+e.g. ['fever', 'headache']
+severity
+Integer
+No
+1–5 scale
+temperature
+Float
+No
+Optional manual entry
+notes
+String
+No
+Free text
+source
+Enum
+Yes
+manual | wearable
+
+Entity: WearableReading (v2+)
+Designed now so the schema does not need to be reworked when wearable integration is added.
+Field
+Type
+Required
+Notes
+reading_id
+UUID
+Yes
+Primary key
+profile_id
+UUID (FK)
+Yes
+
+source
+Enum
+Yes
+apple_healthkit | health_connect
+metric_type
+Enum
+Yes
+heart_rate | spo2 | steps | sleep | temperature
+value
+Float
+Yes
+Metric value
+unit
+String
+Yes
+e.g. 'bpm', '%', 'steps'
+recorded_at
+Timestamp
+Yes
+From the device timestamp
+
+4. API & Backend Architecture
+4.1 Architecture Overview
+	•	Backend: Node.js (Express) or Python (FastAPI) — REST API
+	•	Database: PostgreSQL for relational data
+	•	File storage: AWS S3 (prescription images, discharge summaries)
+	•	Authentication: Firebase Auth or custom OTP via SMS (Twilio / MSG91 for India)
+	•	Push notifications: Firebase Cloud Messaging (FCM) — works for both iOS and Android
+	•	AI extraction: OpenAI GPT-4 Vision API or Google Document AI
+	•	Hosting: AWS / GCP with auto-scaling
+
+Architecture Principle
+In v1, keep the backend simple — a single monolithic REST API is fine. Do not over-engineer with microservices early. Split into services only when you have scaling evidence for a specific bottleneck.
+
+4.2 Key API Endpoints
+Authentication
+Method
+Endpoint
+Description
+POST
+/auth/send-otp
+Send OTP to phone number
+POST
+/auth/verify-otp
+Verify OTP, return JWT token
+POST
+/auth/refresh
+Refresh expired token
+
+Episodes
+Method
+Endpoint
+Description
+GET
+/episodes
+List all episodes for the user's profiles
+POST
+/episodes
+Create new episode (manual)
+GET
+/episodes/:id
+Get episode detail with medicines + tasks
+PATCH
+/episodes/:id
+Update episode (status, follow-up date)
+POST
+/episodes/:id/upload
+Upload prescription image — triggers AI extraction
+GET
+/episodes/:id/adherence
+Get adherence % and dose log summary
+
+Medicines & Dose Logs
+Method
+Endpoint
+Description
+POST
+/medicines
+Add medicine to an episode
+PATCH
+/medicines/:id
+Edit medicine (dose, timing, end date)
+DELETE
+/medicines/:id
+Remove medicine
+GET
+/medicines/:id/doses
+Get upcoming + past doses
+POST
+/doses/:id/log
+Log dose status: taken | skipped | out_of_stock
+
+4.3 AI Extraction Pipeline
+Flow
+	•	App uploads image to S3 via pre-signed URL
+	•	App calls POST /episodes/:id/upload with S3 key
+	•	Backend sends image to GPT-4 Vision with structured extraction prompt
+	•	AI returns JSON: { medicines: [...], tasks: [...], doctor: '', date: '', follow_up: '' }
+	•	Backend stores raw AI response alongside confidence scores
+	•	Backend returns structured data to app for user confirmation
+	•	User confirms / edits and calls POST /episodes/:id/confirm
+	•	Backend creates Medicine and Task records from confirmed data
+
+Extraction Prompt Strategy
+The prompt sent to GPT-4 Vision should instruct it to return only JSON, with a confidence score per field. Low-confidence fields (below 0.7) must be returned with a flag so the app can highlight them for the user.
+
+Safety Rule (Technical)
+Never auto-create Medicine records from AI output without explicit user confirmation. The confirmation step is a hard requirement, not optional UX. Build this as a separate API call so it is impossible to bypass.
+
+4.4 Reminder / Notification System
+	•	Reminder schedule generated server-side when medicines are confirmed
+	•	Stored as scheduled jobs (e.g. using Bull queue + Redis, or AWS EventBridge)
+	•	FCM used to send push notification at scheduled time
+	•	Notification payload includes: medicine name, dose, episode title, action buttons
+	•	Action buttons (iOS and Android): 'Taken', 'Snooze 30 mins', 'Skip'
+	•	User response to notification calls POST /doses/:id/log directly
+	•	Missed doses (no response in 2 hours): logged as pending, shown in app
+
+4.5 Wearable Integration Architecture (v2)
+Platform
+API
+Notes
+iOS
+Apple HealthKit (native Swift)
+Request read permissions per data type. Reads from any Apple Watch or health app.
+Android
+Health Connect (Google)
+Unified API covering Galaxy Watch, Fitbit, Pixel Watch, Garmin. Android 9+.
+Cross-platform lib
+health (Flutter) or react-native-health
+Wraps both APIs. Use if going cross-platform in future.
+
+Key wearable metrics to sync: resting heart rate, SpO2, step count, sleep duration, body temperature (where available). All stored in WearableReading table. Schema already defined in Section 3 to avoid future rewrites.
+
+5. Monetisation & Business Logic
+5.1 Pricing Tiers
+
+Free
+Always free
+Pro
+Rs. 29-49 / month
+Teleconsult
+Rs. 199-399 per consult
+	•	1 active episode only
+	•	1 profile (self only)
+	•	Manual entry only
+	•	Basic reminders
+	•	7-day history
+	•	Unlimited episodes
+	•	Up to 5 family profiles
+	•	Photo/PDF prescription import
+	•	AI extraction
+	•	Refill prediction
+	•	Symptom trend charts
+	•	Full history + export
+	•	Wearable sync (v2)
+	•	Video or chat consultation
+	•	Verified RMP doctors
+	•	Doctor creates plan directly
+	•	Plan auto-added to app
+	•	Margin: 20-30% on consult fee
+	•	Phase 2 feature
+
+5.2 Tier Enforcement Logic
+Free Tier Limits (enforce on backend, not just frontend)
+	•	Episode count check: if user has 1 active episode and is Free → block new episode creation, prompt upgrade
+	•	Profile check: if Free user tries to add second profile → prompt upgrade
+	•	Upload check: if Free user tries to upload prescription photo → prompt upgrade
+	•	Grace behaviour: never delete data if user downgrades. Just restrict new actions.
+
+Upgrade Prompt Strategy
+	•	Trigger upgrade prompt contextually — not as an interstitial on open
+	•	Show prompt when user hits a specific limit, with the exact feature they tried to access named
+	•	Offer free trial for Pro (7 days) to reduce friction
+
+5.3 Refill Prediction Logic
+	•	Calculate: (stock_count) / (doses_per_day) = days remaining
+	•	If days remaining <= refill_reminder_days (default 7): push notification 'Time to refill [Medicine Name]'
+	•	User can update stock_count manually or mark 'refilled' from reminder
+	•	For chronic medicines: generate monthly refill reminders if stock tracking not enabled
+
+5.4 Adherence Calculation
+Adherence % = (doses taken) / (total scheduled doses in period) x 100
+	•	Calculated per medicine, per episode, and per period (7d / 30d / full)
+	•	'Out of stock' doses counted separately — not as skipped, not as taken
+	•	Chronic medicines: rolling 30-day adherence as the primary metric
+	•	Acute medicines: full-course adherence shown on episode completion
+
+5.5 Revenue Projections (Indicative)
+Scenario
+MAU
+Pro Conversion
+MRR
+Conservative (6 months)
+2,000
+5% = 100 users
+Rs. 3,000–4,900
+Base (12 months)
+10,000
+8% = 800 users
+Rs. 24,000–39,200
+Optimistic (18 months)
+50,000
+10% = 5,000 users
+Rs. 1.5L–2.5L
+
+Note on Teleconsult Revenue
+Teleconsult is a Phase 2 revenue stream and not included in the above projections. When live, it represents a higher per-transaction value (Rs. 40–100 margin per consult) but requires significant additional build effort and regulatory compliance.
+
+6. Regulatory & Safety Requirements
+6.1 AI Role Boundaries
+	•	AI is used ONLY for extraction and organisation of existing prescriptions — never for diagnosis or prescribing
+	•	All AI-extracted data must be confirmed by the user before any plan is created
+	•	App UI must never phrase AI output as a recommendation or medical advice
+	•	Disclaimer must be visible on the prescription confirmation screen: 'Please verify all details with your doctor's prescription. This app does not provide medical advice.'
+
+6.2 Teleconsult Compliance (Phase 2)
+	•	All doctors must be Registered Medical Practitioners (RMPs) with valid MCI/NMC registration
+	•	Registration number must be displayed on doctor profile and prescriptions
+	•	Prescriptions generated in-app must meet Telemedicine Practice Guidelines (MoHFW, 2020)
+	•	Controlled substances (Schedule X) cannot be prescribed via teleconsult
+	•	Patient consent must be recorded for every teleconsult session
+
+6.3 Data Privacy
+	•	All health data encrypted at rest (AES-256) and in transit (TLS 1.3)
+	•	Prescription images stored in private S3 bucket with access logging
+	•	User data never shared with third parties for advertising
+	•	DPDP Act (India, 2023) compliance required — privacy policy and consent flows
+	•	Right to data deletion: user can delete account and all associated data
+
+Summary
+MedCare is a one app, two entry door product. v1 focuses entirely on prescription upload to care plan to reminders. The data model is designed upfront to support wearables (v2) and teleconsult (v3) without rework. Monetisation is simple: free tier with limits, Pro subscription, and per-consult teleconsult fees later.

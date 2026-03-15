@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["../node_modules/is-unicode-supported/index.js"],
+  "sourcesContent": [
+    "import process from 'node:process';\n\nexport default function isUnicodeSupported() {\n\tconst {env} = process;\n\tconst {TERM, TERM_PROGRAM} = env;\n\n\tif (process.platform !== 'win32') {\n\t\treturn TERM !== 'linux'; // Linux console (kernel)\n\t}\n\n\treturn Boolean(env.WT_SESSION) // Windows Terminal\n\t\t|| Boolean(env.TERMINUS_SUBLIME) // Terminus (<0.2.27)\n\t\t|| env.ConEmuTask === '{cmd::Cmder}' // ConEmu and cmder\n\t\t|| TERM_PROGRAM === 'Terminus-Sublime'\n\t\t|| TERM_PROGRAM === 'vscode'\n\t\t|| TERM === 'xterm-256color'\n\t\t|| TERM === 'alacritty'\n\t\t|| TERM === 'rxvt-unicode'\n\t\t|| TERM === 'rxvt-unicode-256color'\n\t\t|| env.TERMINAL_EMULATOR === 'JetBrains-JediTerm';\n}\n"
+  ],
+  "mappings": ";AAAA;AAEA,SAAwB,kBAAkB,GAAG;AAAA,EAC5C,QAAO,QAAO;AAAA,EACd,QAAO,MAAM,iBAAgB;AAAA,EAE7B,IAAI,QAAQ,aAAa,SAAS;AAAA,IACjC,OAAO,SAAS;AAAA,EACjB;AAAA,EAEA,OAAO,QAAQ,IAAI,UAAU,KACzB,QAAQ,IAAI,gBAAgB,KAC5B,IAAI,eAAe,kBACnB,iBAAiB,sBACjB,iBAAiB,YACjB,SAAS,oBACT,SAAS,eACT,SAAS,kBACT,SAAS,2BACT,IAAI,sBAAsB;AAAA;",
+  "debugId": "5EC4542EE2AE1DB964756E2164756E21",
+  "names": []
+}

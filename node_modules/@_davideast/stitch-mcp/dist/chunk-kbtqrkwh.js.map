@@ -1,0 +1,10 @@
+{
+  "version": 3,
+  "sources": ["../src/ui/theme.ts"],
+  "sourcesContent": [
+    "import chalk from 'chalk';\n\n/**\n * Theme colors matching the shell script aesthetic\n */\nexport const theme = {\n  blue: chalk.hex('#5E9BFF'),\n  green: chalk.hex('#4EC9B0'),\n  gray: chalk.hex('#646464'),\n  red: chalk.hex('#E65050'),\n  yellow: chalk.hex('#DCDC64'),\n  cyan: chalk.hex('#4DC9FF'),\n  bgDark: chalk.bgHex('#151315'),\n};\n\nexport const icons = {\n  success: '✔',\n  error: '✖',\n  info: 'ℹ',\n  warning: '⚠',\n};\n"
+  ],
+  "mappings": ";;;;;AAKO,IAAM,QAAQ;AAAA,EACnB,MAAM,eAAM,IAAI,SAAS;AAAA,EACzB,OAAO,eAAM,IAAI,SAAS;AAAA,EAC1B,MAAM,eAAM,IAAI,SAAS;AAAA,EACzB,KAAK,eAAM,IAAI,SAAS;AAAA,EACxB,QAAQ,eAAM,IAAI,SAAS;AAAA,EAC3B,MAAM,eAAM,IAAI,SAAS;AAAA,EACzB,QAAQ,eAAM,MAAM,SAAS;AAC/B;AAEO,IAAM,QAAQ;AAAA,EACnB,SAAS;AAAA,EACT,OAAO;AAAA,EACP,MAAM;AAAA,EACN,SAAS;AACX;",
+  "debugId": "0521118B092FF25E64756E2164756E21",
+  "names": []
+}

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "tracker",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["serve", "tracker", "-l", "3847"],
+      "port": 3847
+    }
+  ]
+}

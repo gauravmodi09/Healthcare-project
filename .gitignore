@@ -1,1 +1,16 @@
+# Dependencies
+node_modules/
 .env
+
+# macOS
+.DS_Store
+*.swp
+
+# Xcode
+*.xcuserdata/
+DerivedData/
+build/
+
+# IDE
+.vscode/
+.idea/

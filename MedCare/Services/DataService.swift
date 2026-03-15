@@ -17,7 +17,9 @@ final class DataService {
             DoseLog.self,
             CareTask.self,
             SymptomLog.self,
-            EpisodeImage.self
+            EpisodeImage.self,
+            ChatMessage.self,
+            Nudge.self
         ])
         let config = ModelConfiguration(isStoredInMemoryOnly: false)
         do {

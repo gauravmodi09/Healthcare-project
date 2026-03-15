@@ -27,6 +27,7 @@ final class AppRouter {
         case profileDetail(profileId: UUID)
         case documentDetail(documentId: UUID)
         case profileFiles(profileId: UUID)
+        case aiChat(profileId: UUID)
         case settings
     }
 
@@ -59,6 +60,7 @@ final class AppRouter {
 enum AppTab: String, CaseIterable {
     case home = "Home"
     case reminders = "Reminders"
+    case ai = "AI Chat"
     case history = "History"
     case profile = "Profile"
 
@@ -66,6 +68,7 @@ enum AppTab: String, CaseIterable {
         switch self {
         case .home: return "house.fill"
         case .reminders: return "bell.fill"
+        case .ai: return "sparkles"
         case .history: return "clock.fill"
         case .profile: return "person.fill"
         }

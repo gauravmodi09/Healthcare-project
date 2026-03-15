@@ -412,6 +412,7 @@
             MedCare <span>Project Tracker</span>
         </div>
         <div class="header-actions">
+            <button class="btn btn-secondary" id="saveStatus" onclick="connectAndSave()" title="Tasks auto-save to tasks.json on disk">💾 Connect File</button>
             <button class="btn btn-secondary" onclick="exportData()">Export JSON</button>
             <button class="btn btn-secondary" onclick="importData()">Import</button>
             <button class="btn btn-primary" onclick="openModal()">+ Add Task</button>
@@ -512,19 +513,105 @@ let currentFilter = 'all';
 let searchQuery = '';
 let draggedTask = null;
 
-// ── Persistence ──
-function loadTasks() {
+// ── Persistence (File System Access API + localStorage fallback) ──
+let fileHandle = null; // Holds the file handle for direct disk writes
+
+async function loadTasks() {
+    // Try loading from localStorage first (working copy)
     const saved = localStorage.getItem('medcare_tracker_tasks');
     if (saved) {
         tasks = JSON.parse(saved);
     } else {
-        tasks = getDefaultTasks();
-        saveTasks();
+        // Try loading from tasks.json via fetch
+        try {
+            const resp = await fetch('./tasks.json');
+            if (resp.ok) {
+                const data = await resp.json();
+                if (Array.isArray(data) && data.length > 0) {
+                    tasks = data;
+                } else {
+                    tasks = getDefaultTasks();
+                }
+            } else {
+                tasks = getDefaultTasks();
+            }
+        } catch (e) {
+            tasks = getDefaultTasks();
+        }
+        localStorage.setItem('medcare_tracker_tasks', JSON.stringify(tasks));
+    }
+    render();
+}
+
+async function saveTasks() {
+    // Always save to localStorage (instant)
+    localStorage.setItem('medcare_tracker_tasks', JSON.stringify(tasks));
+
+    // If we have a file handle, write directly to tasks.json on disk
+    if (fileHandle) {
+        try {
+            const writable = await fileHandle.createWritable();
+            await writable.write(JSON.stringify(tasks, null, 2));
+            await writable.close();
+            updateSaveButton('saved');
+        } catch (e) {
+            console.warn('Could not write to file:', e);
+            updateSaveButton('error');
+        }
+    } else {
+        updateSaveButton('disconnected');
     }
 }
 
-function saveTasks() {
-    localStorage.setItem('medcare_tracker_tasks', JSON.stringify(tasks));
+// Connect to the tasks.json file on disk
+async function connectAndSave() {
+    try {
+        // Check if File System Access API is supported
+        if (!window.showOpenFilePicker) {
+            alert('Your browser does not support direct file saving.\n\nUse Chrome or Edge, then click this button to connect to tasks.json.\n\nAlternatively, use Export JSON to manually save.');
+            return;
+        }
+
+        // Let the user pick the tasks.json file
+        const [handle] = await window.showOpenFilePicker({
+            types: [{ description: 'JSON', accept: { 'application/json': ['.json'] } }],
+            multiple: false
+        });
+        fileHandle = handle;
+
+        // Immediately write current tasks to the file
+        const writable = await fileHandle.createWritable();
+        await writable.write(JSON.stringify(tasks, null, 2));
+        await writable.close();
+
+        updateSaveButton('saved');
+    } catch (e) {
+        if (e.name !== 'AbortError') {
+            console.error('File connect error:', e);
+        }
+    }
+}
+
+function updateSaveButton(state) {
+    const btn = document.getElementById('saveStatus');
+    if (state === 'saved') {
+        btn.textContent = '✅ Saved to Disk';
+        btn.style.borderColor = 'var(--green)';
+        btn.style.color = 'var(--green)';
+        setTimeout(() => {
+            btn.textContent = '💾 Auto-Saving';
+            btn.style.borderColor = 'var(--green)';
+            btn.style.color = 'var(--green)';
+        }, 1500);
+    } else if (state === 'error') {
+        btn.textContent = '⚠️ Save Failed';
+        btn.style.borderColor = 'var(--red)';
+        btn.style.color = 'var(--red)';
+    } else {
+        btn.textContent = '💾 Connect File';
+        btn.style.borderColor = '';
+        btn.style.color = '';
+    }
 }
 
 // ── Default Tasks ──
@@ -802,8 +889,7 @@ document.addEventListener('keydown', e => {
 });
 
 // ── Init ──
-loadTasks();
-render();
+loadTasks(); // async — calls render() when done
 </script>
 </body>
 </html>

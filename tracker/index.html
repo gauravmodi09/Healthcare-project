@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedCare - Project Tracker</title>
+    <style>
+        :root {
+            --teal: #0A7E8C;
+            --teal-light: #E8F5F6;
+            --teal-dark: #065A64;
+            --red: #FF6B6B;
+            --red-light: #FFF0F0;
+            --green: #34C759;
+            --green-light: #EAFBEF;
+            --amber: #FF9500;
+            --amber-light: #FFF8EC;
+            --blue: #007AFF;
+            --blue-light: #EBF5FF;
+            --purple: #AF52DE;
+            --purple-light: #F5EDFB;
+            --gray-50: #F7F9FC;
+            --gray-100: #EEF1F6;
+            --gray-200: #D8DCE4;
+            --gray-400: #9CA3AF;
+            --gray-600: #4B5563;
+            --gray-800: #1F2937;
+            --gray-900: #111827;
+            --card-shadow: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.06);
+            --card-shadow-hover: 0 4px 12px rgba(0,0,0,0.12);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', 'Segoe UI', system-ui, sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            line-height: 1.5;
+        }
+
+        /* Header */
+        .header {
+            background: white;
+            border-bottom: 1px solid var(--gray-100);
+            padding: 16px 24px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        .header-inner {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: 700;
+            font-size: 20px;
+            color: var(--teal);
+        }
+        .logo span { color: var(--gray-800); }
+        .header-actions { display: flex; gap: 8px; }
+
+        /* Stats Bar */
+        .stats-bar {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 12px;
+            padding: 16px 20px;
+            flex: 1;
+            min-width: 140px;
+            box-shadow: var(--card-shadow);
+        }
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray-400);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+        }
+        .stat-value {
+            font-size: 28px;
+            font-weight: 700;
+            margin-top: 4px;
+        }
+        .stat-value.teal { color: var(--teal); }
+        .stat-value.amber { color: var(--amber); }
+        .stat-value.green { color: var(--green); }
+        .stat-value.red { color: var(--red); }
+
+        /* Controls */
+        .controls {
+            max-width: 1400px;
+            margin: 16px auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .filter-chip {
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1.5px solid var(--gray-200);
+            background: white;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.15s;
+            color: var(--gray-600);
+        }
+        .filter-chip:hover { border-color: var(--teal); color: var(--teal); }
+        .filter-chip.active {
+            background: var(--teal);
+            border-color: var(--teal);
+            color: white;
+        }
+        .search-input {
+            flex: 1;
+            min-width: 200px;
+            padding: 8px 14px;
+            border-radius: 8px;
+            border: 1.5px solid var(--gray-200);
+            font-size: 13px;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .search-input:focus { border-color: var(--teal); }
+
+        /* Board Layout */
+        .board {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 0 24px;
+            display: flex;
+            gap: 16px;
+            overflow-x: auto;
+            padding-bottom: 24px;
+        }
+        .column {
+            background: var(--gray-100);
+            border-radius: 12px;
+            min-width: 320px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            max-height: calc(100vh - 260px);
+        }
+        .column-header {
+            padding: 14px 16px;
+            font-weight: 700;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid var(--gray-200);
+        }
+        .column-header .count {
+            background: white;
+            border-radius: 10px;
+            padding: 2px 8px;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-400);
+        }
+        .column-body {
+            padding: 12px;
+            overflow-y: auto;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        /* Task Card */
+        .task-card {
+            background: white;
+            border-radius: 10px;
+            padding: 14px;
+            box-shadow: var(--card-shadow);
+            cursor: grab;
+            transition: box-shadow 0.15s, transform 0.15s;
+            border-left: 3px solid transparent;
+        }
+        .task-card:hover {
+            box-shadow: var(--card-shadow-hover);
+            transform: translateY(-1px);
+        }
+        .task-card.dragging { opacity: 0.5; transform: rotate(2deg); }
+        .task-card.priority-critical { border-left-color: var(--red); }
+        .task-card.priority-high { border-left-color: var(--amber); }
+        .task-card.priority-medium { border-left-color: var(--blue); }
+        .task-card.priority-low { border-left-color: var(--gray-400); }
+
+        .task-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 6px;
+            line-height: 1.4;
+        }
+        .task-description {
+            font-size: 12px;
+            color: var(--gray-600);
+            margin-bottom: 8px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .task-meta {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .tag {
+            font-size: 11px;
+            padding: 2px 8px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+        .tag-phase { background: var(--teal-light); color: var(--teal); }
+        .tag-feature { background: var(--purple-light); color: var(--purple); }
+        .tag-bug { background: var(--red-light); color: var(--red); }
+        .tag-infra { background: var(--blue-light); color: var(--blue); }
+        .tag-design { background: var(--amber-light); color: var(--amber); }
+        .tag-priority-critical { background: var(--red-light); color: var(--red); }
+        .tag-priority-high { background: var(--amber-light); color: var(--amber); }
+
+        .task-actions {
+            display: flex;
+            gap: 4px;
+            margin-top: 8px;
+            opacity: 0;
+            transition: opacity 0.15s;
+        }
+        .task-card:hover .task-actions { opacity: 1; }
+        .task-action-btn {
+            padding: 4px 8px;
+            border-radius: 6px;
+            border: 1px solid var(--gray-200);
+            background: white;
+            font-size: 11px;
+            cursor: pointer;
+            color: var(--gray-600);
+        }
+        .task-action-btn:hover { background: var(--gray-50); }
+        .task-action-btn.delete:hover { background: var(--red-light); color: var(--red); border-color: var(--red); }
+
+        /* Buttons */
+        .btn {
+            padding: 8px 16px;
+            border-radius: 8px;
+            border: none;
+            font-size: 13px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-primary {
+            background: var(--teal);
+            color: white;
+        }
+        .btn-primary:hover { background: var(--teal-dark); }
+        .btn-secondary {
+            background: white;
+            color: var(--gray-600);
+            border: 1.5px solid var(--gray-200);
+        }
+        .btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
+        .btn-add-task {
+            width: 100%;
+            padding: 10px;
+            border: 1.5px dashed var(--gray-200);
+            border-radius: 8px;
+            background: transparent;
+            color: var(--gray-400);
+            font-size: 13px;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+        .btn-add-task:hover {
+            border-color: var(--teal);
+            color: var(--teal);
+            background: var(--teal-light);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(4px);
+            z-index: 200;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+        }
+        .modal-overlay.active { opacity: 1; pointer-events: all; }
+        .modal {
+            background: white;
+            border-radius: 16px;
+            padding: 28px;
+            width: 480px;
+            max-width: 90vw;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+            transform: translateY(20px);
+            transition: transform 0.2s;
+        }
+        .modal-overlay.active .modal { transform: translateY(0); }
+        .modal h2 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--gray-900);
+        }
+        .form-group {
+            margin-bottom: 16px;
+        }
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.3px;
+        }
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            outline: none;
+            transition: border-color 0.15s;
+        }
+        .form-group input:focus, .form-group textarea:focus, .form-group select:focus {
+            border-color: var(--teal);
+        }
+        .form-group textarea { resize: vertical; min-height: 60px; }
+        .form-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            margin-top: 20px;
+        }
+
+        /* Drop indicator */
+        .drop-indicator {
+            height: 3px;
+            background: var(--teal);
+            border-radius: 2px;
+            margin: -2px 0;
+            display: none;
+        }
+        .column-body.drag-over { background: rgba(10, 126, 140, 0.05); }
+
+        /* Progress bar */
+        .progress-bar {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .progress-track {
+            height: 6px;
+            background: var(--gray-100);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            border-radius: 3px;
+            background: linear-gradient(90deg, var(--teal), var(--green));
+            transition: width 0.5s ease;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .board { flex-direction: column; }
+            .column { min-width: auto; max-height: none; }
+            .stats-bar { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div class="header-inner">
+        <div class="logo">
+            <svg width="28" height="28" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="#0A7E8C"/><path d="M14 6v16M6 14h16" stroke="white" stroke-width="2.5" stroke-linecap="round"/></svg>
+            MedCare <span>Project Tracker</span>
+        </div>
+        <div class="header-actions">
+            <button class="btn btn-secondary" onclick="exportData()">Export JSON</button>
+            <button class="btn btn-secondary" onclick="importData()">Import</button>
+            <button class="btn btn-primary" onclick="openModal()">+ Add Task</button>
+        </div>
+    </div>
+</div>
+
+<div class="progress-bar">
+    <div class="progress-track">
+        <div class="progress-fill" id="progressFill" style="width: 0%"></div>
+    </div>
+</div>
+
+<div class="stats-bar" id="statsBar"></div>
+
+<div class="controls">
+    <button class="filter-chip active" data-filter="all" onclick="setFilter('all', this)">All</button>
+    <button class="filter-chip" data-filter="feature" onclick="setFilter('feature', this)">Features</button>
+    <button class="filter-chip" data-filter="bug" onclick="setFilter('bug', this)">Bugs</button>
+    <button class="filter-chip" data-filter="infra" onclick="setFilter('infra', this)">Infra</button>
+    <button class="filter-chip" data-filter="design" onclick="setFilter('design', this)">Design</button>
+    <input type="text" class="search-input" placeholder="Search tasks..." oninput="searchTasks(this.value)">
+</div>
+
+<div class="board" id="board"></div>
+
+<!-- Add/Edit Modal -->
+<div class="modal-overlay" id="modalOverlay" onclick="if(event.target===this)closeModal()">
+    <div class="modal">
+        <h2 id="modalTitle">Add Task</h2>
+        <input type="hidden" id="editTaskId">
+        <div class="form-group">
+            <label>Title</label>
+            <input type="text" id="taskTitle" placeholder="What needs to be done?">
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="taskDesc" placeholder="Details, acceptance criteria, context..."></textarea>
+        </div>
+        <div style="display:flex;gap:12px">
+            <div class="form-group" style="flex:1">
+                <label>Category</label>
+                <select id="taskCategory">
+                    <option value="feature">Feature</option>
+                    <option value="bug">Bug</option>
+                    <option value="infra">Infra</option>
+                    <option value="design">Design</option>
+                </select>
+            </div>
+            <div class="form-group" style="flex:1">
+                <label>Priority</label>
+                <select id="taskPriority">
+                    <option value="medium">Medium</option>
+                    <option value="high">High</option>
+                    <option value="critical">Critical</option>
+                    <option value="low">Low</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Phase</label>
+            <select id="taskPhase">
+                <option value="">None</option>
+                <option value="Phase 1: Core">Phase 1: Core Foundation</option>
+                <option value="Phase 2: Wearable">Phase 2: Wearable Integration</option>
+                <option value="Phase 2.5: AI">Phase 2.5: AI Health Assistant</option>
+                <option value="Phase 3: Telecon">Phase 3: Telemedicine</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Status</label>
+            <select id="taskStatus">
+                <option value="backlog">Backlog</option>
+                <option value="todo">To Do</option>
+                <option value="in-progress">In Progress</option>
+                <option value="done">Done</option>
+            </select>
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-secondary" onclick="closeModal()">Cancel</button>
+            <button class="btn btn-primary" onclick="saveTask()">Save Task</button>
+        </div>
+    </div>
+</div>
+
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<script>
+const COLUMNS = [
+    { id: 'backlog', title: 'Backlog', color: 'var(--gray-400)' },
+    { id: 'todo', title: 'To Do', color: 'var(--blue)' },
+    { id: 'in-progress', title: 'In Progress', color: 'var(--amber)' },
+    { id: 'done', title: 'Done', color: 'var(--green)' }
+];
+
+let tasks = [];
+let currentFilter = 'all';
+let searchQuery = '';
+let draggedTask = null;
+
+// ── Persistence ──
+function loadTasks() {
+    const saved = localStorage.getItem('medcare_tracker_tasks');
+    if (saved) {
+        tasks = JSON.parse(saved);
+    } else {
+        tasks = getDefaultTasks();
+        saveTasks();
+    }
+}
+
+function saveTasks() {
+    localStorage.setItem('medcare_tracker_tasks', JSON.stringify(tasks));
+}
+
+// ── Default Tasks ──
+function getDefaultTasks() {
+    return [
+        // Phase 1: Done
+        { id: genId(), title: 'Project scaffold + design system', desc: 'Xcode project, folder structure, MCColors, MCTypography, MCSpacing, core components', category: 'infra', priority: 'critical', phase: 'Phase 1: Core', status: 'done', created: '2026-01-15' },
+        { id: genId(), title: 'Auth flow (Splash, Phone, OTP, Profile)', desc: 'Phone login with OTP, Keychain token storage, profile setup', category: 'feature', priority: 'critical', phase: 'Phase 1: Core', status: 'done', created: '2026-01-20' },
+        { id: genId(), title: 'Data models (User, Profile, Episode, Medicine, DoseLog)', desc: 'SwiftData models with relationships, migrations', category: 'infra', priority: 'critical', phase: 'Phase 1: Core', status: 'done', created: '2026-01-25' },
+        { id: genId(), title: 'Home dashboard with CTA cards', desc: 'Two-door CTA (Consult/Upload), active episodes, today\'s meds, stats bar', category: 'feature', priority: 'high', phase: 'Phase 1: Core', status: 'done', created: '2026-02-01' },
+        { id: genId(), title: 'Dual-capture upload flow', desc: 'Camera/gallery picker, medicine photo capture, image compression, upload UI', category: 'feature', priority: 'critical', phase: 'Phase 1: Core', status: 'done', created: '2026-02-05' },
+        { id: genId(), title: 'AI extraction + confirmation screen', desc: 'GPT-4V extraction service, confidence scoring, HITL confirmation gate', category: 'feature', priority: 'critical', phase: 'Phase 1: Core', status: 'done', created: '2026-02-10' },
+        { id: genId(), title: 'Episode management (4-tab interface)', desc: 'Plan, Reminders, Symptoms, Files tabs. Medicine list, task tracking', category: 'feature', priority: 'high', phase: 'Phase 1: Core', status: 'done', created: '2026-02-15' },
+        { id: genId(), title: 'Reminders engine + notifications', desc: 'Local notification scheduling, actionable notifications, dose logging', category: 'feature', priority: 'critical', phase: 'Phase 1: Core', status: 'done', created: '2026-02-20' },
+        { id: genId(), title: 'Symptom tracking + history', desc: 'Daily check-in, severity sliders, adherence charts, history timeline', category: 'feature', priority: 'high', phase: 'Phase 1: Core', status: 'done', created: '2026-02-25' },
+        { id: genId(), title: 'Multi-profile management', desc: 'Up to 5 family profiles, profile switching, per-profile episodes', category: 'feature', priority: 'high', phase: 'Phase 1: Core', status: 'done', created: '2026-03-01' },
+        { id: genId(), title: 'File management system', desc: 'Document upload, thumbnail grid, detail view, edit/delete, profile-level aggregation', category: 'feature', priority: 'medium', phase: 'Phase 1: Core', status: 'done', created: '2026-03-10' },
+        { id: genId(), title: 'Drug interaction checker', desc: 'Cross-episode drug interaction warnings', category: 'feature', priority: 'high', phase: 'Phase 1: Core', status: 'done', created: '2026-03-05' },
+        { id: genId(), title: 'Offline sync queue', desc: 'Offline-first dose logging, sync on connectivity restoration', category: 'infra', priority: 'high', phase: 'Phase 1: Core', status: 'done', created: '2026-03-05' },
+
+        // Phase 2.5: AI Health Assistant
+        { id: genId(), title: 'AI Chat — Core conversation engine', desc: 'In-app AI chat with case-aware context. Assembles patient history, medicines, symptoms before responding. Safety guardrails, emergency detection, medical disclaimers.', category: 'feature', priority: 'critical', phase: 'Phase 2.5: AI', status: 'todo', created: '2026-03-15' },
+        { id: genId(), title: 'AI Chat — Case context assembly', desc: 'Build context pipeline: gather active episodes, medicines, adherence %, symptom trends, documents, and doctor notes into a structured prompt for the LLM', category: 'infra', priority: 'critical', phase: 'Phase 2.5: AI', status: 'todo', created: '2026-03-15' },
+        { id: genId(), title: 'AI Chat — UI (chat interface)', desc: 'Chat bubble UI, typing indicators, message history, inline action buttons (log symptom, call doctor), voice input button', category: 'design', priority: 'high', phase: 'Phase 2.5: AI', status: 'todo', created: '2026-03-15' },
+        { id: genId(), title: 'Voice input for symptoms', desc: 'Speech-to-text recording, AI extraction of symptoms/severity/timeline from natural speech. Support English + Hinglish code-mixing', category: 'feature', priority: 'high', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Treatment timeline visualization', desc: 'Visual progress bar (Day X of Y), expected improvement curve, symptom trend overlay, milestone markers, adherence streak', category: 'feature', priority: 'high', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Smart nudges — adherence drop-off', desc: 'Trigger-based push notifications: missed doses, no improvement anxiety, course completion encouragement, caregiver alerts', category: 'feature', priority: 'critical', phase: 'Phase 2.5: AI', status: 'todo', created: '2026-03-15' },
+        { id: genId(), title: 'Smart nudges — behavioral interventions', desc: 'Context-aware messages at drop-off moments: "2 days left!", "your doctor prescribed 7 days for a reason", "most patients feel better by day 3-4"', category: 'feature', priority: 'high', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: '"Talk to Doctor" — virtual consult button', desc: 'One-tap doctor connect from AI chat. Auto-generated pre-consultation brief with case summary. Video/audio/chat options.', category: 'feature', priority: 'high', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Pre-consultation AI brief', desc: 'Auto-compile patient case summary for doctor: episode, medicines, adherence, symptoms, specific concern. Doctor sees this before call starts.', category: 'feature', priority: 'high', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Caregiver dashboard', desc: 'Multi-profile adherence overview, alert feed, one-tap call to patient, medicine refill predictor, shared access for multiple family members', category: 'feature', priority: 'medium', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Post-discharge recovery guide', desc: 'Day-by-day milestones, activity guidelines, warning signs checklist, wound care reminders with photo diary, rehab exercise tracker', category: 'feature', priority: 'medium', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Emergency keyword detection', desc: 'Detect "chest pain", "breathing difficulty", "suicidal" etc. in AI chat. Immediately show emergency UI with 112, nearest hospital, do NOT attempt diagnosis.', category: 'feature', priority: 'critical', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'LLM safety guardrails + medical prompt engineering', desc: 'System prompts that prevent diagnosis, ensure disclaimers, handle edge cases. Test against adversarial inputs. Logging for audit.', category: 'infra', priority: 'critical', phase: 'Phase 2.5: AI', status: 'backlog', created: '2026-03-15' },
+
+        // Bugs & Polish
+        { id: genId(), title: 'UI balance fixes across screens', desc: 'Fix spacing, sizing, visual hierarchy in Home, Profile, History, Reminders views', category: 'bug', priority: 'medium', phase: 'Phase 1: Core', status: 'done', created: '2026-03-12' },
+        { id: genId(), title: 'Rich sample case data', desc: '3 profiles (Rahul, Mom, Dad), multiple episodes, realistic adherence, symptoms, documents', category: 'infra', priority: 'low', phase: 'Phase 1: Core', status: 'done', created: '2026-03-15' },
+
+        // Phase 3 placeholders
+        { id: genId(), title: 'Teleconsult platform integration', desc: 'Integrate with Practo/MFine API or build in-house RMP-verified doctor panel', category: 'feature', priority: 'high', phase: 'Phase 3: Telecon', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Payment integration (UPI + cards)', desc: 'Razorpay integration for consultation fees. UPI, cards, netbanking.', category: 'feature', priority: 'high', phase: 'Phase 3: Telecon', status: 'backlog', created: '2026-03-15' },
+        { id: genId(), title: 'Doctor-side app/portal', desc: 'Web portal for doctors: view patient case, update care plan, prescribe, schedule follow-ups', category: 'feature', priority: 'high', phase: 'Phase 3: Telecon', status: 'backlog', created: '2026-03-15' },
+    ];
+}
+
+function genId() { return Math.random().toString(36).substr(2, 9); }
+
+// ── Render ──
+function render() {
+    renderStats();
+    renderBoard();
+}
+
+function renderStats() {
+    const total = tasks.length;
+    const done = tasks.filter(t => t.status === 'done').length;
+    const inProgress = tasks.filter(t => t.status === 'in-progress').length;
+    const todo = tasks.filter(t => t.status === 'todo').length;
+    const pct = total ? Math.round((done / total) * 100) : 0;
+
+    document.getElementById('progressFill').style.width = pct + '%';
+
+    document.getElementById('statsBar').innerHTML = `
+        <div class="stat-card"><div class="stat-label">Total Tasks</div><div class="stat-value">${total}</div></div>
+        <div class="stat-card"><div class="stat-label">To Do</div><div class="stat-value teal">${todo}</div></div>
+        <div class="stat-card"><div class="stat-label">In Progress</div><div class="stat-value amber">${inProgress}</div></div>
+        <div class="stat-card"><div class="stat-label">Done</div><div class="stat-value green">${done}</div></div>
+        <div class="stat-card"><div class="stat-label">Completion</div><div class="stat-value" style="color:${pct > 60 ? 'var(--green)' : pct > 30 ? 'var(--amber)' : 'var(--red)'}">${pct}%</div></div>
+    `;
+}
+
+function renderBoard() {
+    const board = document.getElementById('board');
+    board.innerHTML = '';
+
+    COLUMNS.forEach(col => {
+        let colTasks = tasks.filter(t => t.status === col.id);
+
+        // Apply filters
+        if (currentFilter !== 'all') {
+            colTasks = colTasks.filter(t => t.category === currentFilter);
+        }
+        if (searchQuery) {
+            const q = searchQuery.toLowerCase();
+            colTasks = colTasks.filter(t =>
+                t.title.toLowerCase().includes(q) ||
+                (t.desc && t.desc.toLowerCase().includes(q)) ||
+                (t.phase && t.phase.toLowerCase().includes(q))
+            );
+        }
+
+        const colEl = document.createElement('div');
+        colEl.className = 'column';
+        colEl.innerHTML = `
+            <div class="column-header">
+                <span>${col.title}</span>
+                <span class="count">${colTasks.length}</span>
+            </div>
+            <div class="column-body" data-status="${col.id}"
+                 ondragover="handleDragOver(event)" ondragenter="handleDragEnter(event)"
+                 ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, '${col.id}')">
+                ${colTasks.map(t => renderTaskCard(t)).join('')}
+                <button class="btn-add-task" onclick="openModal('${col.id}')">+ Add task</button>
+            </div>
+        `;
+        board.appendChild(colEl);
+    });
+}
+
+function renderTaskCard(task) {
+    const phaseTag = task.phase ? `<span class="tag tag-phase">${task.phase}</span>` : '';
+    const catTag = `<span class="tag tag-${task.category}">${task.category}</span>`;
+    const prioTag = ['critical', 'high'].includes(task.priority) ?
+        `<span class="tag tag-priority-${task.priority}">${task.priority}</span>` : '';
+
+    return `
+        <div class="task-card priority-${task.priority}" draggable="true"
+             ondragstart="handleDragStart(event, '${task.id}')" ondragend="handleDragEnd(event)"
+             id="task-${task.id}">
+            <div class="task-title">${esc(task.title)}</div>
+            ${task.desc ? `<div class="task-description">${esc(task.desc)}</div>` : ''}
+            <div class="task-meta">${catTag}${prioTag}${phaseTag}</div>
+            <div class="task-actions">
+                <button class="task-action-btn" onclick="editTask('${task.id}')">Edit</button>
+                <button class="task-action-btn delete" onclick="deleteTask('${task.id}')">Delete</button>
+            </div>
+        </div>
+    `;
+}
+
+function esc(str) {
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+}
+
+// ── Drag & Drop ──
+function handleDragStart(e, taskId) {
+    draggedTask = taskId;
+    e.target.classList.add('dragging');
+    e.dataTransfer.effectAllowed = 'move';
+}
+function handleDragEnd(e) {
+    e.target.classList.remove('dragging');
+    draggedTask = null;
+    document.querySelectorAll('.column-body').forEach(c => c.classList.remove('drag-over'));
+}
+function handleDragOver(e) { e.preventDefault(); e.dataTransfer.dropEffect = 'move'; }
+function handleDragEnter(e) { e.preventDefault(); e.currentTarget.classList.add('drag-over'); }
+function handleDragLeave(e) { e.currentTarget.classList.remove('drag-over'); }
+function handleDrop(e, status) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('drag-over');
+    if (draggedTask) {
+        const task = tasks.find(t => t.id === draggedTask);
+        if (task) {
+            task.status = status;
+            saveTasks();
+            render();
+        }
+    }
+}
+
+// ── Filters ──
+function setFilter(filter, el) {
+    currentFilter = filter;
+    document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+    el.classList.add('active');
+    render();
+}
+function searchTasks(query) {
+    searchQuery = query;
+    render();
+}
+
+// ── Modal ──
+function openModal(defaultStatus) {
+    document.getElementById('modalTitle').textContent = 'Add Task';
+    document.getElementById('editTaskId').value = '';
+    document.getElementById('taskTitle').value = '';
+    document.getElementById('taskDesc').value = '';
+    document.getElementById('taskCategory').value = 'feature';
+    document.getElementById('taskPriority').value = 'medium';
+    document.getElementById('taskPhase').value = '';
+    document.getElementById('taskStatus').value = defaultStatus || 'backlog';
+    document.getElementById('modalOverlay').classList.add('active');
+    setTimeout(() => document.getElementById('taskTitle').focus(), 100);
+}
+
+function closeModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+}
+
+function editTask(id) {
+    const task = tasks.find(t => t.id === id);
+    if (!task) return;
+    document.getElementById('modalTitle').textContent = 'Edit Task';
+    document.getElementById('editTaskId').value = id;
+    document.getElementById('taskTitle').value = task.title;
+    document.getElementById('taskDesc').value = task.desc || '';
+    document.getElementById('taskCategory').value = task.category;
+    document.getElementById('taskPriority').value = task.priority;
+    document.getElementById('taskPhase').value = task.phase || '';
+    document.getElementById('taskStatus').value = task.status;
+    document.getElementById('modalOverlay').classList.add('active');
+}
+
+function saveTask() {
+    const title = document.getElementById('taskTitle').value.trim();
+    if (!title) { document.getElementById('taskTitle').focus(); return; }
+
+    const editId = document.getElementById('editTaskId').value;
+    const taskData = {
+        title,
+        desc: document.getElementById('taskDesc').value.trim(),
+        category: document.getElementById('taskCategory').value,
+        priority: document.getElementById('taskPriority').value,
+        phase: document.getElementById('taskPhase').value,
+        status: document.getElementById('taskStatus').value,
+    };
+
+    if (editId) {
+        const task = tasks.find(t => t.id === editId);
+        if (task) Object.assign(task, taskData);
+    } else {
+        tasks.push({ id: genId(), ...taskData, created: new Date().toISOString().split('T')[0] });
+    }
+
+    saveTasks();
+    closeModal();
+    render();
+}
+
+function deleteTask(id) {
+    if (!confirm('Delete this task?')) return;
+    tasks = tasks.filter(t => t.id !== id);
+    saveTasks();
+    render();
+}
+
+// ── Import/Export ──
+function exportData() {
+    const blob = new Blob([JSON.stringify(tasks, null, 2)], { type: 'application/json' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `medcare_tracker_${new Date().toISOString().split('T')[0]}.json`;
+    a.click();
+}
+
+function importData() { document.getElementById('importFile').click(); }
+
+function handleImport(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        try {
+            const imported = JSON.parse(e.target.result);
+            if (Array.isArray(imported)) {
+                tasks = imported;
+                saveTasks();
+                render();
+            }
+        } catch (err) { alert('Invalid JSON file'); }
+    };
+    reader.readAsText(file);
+    event.target.value = '';
+}
+
+// Keyboard shortcut
+document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeModal();
+    if (e.key === 'n' && (e.metaKey || e.ctrlKey)) { e.preventDefault(); openModal(); }
+});
+
+// ── Init ──
+loadTasks();
+render();
+</script>
+</body>
+</html>

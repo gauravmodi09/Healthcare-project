@@ -90,13 +90,15 @@ final class DataService {
 
     // MARK: - Medicine Management
 
-    func addMedicine(to episode: Episode, brandName: String, dosage: String, frequency: MedicineFrequency, timing: [MedicineTiming], duration: Int?, source: MedicineSource = .manual, confidence: Double = 1.0) -> Medicine {
+    func addMedicine(to episode: Episode, brandName: String, dosage: String, doseForm: DoseForm = .tablet, frequency: MedicineFrequency, timing: [MedicineTiming], duration: Int?, mealTiming: MealTiming = .noPreference, source: MedicineSource = .manual, confidence: Double = 1.0) -> Medicine {
         let medicine = Medicine(
             brandName: brandName,
             dosage: dosage,
+            doseForm: doseForm,
             frequency: frequency,
             timing: timing,
             duration: duration,
+            mealTiming: mealTiming,
             source: source,
             confidenceScore: confidence
         )
@@ -144,6 +146,25 @@ final class DataService {
             doseLog.status = status
         }
         save()
+    }
+
+    // MARK: - Overdose Prevention
+
+    /// Checks if the same medicine was already taken within a time window (default 2 hours)
+    func isDuplicateDose(for doseLog: DoseLog, windowMinutes: Int = 120) -> (isDuplicate: Bool, lastTakenTime: Date?) {
+        guard let medicine = doseLog.medicine else { return (false, nil) }
+        let windowStart = doseLog.scheduledTime.addingTimeInterval(-Double(windowMinutes * 60))
+        let windowEnd = doseLog.scheduledTime
+
+        let recentTaken = medicine.doseLogs
+            .filter { $0.id != doseLog.id && $0.status == .taken }
+            .filter { ($0.actualTime ?? $0.scheduledTime) >= windowStart && ($0.actualTime ?? $0.scheduledTime) <= windowEnd }
+            .sorted { ($0.actualTime ?? $0.scheduledTime) > ($1.actualTime ?? $1.scheduledTime) }
+
+        if let last = recentTaken.first {
+            return (true, last.actualTime ?? last.scheduledTime)
+        }
+        return (false, nil)
     }
 
     // MARK: - Symptom Logging
@@ -314,28 +335,32 @@ final class DataService {
         // Medicines
         let augmentin = makeMedicine(
             brand: "Augmentin 625 Duo", generic: "Amoxicillin + Clavulanic Acid",
-            dosage: "625mg", freq: .twiceDaily, timing: [.morning, .night],
+            dosage: "625mg", form: .tablet, meal: .afterMeal,
+            freq: .twiceDaily, timing: [.morning, .night],
             duration: 5, source: .aiExtracted, confidence: 0.95,
             instructions: "After food", manufacturer: "GlaxoSmithKline", mrp: 228.50,
             episode: coldEp
         )
         let pan40 = makeMedicine(
             brand: "Pan 40", generic: "Pantoprazole",
-            dosage: "40mg", freq: .onceDaily, timing: [.morning],
+            dosage: "40mg", form: .tablet, meal: .emptyStomach,
+            freq: .onceDaily, timing: [.morning],
             duration: 5, source: .aiExtracted, confidence: 0.91,
             instructions: "Before food on empty stomach", manufacturer: "Alkem", mrp: 115,
             episode: coldEp
         )
         let montekLC = makeMedicine(
             brand: "Montek LC", generic: "Montelukast + Levocetirizine",
-            dosage: "10mg", freq: .onceDaily, timing: [.night],
+            dosage: "10mg", form: .tablet, meal: .afterMeal,
+            freq: .onceDaily, timing: [.night],
             duration: 7, source: .aiExtracted, confidence: 0.72,
             instructions: "After dinner", manufacturer: "Sun Pharma", mrp: 165,
             episode: coldEp
         )
         let alexCough = makeMedicine(
             brand: "Alex Cough Syrup", generic: "Dextromethorphan + CPM",
-            dosage: "10ml", freq: .thriceDaily, timing: [.morning, .afternoon, .night],
+            dosage: "10ml", form: .syrup, meal: .afterMeal,
+            freq: .thriceDaily, timing: [.morning, .afternoon, .night],
             duration: 5, source: .manual, confidence: 1.0,
             instructions: "After meals", manufacturer: "Glenmark", mrp: 95,
             episode: coldEp
@@ -390,7 +415,8 @@ final class DataService {
 
         let zerodol = makeMedicine(
             brand: "Zerodol SP", generic: "Aceclofenac + Paracetamol + Serratiopeptidase",
-            dosage: "100mg", freq: .twiceDaily, timing: [.morning, .night],
+            dosage: "100mg", form: .tablet, meal: .afterMeal,
+            freq: .twiceDaily, timing: [.morning, .night],
             duration: 7, source: .manual, confidence: 1.0,
             instructions: "After food", manufacturer: "IPCA", mrp: 142,
             episode: kneeEp
@@ -398,7 +424,8 @@ final class DataService {
         zerodol.isActive = false
         let pregab = makeMedicine(
             brand: "Pregabalin M 75", generic: "Pregabalin + Methylcobalamin",
-            dosage: "75mg", freq: .onceDaily, timing: [.night],
+            dosage: "75mg", form: .capsule, meal: .afterMeal,
+            freq: .onceDaily, timing: [.night],
             duration: 14, source: .manual, confidence: 1.0,
             instructions: "After dinner", manufacturer: "Torrent", mrp: 198,
             episode: kneeEp
@@ -446,21 +473,24 @@ final class DataService {
 
         let glycomet = makeMedicine(
             brand: "Glycomet GP 2", generic: "Metformin + Glimepiride",
-            dosage: "500mg/2mg", freq: .twiceDaily, timing: [.morning, .evening],
+            dosage: "500mg/2mg", form: .tablet, meal: .withMeal,
+            freq: .twiceDaily, timing: [.morning, .evening],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "With meals", manufacturer: "USV", mrp: 185,
             episode: diabetesEp
         )
         let telma = makeMedicine(
             brand: "Telma 40", generic: "Telmisartan",
-            dosage: "40mg", freq: .onceDaily, timing: [.morning],
+            dosage: "40mg", form: .tablet, meal: .emptyStomach,
+            freq: .onceDaily, timing: [.morning],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "Empty stomach", manufacturer: "Glenmark", mrp: 135,
             episode: diabetesEp
         )
         let thyronorm = makeMedicine(
             brand: "Thyronorm 50", generic: "Levothyroxine",
-            dosage: "50mcg", freq: .onceDaily, timing: [.morning],
+            dosage: "50mcg", form: .tablet, meal: .emptyStomach,
+            freq: .onceDaily, timing: [.morning],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "30 min before breakfast on empty stomach", manufacturer: "Abbott", mrp: 112,
             episode: diabetesEp
@@ -513,35 +543,40 @@ final class DataService {
 
         let ecosprin = makeMedicine(
             brand: "Ecosprin 75", generic: "Aspirin",
-            dosage: "75mg", freq: .onceDaily, timing: [.afternoon],
+            dosage: "75mg", form: .tablet, meal: .afterMeal,
+            freq: .onceDaily, timing: [.afternoon],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "After lunch", manufacturer: "USV", mrp: 35,
             episode: cabgEp
         )
         let clopilet = makeMedicine(
             brand: "Clopilet 75", generic: "Clopidogrel",
-            dosage: "75mg", freq: .onceDaily, timing: [.morning],
+            dosage: "75mg", form: .tablet, meal: .afterMeal,
+            freq: .onceDaily, timing: [.morning],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "After breakfast", manufacturer: "Sun Pharma", mrp: 92,
             episode: cabgEp
         )
         let atorva = makeMedicine(
             brand: "Atorva 40", generic: "Atorvastatin",
-            dosage: "40mg", freq: .onceDaily, timing: [.night],
+            dosage: "40mg", form: .tablet, meal: .afterMeal,
+            freq: .onceDaily, timing: [.night],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "After dinner", manufacturer: "Zydus", mrp: 178,
             episode: cabgEp
         )
         let metXL = makeMedicine(
             brand: "Met XL 25", generic: "Metoprolol Succinate",
-            dosage: "25mg", freq: .onceDaily, timing: [.morning],
+            dosage: "25mg", form: .tablet, meal: .withMeal,
+            freq: .onceDaily, timing: [.morning],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "With breakfast", manufacturer: "Cipla", mrp: 85,
             episode: cabgEp
         )
         let cardace = makeMedicine(
             brand: "Cardace 2.5", generic: "Ramipril",
-            dosage: "2.5mg", freq: .onceDaily, timing: [.morning],
+            dosage: "2.5mg", form: .tablet, meal: .emptyStomach,
+            freq: .onceDaily, timing: [.morning],
             duration: nil, source: .manual, confidence: 1.0,
             instructions: "Empty stomach in the morning", manufacturer: "Sanofi", mrp: 62,
             episode: cabgEp
@@ -574,6 +609,7 @@ final class DataService {
 
     private func makeMedicine(
         brand: String, generic: String? = nil, dosage: String,
+        form: DoseForm = .tablet, meal: MealTiming = .noPreference,
         freq: MedicineFrequency, timing: [MedicineTiming], duration: Int?,
         source: MedicineSource, confidence: Double,
         instructions: String?, manufacturer: String?, mrp: Double?,
@@ -581,8 +617,8 @@ final class DataService {
     ) -> Medicine {
         let med = Medicine(
             brandName: brand, genericName: generic, dosage: dosage,
-            frequency: freq, timing: timing, duration: duration,
-            source: source, confidenceScore: confidence
+            doseForm: form, frequency: freq, timing: timing, duration: duration,
+            mealTiming: meal, source: source, confidenceScore: confidence
         )
         med.instructions = instructions
         med.manufacturer = manufacturer

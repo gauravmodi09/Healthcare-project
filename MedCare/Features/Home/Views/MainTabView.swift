@@ -17,6 +17,12 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.home)
 
+            TodayView()
+                .tabItem {
+                    Label("Today", systemImage: "calendar")
+                }
+                .tag(AppTab.today)
+
             RemindersView()
                 .tabItem {
                     Label("Reminders", systemImage: "bell.fill")
@@ -28,12 +34,6 @@ struct MainTabView: View {
                     Label("AI Chat", systemImage: "sparkles")
                 }
                 .tag(AppTab.ai)
-
-            HistoryView()
-                .tabItem {
-                    Label("History", systemImage: "clock.fill")
-                }
-                .tag(AppTab.history)
 
             ProfileManagementView()
                 .tabItem {

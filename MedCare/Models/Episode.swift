@@ -64,6 +64,41 @@ final class Episode {
         guard let end = endDate else { return nil }
         return Calendar.current.dateComponents([.day], from: Date(), to: end).day
     }
+
+    /// Consecutive days with 100% adherence (all doses taken) going backwards from today
+    var adherenceStreak: Int {
+        let calendar = Calendar.current
+        let allLogs = activeMedicines.flatMap { $0.doseLogs }
+        guard !allLogs.isEmpty else { return 0 }
+
+        var streak = 0
+        var checkDate = calendar.startOfDay(for: Date())
+
+        // Go backwards day by day
+        for _ in 0..<365 {
+            let dayEnd = calendar.date(byAdding: .day, value: 1, to: checkDate)!
+            let dayLogs = allLogs.filter {
+                $0.scheduledTime >= checkDate && $0.scheduledTime < dayEnd
+            }
+
+            // Skip days with no scheduled doses
+            if dayLogs.isEmpty {
+                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
+                continue
+            }
+
+            // Check if all doses for this day were taken
+            let allTaken = dayLogs.allSatisfy { $0.status == .taken }
+            if allTaken {
+                streak += 1
+                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
+            } else {
+                break
+            }
+        }
+
+        return streak
+    }
 }
 
 enum EpisodeType: String, Codable, CaseIterable {

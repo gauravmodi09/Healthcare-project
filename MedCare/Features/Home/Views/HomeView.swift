@@ -267,7 +267,7 @@ struct DoseReminderCard: View {
                     .fill(MCColors.primaryTeal.opacity(0.1))
                     .frame(width: 40, height: 40)
                     .overlay(
-                        Image(systemName: "pills")
+                        Image(systemName: doseLog.medicine?.doseForm.icon ?? "pills")
                             .foregroundStyle(MCColors.primaryTeal)
                     )
 
@@ -275,9 +275,21 @@ struct DoseReminderCard: View {
                     Text(doseLog.medicine?.brandName ?? "Medicine")
                         .font(MCTypography.bodyMedium)
                         .foregroundStyle(MCColors.textPrimary)
-                    Text(doseLog.medicine?.dosage ?? "")
-                        .font(MCTypography.caption)
-                        .foregroundStyle(MCColors.textSecondary)
+                    HStack(spacing: 4) {
+                        Text(doseLog.medicine?.dosage ?? "")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textSecondary)
+                        if let med = doseLog.medicine, med.mealTiming != .noPreference {
+                            Text("·")
+                                .foregroundStyle(MCColors.textTertiary)
+                            Image(systemName: med.mealTiming.icon)
+                                .font(.system(size: 10))
+                                .foregroundStyle(MCColors.warning)
+                            Text(med.mealTiming.shortLabel)
+                                .font(MCTypography.caption)
+                                .foregroundStyle(MCColors.warning)
+                        }
+                    }
                 }
 
                 Spacer()
@@ -322,6 +334,16 @@ struct EpisodeCard: View {
                     Label("\(episode.activeMedicines.count) meds", systemImage: "pills")
                         .font(MCTypography.caption)
                         .foregroundStyle(MCColors.textSecondary)
+
+                    if episode.adherenceStreak > 0 {
+                        HStack(spacing: 2) {
+                            Image(systemName: "flame.fill")
+                                .font(.system(size: 10))
+                            Text("\(episode.adherenceStreak)d streak")
+                                .font(MCTypography.caption)
+                        }
+                        .foregroundStyle(MCColors.accentCoral)
+                    }
                 }
 
                 // Adherence bar

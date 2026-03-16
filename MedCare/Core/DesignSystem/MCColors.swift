@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// MedCare Design System — Colors
+/// MedCare Design System — Colors (adaptive light/dark mode)
 enum MCColors {
     // MARK: - Primary
     static let primaryTeal = Color(hex: "0A7E8C")
@@ -15,17 +15,57 @@ enum MCColors {
     static let error = Color(hex: "FF3B30")
     static let info = Color(hex: "007AFF")
 
-    // MARK: - Background
-    static let backgroundLight = Color(hex: "F7F9FC")
+    // MARK: - Background (adaptive)
+    static let backgroundLight = Color(
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(Color(hex: "1A1D29"))
+                : UIColor(Color(hex: "F7F9FC"))
+        }
+    )
     static let backgroundDark = Color(hex: "1A1D29")
-    static let cardBackground = Color.white
+
+    static let cardBackground = Color(
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(Color(hex: "252836"))
+                : .white
+        }
+    )
     static let cardBackgroundDark = Color(hex: "252836")
 
-    // MARK: - Text
-    static let textPrimary = Color(hex: "1A1D29")
-    static let textSecondary = Color(hex: "6B7280")
-    static let textTertiary = Color(hex: "9CA3AF")
+    // MARK: - Text (adaptive)
+    static let textPrimary = Color(
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(Color(hex: "F1F5F9"))
+                : UIColor(Color(hex: "1A1D29"))
+        }
+    )
+    static let textSecondary = Color(
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(Color(hex: "9CA3AF"))
+                : UIColor(Color(hex: "6B7280"))
+        }
+    )
+    static let textTertiary = Color(
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(Color(hex: "6B7280"))
+                : UIColor(Color(hex: "9CA3AF"))
+        }
+    )
     static let textOnPrimary = Color.white
+
+    // MARK: - Divider / Border (adaptive)
+    static let divider = Color(
+        uiColor: UIColor { traits in
+            traits.userInterfaceStyle == .dark
+                ? UIColor(white: 1, alpha: 0.08)
+                : UIColor(white: 0, alpha: 0.06)
+        }
+    )
 
     // MARK: - Gradients
     static let primaryGradient = LinearGradient(

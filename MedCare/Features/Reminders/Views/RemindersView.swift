@@ -7,6 +7,7 @@ struct RemindersView: View {
     @Query private var users: [User]
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
+    @State private var confirmedMedicineName: String?
 
     private var activeProfile: UserProfile? { users.first?.activeProfile }
 
@@ -44,6 +45,9 @@ struct RemindersView: View {
                                                 withAnimation {
                                                     dataService.logDose(dose, status: status)
                                                 }
+                                                if status == .taken {
+                                                    confirmedMedicineName = dose.medicine?.brandName ?? "Medicine"
+                                                }
                                                 // Update Live Activity based on action
                                                 Task {
                                                     if status == .taken || status == .skipped {
@@ -77,6 +81,13 @@ struct RemindersView: View {
             }
             .background(MCColors.backgroundLight)
             .navigationTitle("Reminders")
+            .overlay {
+                if let name = confirmedMedicineName {
+                    DoseConfirmationOverlay(medicineName: name) {
+                        confirmedMedicineName = nil
+                    }
+                }
+            }
             .onAppear {
                 Task {
                     let _ = await NotificationService.shared.requestPermission()

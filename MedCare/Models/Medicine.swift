@@ -7,9 +7,11 @@ final class Medicine {
     var brandName: String
     var genericName: String?
     var dosage: String
+    var doseForm: DoseForm
     var frequency: MedicineFrequency
     var timing: [MedicineTiming]
     var duration: Int? // days
+    var mealTiming: MealTiming
     var instructions: String?
     var manufacturer: String?
     var mrp: Double?
@@ -28,9 +30,11 @@ final class Medicine {
         brandName: String,
         genericName: String? = nil,
         dosage: String,
+        doseForm: DoseForm = .tablet,
         frequency: MedicineFrequency = .onceDaily,
         timing: [MedicineTiming] = [.morning],
         duration: Int? = nil,
+        mealTiming: MealTiming = .noPreference,
         source: MedicineSource = .manual,
         confidenceScore: Double = 1.0
     ) {
@@ -38,9 +42,11 @@ final class Medicine {
         self.brandName = brandName
         self.genericName = genericName
         self.dosage = dosage
+        self.doseForm = doseForm
         self.frequency = frequency
         self.timing = timing
         self.duration = duration
+        self.mealTiming = mealTiming
         self.instructions = nil
         self.manufacturer = nil
         self.mrp = nil
@@ -164,4 +170,74 @@ enum MedicineSource: String, Codable {
     case aiExtracted = "AI Extracted"
     case manual = "Manual Entry"
     case edited = "User Edited"
+}
+
+enum DoseForm: String, Codable, CaseIterable {
+    case tablet = "Tablet"
+    case capsule = "Capsule"
+    case syrup = "Syrup"
+    case injection = "Injection"
+    case drops = "Drops"
+    case cream = "Cream/Ointment"
+    case inhaler = "Inhaler"
+    case patch = "Patch"
+    case powder = "Powder"
+    case suppository = "Suppository"
+
+    var icon: String {
+        switch self {
+        case .tablet: return "pills"
+        case .capsule: return "capsule"
+        case .syrup: return "cup.and.saucer"
+        case .injection: return "syringe"
+        case .drops: return "drop"
+        case .cream: return "hand.raised"
+        case .inhaler: return "lungs"
+        case .patch: return "bandage"
+        case .powder: return "sparkles"
+        case .suppository: return "pill"
+        }
+    }
+
+    var unit: String {
+        switch self {
+        case .tablet, .capsule: return "tab"
+        case .syrup: return "ml"
+        case .injection: return "ml"
+        case .drops: return "drops"
+        case .cream: return "application"
+        case .inhaler: return "puff"
+        case .patch: return "patch"
+        case .powder: return "sachet"
+        case .suppository: return "unit"
+        }
+    }
+}
+
+enum MealTiming: String, Codable, CaseIterable {
+    case beforeMeal = "Before Meal"
+    case afterMeal = "After Meal"
+    case withMeal = "With Meal"
+    case emptyStomach = "Empty Stomach"
+    case noPreference = "Any Time"
+
+    var icon: String {
+        switch self {
+        case .beforeMeal: return "fork.knife"
+        case .afterMeal: return "fork.knife.circle.fill"
+        case .withMeal: return "fork.knife.circle"
+        case .emptyStomach: return "cup.and.saucer"
+        case .noPreference: return "clock"
+        }
+    }
+
+    var shortLabel: String {
+        switch self {
+        case .beforeMeal: return "Before food"
+        case .afterMeal: return "After food"
+        case .withMeal: return "With food"
+        case .emptyStomach: return "Empty stomach"
+        case .noPreference: return ""
+        }
+    }
 }

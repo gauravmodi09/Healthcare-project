@@ -339,17 +339,36 @@ struct TaskRowView: View {
 struct DoseActionCard: View {
     let doseLog: DoseLog
     let onAction: (DoseStatus) -> Void
+    @Environment(DataService.self) private var dataService
+    @State private var showDuplicateAlert = false
+    @State private var duplicateTime: Date?
 
     var body: some View {
         MCCard {
             VStack(spacing: MCSpacing.sm) {
                 HStack {
+                    Image(systemName: doseLog.medicine?.doseForm.icon ?? "pills")
+                        .font(.system(size: 16))
+                        .foregroundStyle(MCColors.primaryTeal)
+                        .frame(width: 32, height: 32)
+                        .background(MCColors.primaryTeal.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 6))
+
                     VStack(alignment: .leading, spacing: 2) {
                         Text(doseLog.medicine?.brandName ?? "Medicine")
                             .font(MCTypography.bodyMedium)
-                        Text(doseLog.medicine?.dosage ?? "")
-                            .font(MCTypography.caption)
-                            .foregroundStyle(MCColors.textSecondary)
+                        HStack(spacing: 4) {
+                            Text(doseLog.medicine?.dosage ?? "")
+                                .font(MCTypography.caption)
+                                .foregroundStyle(MCColors.textSecondary)
+                            if let med = doseLog.medicine, med.mealTiming != .noPreference {
+                                Text("·")
+                                    .foregroundStyle(MCColors.textTertiary)
+                                Text(med.mealTiming.shortLabel)
+                                    .font(MCTypography.caption)
+                                    .foregroundStyle(MCColors.warning)
+                            }
+                        }
                     }
 
                     Spacer()
@@ -363,7 +382,13 @@ struct DoseActionCard: View {
                 if doseLog.status == .pending {
                     HStack(spacing: MCSpacing.xs) {
                         Button {
-                            onAction(.taken)
+                            let check = dataService.isDuplicateDose(for: doseLog)
+                            if check.isDuplicate {
+                                duplicateTime = check.lastTakenTime
+                                showDuplicateAlert = true
+                            } else {
+                                onAction(.taken)
+                            }
                         } label: {
                             HStack(spacing: MCSpacing.xxs) {
                                 Image(systemName: "checkmark")
@@ -408,6 +433,18 @@ struct DoseActionCard: View {
                         }
                     }
                 }
+            }
+        }
+        .alert("Duplicate Dose Warning", isPresented: $showDuplicateAlert) {
+            Button("Take Anyway", role: .destructive) {
+                onAction(.taken)
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            if let time = duplicateTime {
+                Text("You already took \(doseLog.medicine?.brandName ?? "this medicine") at \(time.formatted(date: .omitted, time: .shortened)). Taking another dose this soon could be harmful.")
+            } else {
+                Text("You may have already taken this dose recently. Are you sure?")
             }
         }
     }

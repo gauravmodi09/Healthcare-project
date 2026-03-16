@@ -8,12 +8,14 @@ struct MCCard<Content: View>: View {
         self.content = content()
     }
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         content
             .padding(MCSpacing.cardPadding)
             .background(MCColors.cardBackground)
             .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
-            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+            .shadow(color: .black.opacity(colorScheme == .dark ? 0.2 : 0.06), radius: 8, y: 2)
     }
 }
 
@@ -27,6 +29,8 @@ struct MCAccentCard<Content: View>: View {
         self.content = content()
     }
 
+    @Environment(\.colorScheme) private var colorScheme
+
     var body: some View {
         HStack(spacing: 0) {
             Rectangle()
@@ -39,6 +43,6 @@ struct MCAccentCard<Content: View>: View {
         }
         .background(MCColors.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
-        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+        .shadow(color: .black.opacity(colorScheme == .dark ? 0.2 : 0.06), radius: 8, y: 2)
     }
 }

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		CC92D8BF9F584F05B842D5DC /* DoseConfirmationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9180C9A3ECDB451AB24CB12E /* DoseConfirmationOverlay.swift */; };
+		862C432FB7294BE08ED90106 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2536DC08D5CF4FB8A071446C /* OnboardingView.swift */; };
+		07DEBBC82548421DA4F39E36 /* TodayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C76CC51ADE9415693A894E4 /* TodayView.swift */; };
 		017403B7AA83947B1AEE00F5 /* AppRouter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6906073674058FE0D69DF27A /* AppRouter.swift */; };
 		024BD1115CCC6756FA9CD5D4 /* EmergencyAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9FCBC5B5E214063962B8664F /* EmergencyAlertView.swift */; };
 		03EE3506AC802D1127D389B5 /* SymptomLog.swift in Sources */ = {isa = PBXBuildFile; fileRef = E71B1D931596710E77FA6FC1 /* SymptomLog.swift */; };
@@ -118,6 +121,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		9180C9A3ECDB451AB24CB12E /* DoseConfirmationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseConfirmationOverlay.swift; sourceTree = "<group>"; };
+		2536DC08D5CF4FB8A071446C /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
+		0C76CC51ADE9415693A894E4 /* TodayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TodayView.swift; sourceTree = "<group>"; };
 		03062A9D3A3A338EFB504CA4 /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		0379F3DD718078F4ACACFF99 /* PhoneLoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhoneLoginView.swift; sourceTree = "<group>"; };
 		065DE45299423273167DDCFF /* EpisodeFilesTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EpisodeFilesTabView.swift; sourceTree = "<group>"; };
@@ -247,6 +253,7 @@
 				0379F3DD718078F4ACACFF99 /* PhoneLoginView.swift */,
 				3265BC1F24127DAF25A3CCE2 /* ProfileSetupView.swift */,
 				860F8B6B6DBD9A25E6086A5B /* SplashScreen.swift */,
+				2536DC08D5CF4FB8A071446C /* OnboardingView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -283,6 +290,7 @@
 				938D83A193BD3E835B3A2C7A /* MCBadge.swift */,
 				D64022A94F4B5B1AB078F973 /* MCButton.swift */,
 				C295CB0060698E0AEA624EDA /* MCCard.swift */,
+				9180C9A3ECDB451AB24CB12E /* DoseConfirmationOverlay.swift */,
 				411572CD64A8B9EB2DC4A554 /* MCEmptyState.swift */,
 				24188DD9C1575658D75D710E /* MCTextField.swift */,
 			);
@@ -634,6 +642,7 @@
 			isa = PBXGroup;
 			children = (
 				F92DFC21E3490828822DB66E /* HomeView.swift */,
+				0C76CC51ADE9415693A894E4 /* TodayView.swift */,
 				995DF3C0A4C7EDB81C8259D6 /* InsightsCard.swift */,
 				C420655CA9F0488A7FBDA2E0 /* MainTabView.swift */,
 				0F9D217B6086C05614935191 /* NudgeBannerView.swift */,
@@ -870,6 +879,9 @@
 				5F37C9FE011BF3B334C9D726 /* User.swift in Sources */,
 				3206E2DBE71F25EEC8CE9501 /* UserProfile.swift in Sources */,
 				DBDDAF884139C56ED5F0F2A8 /* WidgetDataService.swift in Sources */,
+				07DEBBC82548421DA4F39E36 /* TodayView.swift in Sources */,
+				862C432FB7294BE08ED90106 /* OnboardingView.swift in Sources */,
+				CC92D8BF9F584F05B842D5DC /* DoseConfirmationOverlay.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

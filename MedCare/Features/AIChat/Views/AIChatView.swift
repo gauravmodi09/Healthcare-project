@@ -6,6 +6,7 @@ struct AIChatView: View {
     @Environment(AIChatService.self) private var chatService
     @Environment(\.modelContext) private var modelContext
     @State private var messageText = ""
+    @State private var showQuickReplies = true
     @FocusState private var isInputFocused: Bool
 
     let profile: UserProfile
@@ -24,6 +25,11 @@ struct AIChatView: View {
 
                 // Messages
                 messagesList
+
+                // Quick reply chips
+                if showQuickReplies && !chatService.isStreaming {
+                    quickReplyChips
+                }
 
                 // Input bar
                 inputBar
@@ -169,6 +175,40 @@ struct AIChatView: View {
             .onChange(of: chatService.currentStreamedText) {
                 proxy.scrollTo("typing", anchor: .bottom)
             }
+        }
+    }
+
+    // MARK: - Quick Reply Chips
+
+    private var quickReplyChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                quickChip("💊 My medicines", query: "What are my current medicines?")
+                quickChip("📊 My progress", query: "How is my recovery going?")
+                quickChip("😵 Side effects?", query: "Are my symptoms normal side effects?")
+                quickChip("🍽️ Diet tips", query: "What diet should I follow with my treatment?")
+                quickChip("⏰ Missed a dose", query: "I missed my last dose, what should I do?")
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 6)
+        }
+        .background(Color(hex: "F7F9FC").opacity(0.9))
+    }
+
+    private func quickChip(_ label: String, query: String) -> some View {
+        Button {
+            messageText = query
+            sendMessage()
+            showQuickReplies = false
+        } label: {
+            Text(label)
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(Color(hex: "0A7E8C"))
+                .padding(.horizontal, 12)
+                .padding(.vertical, 8)
+                .background(Color(hex: "0A7E8C").opacity(0.08))
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color(hex: "0A7E8C").opacity(0.15), lineWidth: 1))
         }
     }
 

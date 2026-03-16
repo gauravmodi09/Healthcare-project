@@ -26,6 +26,7 @@ targets:
         excludes:
           - "**/*.xcassets"
           - "Resources/Info.plist"
+      - path: Shared
     resources:
       - path: MedCare/Resources
     settings:
@@ -40,6 +41,31 @@ targets:
       path: MedCare/Resources/MedCare.entitlements
       properties:
         aps-environment: development
+        com.apple.security.application-groups:
+          - group.com.medcare.shared
+    dependencies:
+      - target: MedCareWidgetExtension
+        embed: true
+
+  MedCareWidgetExtension:
+    type: app-extension
+    platform: iOS
+    deploymentTarget: "17.0"
+    sources:
+      - path: MedCareWidgetExtension
+      - path: Shared
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: com.medcare.app.widgets
+        INFOPLIST_FILE: MedCareWidgetExtension/Info.plist
+        LD_RUNPATH_SEARCH_PATHS: "$(inherited) @executable_path/Frameworks @executable_path/../../Frameworks"
+        SKIP_INSTALL: true
+        CODE_SIGN_STYLE: Automatic
+    entitlements:
+      path: MedCareWidgetExtension/MedCareWidgetExtension.entitlements
+      properties:
+        com.apple.security.application-groups:
+          - group.com.medcare.shared
 
   MedCareTests:
     type: bundle.unit-test
@@ -58,6 +84,7 @@ schemes:
     build:
       targets:
         MedCare: all
+        MedCareWidgetExtension: all
     run:
       config: Debug
     test:

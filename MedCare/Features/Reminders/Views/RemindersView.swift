@@ -3,6 +3,7 @@ import SwiftData
 
 struct RemindersView: View {
     @Environment(DataService.self) private var dataService
+    @Environment(LiveActivityService.self) private var liveActivityService
     @Query private var users: [User]
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
@@ -43,14 +44,23 @@ struct RemindersView: View {
                                                 withAnimation {
                                                     dataService.logDose(dose, status: status)
                                                 }
-                                                // Schedule notification if snoozed
-                                                if status == .snoozed, let med = dose.medicine {
-                                                    Task {
+                                                // Update Live Activity based on action
+                                                Task {
+                                                    if status == .taken || status == .skipped {
+                                                        await liveActivityService.endActivity(doseLogId: dose.id)
+                                                    } else if status == .snoozed, let med = dose.medicine {
                                                         await NotificationService.shared.scheduleSnooze(
                                                             medicineId: med.id,
                                                             medicineName: med.brandName,
                                                             dosage: med.dosage,
                                                             doseLogId: dose.id
+                                                        )
+                                                        let snoozedUntil = Date().addingTimeInterval(15 * 60)
+                                                        await liveActivityService.updateActivity(
+                                                            doseLogId: dose.id,
+                                                            status: .snoozed,
+                                                            minutesRemaining: 15,
+                                                            snoozedUntil: snoozedUntil
                                                         )
                                                     }
                                                 }

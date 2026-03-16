@@ -55,10 +55,12 @@ final class NotificationService: Sendable {
         doseLogId: UUID
     ) async {
         let content = UNMutableNotificationContent()
-        content.title = "Time for your medicine"
+        content.title = "Time for your medicine 💊"
         content.body = "\(medicineName) \(dosage)"
         content.sound = .default
         content.categoryIdentifier = "DOSE_REMINDER"
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 1.0
         content.userInfo = [
             "medicineId": medicineId.uuidString,
             "doseLogId": doseLogId.uuidString
@@ -101,10 +103,12 @@ final class NotificationService: Sendable {
         minutes: Int = 15
     ) async {
         let content = UNMutableNotificationContent()
-        content.title = "Snoozed reminder"
+        content.title = "Snoozed reminder 💊"
         content.body = "\(medicineName) \(dosage) — take it now!"
         content.sound = .default
         content.categoryIdentifier = "DOSE_REMINDER"
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 1.0
         content.userInfo = [
             "medicineId": medicineId.uuidString,
             "doseLogId": doseLogId.uuidString

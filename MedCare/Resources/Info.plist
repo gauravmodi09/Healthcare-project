@@ -50,5 +50,18 @@
     <string>MedCare needs photo library access to select prescription and medicine photos.</string>
     <key>UIUserInterfaceStyle</key>
     <string>Light</string>
+    <key>NSSupportsLiveActivities</key>
+    <true/>
+    <key>CFBundleURLTypes</key>
+    <array>
+        <dict>
+            <key>CFBundleURLName</key>
+            <string>com.medcare.app</string>
+            <key>CFBundleURLSchemes</key>
+            <array>
+                <string>medcare</string>
+            </array>
+        </dict>
+    </array>
 </dict>
 </plist>

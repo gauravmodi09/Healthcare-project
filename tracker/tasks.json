@@ -1,1 +1,1071 @@
-[]
+[
+  {
+    "id": "p1_001",
+    "title": "Project scaffold + design system",
+    "desc": "Xcode project, folder structure, MCColors, MCTypography, MCSpacing, core components (MCButton, MCCard, MCBadge, MCTextField, MCEmptyState)",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-01-15"
+  },
+  {
+    "id": "p1_002",
+    "title": "Auth flow (Splash, Phone, OTP, Profile)",
+    "desc": "Phone login with +91, OTP verification, Keychain token storage, profile setup with demographics",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-01-20"
+  },
+  {
+    "id": "p1_003",
+    "title": "SwiftData models & relationships",
+    "desc": "User, UserProfile, Episode, Medicine, DoseLog, CareTask, SymptomLog, ChatMessage, Nudge, EpisodeImage models with all relationships",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-01-25"
+  },
+  {
+    "id": "p1_004",
+    "title": "Home dashboard with CTA cards",
+    "desc": "Two-door CTA (Consult Doctor/Upload Prescription), active episodes, today's medication summary, upcoming tasks, greeting + profile switcher",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-02-01"
+  },
+  {
+    "id": "p1_005",
+    "title": "Prescription upload flow",
+    "desc": "Camera/gallery picker, image compression, 4-step progress UI (upload, extraction, validation, stitching)",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-02-05"
+  },
+  {
+    "id": "p1_006",
+    "title": "AI extraction + confirmation screen",
+    "desc": "Mock GPT-4V extraction service with confidence scoring, HITL confirmation gate, low-confidence amber warnings",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-02-10"
+  },
+  {
+    "id": "p1_007",
+    "title": "Episode management (4-tab interface)",
+    "desc": "Plan tab (medicines + adherence), Reminders tab (dose logs), Symptoms tab (history + charts), Files tab (documents by type)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-02-15"
+  },
+  {
+    "id": "p1_008",
+    "title": "Reminders engine + local notifications",
+    "desc": "UserNotifications scheduling, actionable notifications (Take/Skip/Snooze), dose status logging, time-sensitive interruption level",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-02-20"
+  },
+  {
+    "id": "p1_009",
+    "title": "Symptom tracking + daily check-in",
+    "desc": "Feeling slider (terrible to great), symptom list with severity, optional vitals (temp, BP, weight), notes field",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-02-25"
+  },
+  {
+    "id": "p1_010",
+    "title": "Multi-profile family management",
+    "desc": "Up to 5 family profiles (self, spouse, parent, child, sibling), profile switching, per-profile episodes, avatar emoji selector",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-03-01"
+  },
+  {
+    "id": "p1_011",
+    "title": "File & document management",
+    "desc": "Upload documents (prescriptions, lab reports, scans, bills), thumbnail grid, detail view with edit/delete, profile-level aggregation by type",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-03-05"
+  },
+  {
+    "id": "p1_012",
+    "title": "History & analytics dashboard",
+    "desc": "Time range picker (7/14/30 days), adherence trend charts, episode history timeline, PDF export",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-03-05"
+  },
+  {
+    "id": "p1_013",
+    "title": "Smart nudges system",
+    "desc": "Missed dose detection (2+ consecutive), course ending alerts, adherence drop warnings (<70%), no symptom log reminders, 24hr dedup",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-03-08"
+  },
+  {
+    "id": "p1_014",
+    "title": "Rich demo seed data",
+    "desc": "3 profiles (Rahul 30M, Mom 58F, Dad 62M), multiple episodes with realistic medicines, dose logs, symptom trajectories, documents",
+    "category": "infra",
+    "priority": "low",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-03-10"
+  },
+  {
+    "id": "p1_015",
+    "title": "Design system & UI polish",
+    "desc": "MCColors (teal/coral theme), MCTypography, MCSpacing, consistent card shadows, gradients, spacing fixes across all screens",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 1: Core",
+    "status": "done",
+    "created": "2026-03-12"
+  },
+
+  {
+    "id": "p25_001",
+    "title": "AI Chat — core conversation engine",
+    "desc": "In-app AI chat with streaming responses, context-aware system prompts, patient history assembly, medical disclaimers, action button suggestions",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-13"
+  },
+  {
+    "id": "p25_002",
+    "title": "AI Chat — Groq LLM integration",
+    "desc": "Groq Cloud API with Llama 3.3 70B, SSE streaming via URLSession.bytes, OpenAI-compatible format, mock fallback when no API key",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-14"
+  },
+  {
+    "id": "p25_003",
+    "title": "AI Chat — emergency keyword detection",
+    "desc": "Detect chest pain, breathing difficulty, suicidal ideation, severe allergy, stroke, unconscious. Hindi/Hinglish support. Show emergency UI with Call 112",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-14"
+  },
+  {
+    "id": "p25_004",
+    "title": "AI Chat — chat UI with streaming",
+    "desc": "Chat bubbles, typing indicator animation, message history, inline action buttons, input bar with send/mic toggle, disclaimer banner",
+    "category": "design",
+    "priority": "high",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-14"
+  },
+  {
+    "id": "p25_005",
+    "title": "Dynamic Island — Live Activities for dose reminders",
+    "desc": "ActivityKit integration, compact/expanded/lock screen views, Take/Snooze/Skip buttons via deep links, countdown timer, MedCare teal branding",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-15"
+  },
+  {
+    "id": "p25_006",
+    "title": "Dynamic Island — LiveActivityService",
+    "desc": "Start activity 15min before dose, update countdown every 60s, auto-end 30min overdue, deep link handling for Take/Snooze/Skip actions",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-15"
+  },
+  {
+    "id": "p25_007",
+    "title": "Time-sensitive notifications",
+    "desc": "Added interruptionLevel .timeSensitive and relevanceScore 1.0 to dose reminders and snooze notifications for higher priority delivery",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 2.5: AI",
+    "status": "done",
+    "created": "2026-03-15"
+  },
+
+  {
+    "id": "p0_001",
+    "title": "Fix device signing & deploy to iPhone",
+    "desc": "Set DEVELOPMENT_TEAM in Xcode, configure automatic signing for both MedCare and MedCareWidgetExtension targets, build and install on physical device",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 3: Polish",
+    "status": "in-progress",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p0_002",
+    "title": "Test Groq AI chat on physical device",
+    "desc": "Verify LLM streaming works over cellular/WiFi on real device, test response quality, fallback behavior, error handling",
+    "category": "bug",
+    "priority": "critical",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p0_003",
+    "title": "Test Dynamic Island on physical device",
+    "desc": "Verify Live Activities appear on Dynamic Island, test Take/Snooze/Skip buttons, countdown updates, deep link navigation",
+    "category": "bug",
+    "priority": "critical",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p0_004",
+    "title": "Test notifications on physical device",
+    "desc": "Verify dose reminder notifications fire at correct times, test actionable buttons, snooze rescheduling, time-sensitive delivery",
+    "category": "bug",
+    "priority": "critical",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "p3_001",
+    "title": "Welcome onboarding carousel",
+    "desc": "3-slide onboarding: Track Medicines, AI Health Chat, Family Care. Skip option, dot indicators, beautiful illustrations, only shown on first launch",
+    "category": "design",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_002",
+    "title": "Guided tour overlay on first visit",
+    "desc": "Spotlight overlay highlighting key Home screen areas (doses, episodes, AI chat). Coach marks with arrows and brief text explanations",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_003",
+    "title": "Quick-add medicine flow",
+    "desc": "For users without prescriptions — manually add medicine name, dosage, frequency, timing in 30 seconds. Auto-create episode and schedule doses",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_004",
+    "title": "Persist AI chat history across sessions",
+    "desc": "Save ChatMessage array to SwiftData. Load previous conversations on app relaunch. Add 'New Chat' button to start fresh conversation",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_005",
+    "title": "AI Chat — quick reply chips",
+    "desc": "After each AI response, show 2-3 suggested follow-up questions as tappable chips below the message. Context-aware suggestions",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_006",
+    "title": "AI Chat — voice input (Speech-to-Text)",
+    "desc": "iOS Speech framework integration. Hold mic button to record, auto-transcribe to text, send as message. Support English + Hindi",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_007",
+    "title": "AI Chat — structured health responses",
+    "desc": "Format AI responses with clear sections: Possible Cause, What You Can Do, When to See a Doctor. Use markdown rendering in chat bubbles",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_008",
+    "title": "AI Chat — share conversation as PDF",
+    "desc": "Export chat history as formatted PDF to share with doctor. Include patient context, timestamps, medicine list",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_009",
+    "title": "Smart snooze — learn preferred duration",
+    "desc": "Track user's snooze behavior. If they always snooze 10min, default to 10min. Offer 5/10/15/30min options",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_010",
+    "title": "Adherence streak tracking & celebrations",
+    "desc": "Track consecutive days of 100% adherence. Show streak counter on Home screen. Celebrate milestones (7-day, 30-day) with animations",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_011",
+    "title": "Visual dose calendar (monthly view)",
+    "desc": "Monthly calendar with color-coded days: green (100%), yellow (partial), red (missed). Tap day to see dose details. Shows patterns at a glance",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_012",
+    "title": "Refill reminders based on pill count",
+    "desc": "Track remaining pill count per medicine. Alert 5 days before running out. Option to set total pills when adding medicine",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_013",
+    "title": "Notification grouping for multiple doses",
+    "desc": "Batch multiple due doses into single notification: 'Morning medicines: Paracetamol, Azithromycin, Vitamin D'. Reduces notification fatigue",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_014",
+    "title": "Expanded Dynamic Island — multiple doses",
+    "desc": "Show next 2-3 upcoming doses in expanded Dynamic Island view instead of just one. Daily adherence % ring",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_015",
+    "title": "Siri Shortcuts integration",
+    "desc": "\"Hey Siri, mark my morning medicines as taken\". Donate intents for common actions. App Shortcuts for iOS 16+ Shortcuts app",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_016",
+    "title": "Buddy system — notify family on missed dose",
+    "desc": "If dose is missed for 2+ hours, send push notification to designated family member/caregiver. Configurable per profile",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p3_017",
+    "title": "Permission primer screens",
+    "desc": "Show custom explanation screen before iOS permission dialogs (notifications, camera, health). Explain why each permission is needed",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "p4_001",
+    "title": "Real OCR — Apple Vision framework",
+    "desc": "Replace mock prescription extraction with on-device Apple Vision text recognition. Extract text blocks, identify medicine names, dosages, frequencies",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_002",
+    "title": "Medicine name fuzzy matching",
+    "desc": "Build Indian drug database (brand names + generics). Fuzzy match extracted text against database. Handle misspellings, abbreviations, handwriting errors",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_003",
+    "title": "Handwriting recognition for prescriptions",
+    "desc": "Indian doctors commonly handwrite prescriptions. Train/use Vision model optimized for medical handwriting. OCR confidence scoring per field",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_004",
+    "title": "Multi-page prescription stitching",
+    "desc": "Allow uploading multiple photos for one prescription. Stitch and process as single document. Handle front/back of prescription",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_005",
+    "title": "Auto-detect document type from photo",
+    "desc": "Classify uploaded photo as prescription, lab report, bill, insurance, discharge summary. Auto-tag document type. Reduce manual selection",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_006",
+    "title": "Drug interaction checker — real database",
+    "desc": "Integrate DrugBank or OpenFDA API for real drug interaction data. Cross-check all active medicines across all episodes. Severity levels (minor/moderate/severe)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_007",
+    "title": "Food interaction alerts",
+    "desc": "Alert users about food-medicine interactions: Ciprofloxacin + milk, Warfarin + vitamin K foods, statins + grapefruit. Show at meal-time reminders",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_008",
+    "title": "Side effect tracker & correlation",
+    "desc": "When user logs a symptom, auto-check if it matches known side effects of their medicines. Show correlation: 'Nausea may be caused by Azithromycin'",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_009",
+    "title": "Medicine info cards",
+    "desc": "Tap any medicine to see: uses, common side effects, how to take, storage, generic alternatives, manufacturer info. Data from Indian pharma database",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_010",
+    "title": "Generic alternative suggestions",
+    "desc": "Show cheaper generic alternatives when adding a branded medicine. Price comparison, same composition. Help users save on medicine costs",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_011",
+    "title": "Symptom trend analysis",
+    "desc": "Analyze logged symptoms over time. Show trends: 'Your headaches are getting less frequent'. Predict recovery trajectory vs typical recovery curve",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_012",
+    "title": "Health score (0-100)",
+    "desc": "Composite score from: adherence %, symptom improvement, vitals stability, task completion. Show on Home screen. Weekly trend chart",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_013",
+    "title": "Weekly health summary (automated)",
+    "desc": "Every Sunday, generate AI-powered health report: adherence stats, symptom trends, upcoming tasks, medicine changes, tips for improvement",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_014",
+    "title": "Anomaly detection in vitals",
+    "desc": "Flag unusual patterns: sudden weight change, BP spike, temperature anomaly. Alert user and suggest contacting doctor",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_015",
+    "title": "AI Chat — image analysis",
+    "desc": "Send photo of rash, wound, swelling in chat. AI provides initial assessment with strong disclaimer. Suggest urgency level (self-care vs doctor visit)",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p4_016",
+    "title": "Pregnancy/lactation medicine warnings",
+    "desc": "Flag medicines unsafe during pregnancy or breastfeeding when relevant profile is set. Use FDA pregnancy categories",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "p5_001",
+    "title": "Backend API design & setup",
+    "desc": "Design REST API (FastAPI or Node.js). User auth, data sync endpoints, real-time WebSocket. Deploy on Railway/Supabase",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_002",
+    "title": "Cloud database & data sync",
+    "desc": "PostgreSQL/Supabase for user data. Real-time sync across devices. Offline-first architecture with conflict resolution",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_003",
+    "title": "Data encryption & HIPAA compliance",
+    "desc": "AES-256 encryption at rest, TLS 1.3 in transit. HIPAA-compliant medical data storage. Audit logging for data access",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_004",
+    "title": "Account deletion & data export (GDPR)",
+    "desc": "Complete data wipe on account deletion per GDPR/IT Act. Export all data as encrypted JSON/PDF. 30-day grace period",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_005",
+    "title": "Caregiver dashboard",
+    "desc": "One screen to see all family members' adherence. Alert feed for missed doses. One-tap call to patient. Medicine refill predictor",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_006",
+    "title": "Role-based access (caregiver vs self)",
+    "desc": "Define permissions: caregiver can view/remind but not modify. Self-manager has full access. Invitation flow for adding caregivers",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_007",
+    "title": "Elder care mode — simplified UI",
+    "desc": "Large text, simplified navigation (only 3 tabs), high contrast, big take/skip buttons, voice reminders, reduced cognitive load",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_008",
+    "title": "Emergency info card",
+    "desc": "Shareable card with: medicines, allergies, blood group, emergency contacts, insurance info. Show on lock screen widget. Export as image",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_009",
+    "title": "Doctor profile linking",
+    "desc": "Save doctor details (name, specialization, hospital, phone, registration number). Link doctors to episodes. Quick call/message buttons",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_010",
+    "title": "Appointment reminders from prescriptions",
+    "desc": "Extract follow-up dates from prescriptions. Auto-create calendar reminders. Show upcoming appointments on Home screen",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_011",
+    "title": "Treatment summary export for doctor",
+    "desc": "One-tap PDF report for doctor visit: adherence %, symptom log, vitals, medicines with timing, specific concerns. Shareable via WhatsApp/email",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_012",
+    "title": "Teleconsult integration (Practo/1mg)",
+    "desc": "Video call via Practo/1mg API. Auto-share patient summary before call. In-app prescription receive after consultation",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_013",
+    "title": "Medicine ordering from pharmacies",
+    "desc": "Order refills from 1mg/PharmEasy/Netmeds via API. Price comparison across pharmacies. Auto-refill scheduling",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_014",
+    "title": "Nearby pharmacy finder (MapKit)",
+    "desc": "MapKit integration to find nearby pharmacies. Show distance, ratings, medicine availability. Directions integration",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p5_015",
+    "title": "Real OTP authentication (SMS provider)",
+    "desc": "Replace mock OTP with real SMS provider (MSG91/Twilio). Rate limiting, retry logic, OTP expiry (5 min), resend cooldown",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "p6_001",
+    "title": "Adherence streak badges & celebrations",
+    "desc": "Visual flame/trophy badges for streaks. Confetti animation on 7-day, 30-day milestones. Share achievement on social media",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_002",
+    "title": "Daily health missions",
+    "desc": "3 daily missions: 'Log your symptoms', 'Take all doses on time', 'Check your vitals'. Progress bar, completion rewards",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_003",
+    "title": "Achievement system",
+    "desc": "Unlock achievements: First Week Champion, Month of Consistency, Family Health Hero, Zero Missed Week. Trophy case in profile",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_004",
+    "title": "Satisfying dose-taken animations",
+    "desc": "Haptic feedback + visual animation when marking dose as taken. Checkmark morph, particle effects, sound feedback",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_005",
+    "title": "Medicine education cards",
+    "desc": "\"Did you know?\" cards about user's medicines. Show one per day on Home screen. Engaging medical facts, dosing tips",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_006",
+    "title": "Condition-specific health tips",
+    "desc": "Curated tips based on user's conditions: diabetes diet tips, post-surgery care, BP management. AI-generated, doctor-reviewed",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_007",
+    "title": "Seasonal health alerts",
+    "desc": "Push notifications for dengue season, flu season, pollution alerts, heatwave warnings. Location-based relevance",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p6_008",
+    "title": "Child care mode — gamified",
+    "desc": "Fun character avatar, rewards for taking medicine, animated mascot, simple language, parent-controlled settings",
+    "category": "design",
+    "priority": "low",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "p7_001",
+    "title": "Home screen widgets (small + medium + large)",
+    "desc": "Small: next dose countdown. Medium: today's dose summary with adherence %. Large: full day schedule. Interactive take button (iOS 17+)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_002",
+    "title": "Lock screen & StandBy widgets",
+    "desc": "Lock screen widget: next dose countdown. StandBy mode: bedside medicine reminder with large text and time",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_003",
+    "title": "Apple Watch app",
+    "desc": "Basic watch app: next dose, take/skip buttons, daily adherence ring, haptic reminders, complication for watch face",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_004",
+    "title": "HealthKit integration",
+    "desc": "Sync vitals from Apple Health: heart rate, steps, sleep, blood pressure, weight. Show trends alongside medicine adherence",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_005",
+    "title": "iPad optimized layout",
+    "desc": "Sidebar navigation on iPad. Split view: episodes list + detail. Drag-and-drop document management. Keyboard shortcuts",
+    "category": "design",
+    "priority": "low",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_006",
+    "title": "VoiceOver & accessibility audit",
+    "desc": "Full screen reader support. Dynamic Type for all text sizes. High contrast mode (WCAG AAA). Reduce motion support",
+    "category": "design",
+    "priority": "high",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_007",
+    "title": "Hindi localization",
+    "desc": "Full app translation to Hindi. Medicine names in Devanagari script. AI chat responses in Hindi when preferred",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p7_008",
+    "title": "Regional language support (Tamil, Telugu, Bengali, Marathi)",
+    "desc": "Top 4 Indian languages after Hindi. Localized strings, regional medicine names, voice input support",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "p8_001",
+    "title": "Freemium subscription tiers",
+    "desc": "Free: 1 profile, 5 medicines, basic reminders. Pro (₹149/mo): 3 profiles, unlimited medicines, AI chat. Premium (₹299/mo): all features, family dashboard",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p8_002",
+    "title": "StoreKit 2 in-app purchases",
+    "desc": "Implement subscription management with StoreKit 2. Monthly/yearly plans, restore purchases, receipt validation, grace period handling",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p8_003",
+    "title": "App Store listing & ASO",
+    "desc": "Keywords, screenshots, preview video, description, categories. A/B test app icon. Localized listings for Hindi",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p8_004",
+    "title": "Referral rewards program",
+    "desc": "Invite family members, earn 7-day Pro trial. Share referral code. Track invitations and conversions",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p8_005",
+    "title": "Analytics & event tracking (Mixpanel/PostHog)",
+    "desc": "DAU/MAU, D1/D7/D30 retention, feature usage heatmap, funnel analysis (onboarding, prescription upload), adherence metrics",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p8_006",
+    "title": "Crash reporting (Firebase Crashlytics)",
+    "desc": "Integrate crash reporting. Target 99.5% crash-free rate. Symbolication, breadcrumbs, user context for debugging",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "p8_007",
+    "title": "In-app NPS surveys",
+    "desc": "Periodic satisfaction surveys (NPS). Trigger after 7 days of use. Target NPS >50. Feedback collection for improvement",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 8: Growth",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+
+  {
+    "id": "td_001",
+    "title": "Unit tests — Services layer (70% coverage)",
+    "desc": "Write unit tests for DataService, AIChatService, NotificationService, LiveActivityService, SmartNudgeService. XCTest framework",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_002",
+    "title": "UI tests — critical user flows",
+    "desc": "XCUITest for: login flow, add medicine, take dose, AI chat conversation, profile switching. Run in CI pipeline",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_003",
+    "title": "SwiftLint integration",
+    "desc": "Add SwiftLint for code style consistency. Configure rules, add build phase script, fix existing violations",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_004",
+    "title": "Proper dependency injection",
+    "desc": "Replace singletons with DI container. Inject services via @Environment. Enables better testing and modularity",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_005",
+    "title": "Repository pattern for data access",
+    "desc": "Abstract SwiftData behind repository interfaces. Separate concerns between service and persistence layers. Protocol-based for mocking",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_006",
+    "title": "Error handling audit",
+    "desc": "Ensure all network calls, file operations, and SwiftData queries have proper error states. User-friendly error messages. Retry logic",
+    "category": "bug",
+    "priority": "medium",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_007",
+    "title": "Performance profiling with Instruments",
+    "desc": "Profile app with Xcode Instruments. Check for memory leaks, excessive allocations, slow renders. Target <2s cold start",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_008",
+    "title": "Image caching for document thumbnails",
+    "desc": "Cache document thumbnails in memory and disk. Lazy loading for thumbnail grids. Reduce memory footprint on Files screen",
+    "category": "infra",
+    "priority": "low",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  },
+  {
+    "id": "td_009",
+    "title": "Feature flags (remote config)",
+    "desc": "Firebase Remote Config or custom feature flag system. A/B testing, gradual rollout of new features, kill switches",
+    "category": "infra",
+    "priority": "low",
+    "phase": "Tech Debt",
+    "status": "backlog",
+    "created": "2026-03-16"
+  }
+]

@@ -10,6 +10,8 @@ final class AIChatService {
     var currentStreamedText = ""
     var messages: [ChatMessage] = []
     var activeEmergency: EmergencyType?
+    private var currentStreamTask: Task<Void, Never>?
+    private let llmService = LLMService()
 
     // MARK: - Configuration
 
@@ -156,29 +158,53 @@ final class AIChatService {
         // 3. Build context + prompt
         let context = assembleContext(profile: profile, activeEpisodes: activeEpisodes)
 
-        // 4. Stream AI response
+        // 4. Cancel any in-flight stream
+        currentStreamTask?.cancel()
+
+        // 5. Stream AI response
         isStreaming = true
         currentStreamedText = ""
 
         let assistantMessage = ChatMessage(role: .assistant, content: "")
         messages.append(assistantMessage)
 
-        // Use mock streaming for now — replace with real API call later
-        let response = await generateMockResponse(for: text, context: context)
-
-        // Simulate token-by-token streaming
-        for char in response {
-            currentStreamedText += String(char)
-            assistantMessage.content = currentStreamedText
-
-            // Pace the streaming (~30ms per character for natural feel)
-            try? await Task.sleep(nanoseconds: 30_000_000)
+        // Try real LLM first, fall back to mock responses
+        if llmService.isConfigured {
+            do {
+                let history = buildConversationHistory()
+                let stream = llmService.streamResponse(
+                    systemPrompt: systemPrompt,
+                    context: context,
+                    conversationHistory: history,
+                    userMessage: text
+                )
+                for try await token in stream {
+                    currentStreamedText += token
+                    assistantMessage.content = currentStreamedText
+                }
+            } catch {
+                // LLM failed — fall back to mock if nothing was streamed yet
+                if currentStreamedText.isEmpty {
+                    let response = await generateMockResponse(for: text, context: context)
+                    currentStreamedText = response
+                    assistantMessage.content = response
+                }
+            }
+        } else {
+            // No API key — use mock responses with simulated streaming
+            let response = await generateMockResponse(for: text, context: context)
+            for char in response {
+                currentStreamedText += String(char)
+                assistantMessage.content = currentStreamedText
+                try? await Task.sleep(nanoseconds: 30_000_000)
+            }
         }
 
-        // 5. Add action buttons based on content
-        assistantMessage.actionButtons = suggestActions(for: text, response: response)
+        // 6. Add action buttons based on content
+        let finalResponse = assistantMessage.content
+        assistantMessage.actionButtons = suggestActions(for: text, response: finalResponse)
 
-        // 6. Persist
+        // 7. Persist
         modelContext.insert(assistantMessage)
         try? modelContext.save()
 
@@ -186,19 +212,48 @@ final class AIChatService {
         currentStreamedText = ""
     }
 
+    // MARK: - Conversation History
+
+    /// Converts recent chat messages to LLMMessage format for the API
+    private func buildConversationHistory() -> [LLMMessage] {
+        messages
+            .filter { $0.role == .user || $0.role == .assistant }
+            .suffix(10)
+            .compactMap { msg in
+                guard !msg.content.isEmpty else { return nil }
+                return LLMMessage(role: msg.role.rawValue, content: msg.content)
+            }
+    }
+
     // MARK: - Action Suggestions
 
     private func suggestActions(for userText: String, response: String) -> [ChatAction] {
         var actions: [ChatAction] = []
-        let lower = userText.lowercased()
+        let lower = userText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
-        if lower.contains("symptom") || lower.contains("feeling") || lower.contains("pain") {
+        // Greetings & casual → show quick-start options
+        let greetings = ["hello", "hi", "hey", "hola", "namaste", "namaskar", "yo", "sup", "good morning", "good afternoon", "good evening", "howdy", "hii", "hiii", "help", "what can you do", "menu"]
+        let isGreeting = greetings.contains(where: { lower == $0 || lower.hasPrefix($0 + " ") || lower.hasPrefix($0 + "!") || lower.hasPrefix($0 + ",") })
+
+        if isGreeting {
+            actions.append(ChatAction(title: "💊 My Medicines", type: .viewEpisode))
             actions.append(ChatAction(title: "📝 Log Symptom", type: .logSymptom))
+            actions.append(ChatAction(title: "📊 My Progress", type: .viewTimeline))
+            return actions
+        }
+
+        if lower.contains("symptom") || lower.contains("feeling") || lower.contains("pain") || lower.contains("dizzy") || lower.contains("nausea") {
+            actions.append(ChatAction(title: "📝 Log Symptom", type: .logSymptom))
+            actions.append(ChatAction(title: "👨‍⚕️ Talk to Doctor", type: .callDoctor))
         }
         if lower.contains("doctor") || lower.contains("appointment") || lower.contains("consult") {
             actions.append(ChatAction(title: "👨‍⚕️ Talk to Doctor", type: .callDoctor))
         }
-        if lower.contains("progress") || lower.contains("how long") || lower.contains("timeline") {
+        if lower.contains("progress") || lower.contains("how long") || lower.contains("timeline") || lower.contains("how am i") {
+            actions.append(ChatAction(title: "📊 View Timeline", type: .viewTimeline))
+        }
+        if lower.contains("not working") || lower.contains("no improvement") || lower.contains("worse") {
+            actions.append(ChatAction(title: "👨‍⚕️ Talk to Doctor", type: .callDoctor))
             actions.append(ChatAction(title: "📊 View Timeline", type: .viewTimeline))
         }
 
@@ -209,10 +264,76 @@ final class AIChatService {
 
     /// Generates contextual mock responses until real API is connected
     private func generateMockResponse(for userText: String, context: String) async -> String {
-        let lower = userText.lowercased()
+        let lower = userText.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
 
         // Add a small delay to simulate network
         try? await Task.sleep(nanoseconds: 500_000_000)
+
+        // Extract patient name from context
+        let patientName = extractName(from: context)
+
+        // --- Greetings ---
+        let greetings = ["hello", "hi", "hey", "hola", "namaste", "namaskar", "yo", "sup", "good morning", "good afternoon", "good evening", "howdy", "hii", "hiii", "hiiii"]
+        if greetings.contains(where: { lower == $0 || lower.hasPrefix($0 + " ") || lower.hasPrefix($0 + "!") || lower.hasPrefix($0 + ",") }) {
+            let timeGreeting = Self.timeBasedGreeting()
+            return """
+            \(timeGreeting), \(patientName)! 😊 Great to see you here.
+
+            I'm your MedCare AI health companion — think of me as a friendly guide who helps you stay on top of your treatment.
+
+            Here's what I can help you with right now:
+            • 💊 **Explain your medicines** — what they do, when to take them
+            • 📈 **Check your progress** — how your recovery is going
+            • 🤔 **Answer questions** — side effects, diet, lifestyle tips
+            • 📝 **Log symptoms** — track how you're feeling
+
+            What's on your mind today? Feel free to ask me anything!
+
+            💊 Remember: I'm your health companion, not your doctor. Always follow your doctor's advice.
+            """
+        }
+
+        // --- Thank you / appreciation ---
+        let thanks = ["thank", "thanks", "thx", "dhanyavaad", "dhanyawad", "shukriya", "appreciate"]
+        if thanks.contains(where: { lower.contains($0) }) {
+            return """
+            You're welcome, \(patientName)! 😊 I'm always here whenever you need me.
+
+            Is there anything else you'd like to know about your treatment or how you're feeling?
+
+            💊 Remember: I'm your health companion, not your doctor. Always follow your doctor's advice.
+            """
+        }
+
+        // --- How are you / casual chat ---
+        let casualChat = ["how are you", "how r u", "kaise ho", "kaisa hai", "what's up", "wassup", "kya haal"]
+        if casualChat.contains(where: { lower.contains($0) }) {
+            return """
+            I'm doing great, thanks for asking! 😄 More importantly — how are **you** feeling today, \(patientName)?
+
+            If you've noticed any changes in your symptoms or have questions about your medicines, I'm all ears. Or if you just want to check in on your progress, I can help with that too!
+
+            💊 Remember: I'm your health companion, not your doctor. Always follow your doctor's advice.
+            """
+        }
+
+        // --- Help / what can you do ---
+        let helpPhrases = ["help", "what can you do", "kya kar sakte", "what do you do", "options", "menu"]
+        if helpPhrases.contains(where: { lower.contains($0) }) {
+            return """
+            Of course! Here's how I can help you, \(patientName):
+
+            🔹 **\"What does my medicine do?\"** — I'll explain your prescriptions in simple terms
+            🔹 **\"I'm feeling dizzy\"** — I'll check if it's a known side effect and share tips
+            🔹 **\"Can I stop my medicine?\"** — I'll explain why completing the course matters
+            🔹 **\"How's my progress?\"** — I'll review your symptom logs and adherence
+            🔹 **\"I'm not improving\"** — I'll help you understand recovery timelines
+
+            Just type naturally — even Hinglish works! I'm here to make your recovery smoother. 💪
+
+            💊 Remember: I'm your health companion, not your doctor. Always follow your doctor's advice.
+            """
+        }
 
         if lower.contains("side effect") || lower.contains("dizzy") || lower.contains("nausea") {
             return """
@@ -280,21 +401,44 @@ final class AIChatService {
             """
         }
 
-        // Default supportive response
+        // Default conversational response
         return """
-        Thank you for sharing that with me. I want you to know that I'm here to help you understand your treatment better.
+        That's a great question, \(patientName)! Let me help you with that.
 
-        Based on your current care plan, you're on the right track. Your adherence has been consistent, and that's the most important thing for recovery.
+        While I work best with specific health questions about your treatment, here are some things I can assist with right now:
 
-        Here are a few things that might help:
-        • Keep taking your medicines at the scheduled times
-        • Log your symptoms daily so we can track your progress
-        • Stay hydrated and get adequate rest
+        • **Ask about your medicines** — \"What does Augmentin do?\"
+        • **Report how you feel** — \"I'm feeling dizzy after my dose\"
+        • **Check your progress** — \"How am I doing?\"
+        • **Understand your recovery** — \"Why isn't my medicine working yet?\"
 
-        Is there anything specific about your treatment you'd like to know more about?
+        Just ask naturally — I'm here to help you feel informed and confident about your care! 😊
 
         💊 Remember: I'm your health companion, not your doctor. Always follow your doctor's advice.
         """
+    }
+
+    // MARK: - Helpers
+
+    /// Returns a time-appropriate greeting
+    private static func timeBasedGreeting() -> String {
+        let hour = Calendar.current.component(.hour, from: Date())
+        switch hour {
+        case 5..<12: return "Good morning"
+        case 12..<17: return "Good afternoon"
+        case 17..<21: return "Good evening"
+        default: return "Hey there"
+        }
+    }
+
+    /// Extracts patient name from context string
+    private func extractName(from context: String) -> String {
+        for line in context.components(separatedBy: "\n") {
+            if line.contains("- Name:") {
+                return line.replacingOccurrences(of: "- Name:", with: "").trimmingCharacters(in: .whitespaces)
+            }
+        }
+        return "there"
     }
 
     // MARK: - Load History

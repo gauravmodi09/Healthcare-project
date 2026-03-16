@@ -1067,5 +1067,352 @@
     "phase": "Tech Debt",
     "status": "backlog",
     "created": "2026-03-16"
+  },
+
+  {
+    "id": "p3_018",
+    "title": "Dark mode support",
+    "desc": "Full dark mode with system toggle. Dark teal accent, dark cards, OLED-friendly pure black backgrounds. Essential for nighttime medicine-taking. Save battery on Indian OLED phones",
+    "category": "design",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "Competitors like Medisafe and Pillo offer dark mode. Most Indian users use phones at night for medicine reminders", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_019",
+    "title": "Dose format types — tablet, syrup, injection, drops, cream, inhaler, patch",
+    "desc": "Different medicine formats need different UI: tablet shows pill count, syrup shows ml dosage, injection shows syringe icon, cream shows tube icon. Custom icons per format. Affects reminder text ('Take 2 tablets' vs 'Apply cream')",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "DoseCast handles pills, injections, patches, sprays, drops — MedCare currently treats all meds as pills", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_020",
+    "title": "Pre/post meal timing labels",
+    "desc": "Add meal-relative timing to doses: Before Food, After Food, With Food, Empty Stomach, Bedtime. Show as colored label on dose card. Critical for Indian prescriptions where timing matters (e.g., antacids before food, antibiotics after food)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "Indian prescriptions always specify AC/PC/HS timing. Current app doesn't capture this — big gap for Indian users", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_021",
+    "title": "Persistent alarm mode for critical medicines",
+    "desc": "Option to set 'critical' alarm for must-take medicines (insulin, blood thinners, anti-seizure). Alarm rings like phone call, won't stop until user taps Take or Snooze. Inspired by Pillo app's persistent alarm tech",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "Pillo's #1 differentiator is persistent alarms. Regular notifications get buried on Indian phones with heavy notification load", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_022",
+    "title": "Missed dose guidance — what to do",
+    "desc": "When user marks dose as missed, show guidance: 'Take now if less than 4 hours late' vs 'Skip and take next dose on time'. Medicine-specific rules. Source from drug database. Never double-dose warning",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "No competitor does this well. Major safety feature — users commonly double-dose when they miss one", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_023",
+    "title": "Overdose prevention — duplicate dose alert",
+    "desc": "If user tries to log same dose twice within the dosing window, show warning: 'You already took this dose at 8:15 AM. Taking another may be harmful.' Require explicit confirmation to override",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "TakeYourPills has overdose warning system. Safety-critical feature especially for elderly managing multiple meds", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_024",
+    "title": "3D Touch / Haptic Touch quick actions on app icon",
+    "desc": "Long-press app icon shows: Quick Add Medicine, Log Today's Doses, Open AI Chat, Scan Prescription. Jump straight to key flows without navigating",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": []
+  },
+  {
+    "id": "p3_025",
+    "title": "Satisfying dose confirmation — haptic + sound + animation",
+    "desc": "When tapping 'Take' on a dose: success haptic, subtle chime sound, checkmark morph animation with particle burst. Make dose-taking feel rewarding. Inspired by Medisafe gamification",
+    "category": "design",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "Medisafe turns adherence into a game. Small dopamine hits for dose-taking builds habit loop", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_026",
+    "title": "Today view — consolidated daily schedule",
+    "desc": "Single screen showing entire day's health schedule: morning doses at 8am, afternoon at 2pm, evening at 8pm. Timeline format with past (grayed/checked) and upcoming. Shows meals, vitals, tasks alongside medicines",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 3: Polish",
+    "status": "todo",
+    "created": "2026-03-16",
+    "notes": [{"text": "CareClinic and MyTherapy have excellent daily schedule views. Current Home screen shows doses but not in timeline format", "date": "2026-03-16"}]
+  },
+
+  {
+    "id": "p4_017",
+    "title": "Medicine photo identification — snap strip to identify",
+    "desc": "Camera feature to photograph a medicine strip/box. AI identifies medicine name, manufacturer, composition, expiry from packaging. Auto-fill fields when adding medicine. Uses CDSCO-mandated printed info on Indian packaging",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "TOM Medications has photo-based identification. Combined with our dual-capture approach, this becomes very powerful for Indian market", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p4_018",
+    "title": "Discharge summary parser",
+    "desc": "Upload hospital discharge summary photo/PDF. AI extracts: diagnosis, prescribed medicines, follow-up dates, dietary restrictions, activity guidelines, warning signs. Auto-create episode + care plan from discharge",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Post-discharge is when patients need most help. Indian hospital discharge summaries follow semi-standard formats. Huge differentiator — no competitor does this", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p4_019",
+    "title": "Lab report digitization & trend tracking",
+    "desc": "Upload lab report photo. AI extracts values (HbA1c, cholesterol, CBC, thyroid panel). Track trends across reports over months. Flag abnormal values. Show alongside medicine adherence to correlate",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "1mg and Practo store reports but don't track trends. Showing HbA1c dropping while on diabetes medication is powerful motivation", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p4_020",
+    "title": "AI-powered adherence prediction",
+    "desc": "ML model predicts which patients are likely to drop off in next 3 days based on: past patterns, day of week, weather, time since prescription. Proactively intervene before they miss doses",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "From AI health companion research: proactive interventions at moments where guidance is most effective. Medisafe claims 90% adherence rate with AI nudges", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p4_021",
+    "title": "Sentiment analysis in AI chat",
+    "desc": "Detect user frustration, anxiety, or confusion in chat messages. Adjust AI tone: more empathetic for anxious users, more direct for frustrated users. Flag distress patterns to nudge service",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 4: Intelligence",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "AI health companion research recommends emotion/sentiment analysis. Indian patients may express anxiety indirectly", "date": "2026-03-16"}]
+  },
+
+  {
+    "id": "p5_016",
+    "title": "WhatsApp reminders integration",
+    "desc": "Send dose reminders via WhatsApp using WhatsApp Business API. Critical for India — many users mute app notifications but always check WhatsApp. Option to send to self or family member. Include medicine name, dose, timing",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "PharmEasy and 1mg both use WhatsApp for refill reminders. India has 500M+ WhatsApp users. This is the #1 channel for reaching Indian users reliably", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p5_017",
+    "title": "WhatsApp medicine schedule sharing",
+    "desc": "Share today's medicine schedule or full care plan as formatted WhatsApp message to family member/caregiver. One-tap share with pre-formatted text including medicine names, timings, and special instructions",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Indian families coordinate care via WhatsApp groups. Making it easy to share schedule builds trust and involvement", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p5_018",
+    "title": "ABHA Health ID integration",
+    "desc": "Integrate with India's Ayushman Bharat Health Account (ABHA). Link ABHA ID to profile. Pull health records from ABDM (Ayushman Bharat Digital Mission). Push MedCare records to ABHA. Interoperability with government health infra",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "ABHA is India's national health ID — government is pushing adoption. Early integration = competitive advantage. Also enables pulling records from participating hospitals", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p5_019",
+    "title": "Monthly medicine cost tracker",
+    "desc": "Track cost per medicine, per episode, per month. Show total monthly/yearly medicine spend. Cost trends over time. Compare branded vs generic savings. India-specific: show MRP vs actual price paid",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Medicine cost is a major concern for Indian families. 1mg shows generic alternatives with price comparison. Tracking total spend helps families budget", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p5_020",
+    "title": "Insurance document vault",
+    "desc": "Store health insurance policies, claim forms, cashless cards. Quick access during hospital emergencies. OCR extract policy number, sum insured, TPA details. Reminder for policy renewal dates",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "No health app in India manages insurance documents well. During hospital emergencies, families scramble to find policy details", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p5_021",
+    "title": "iCloud backup & restore",
+    "desc": "Auto-backup all data to iCloud (episodes, medicines, dose logs, documents, chat history). Seamless restore on new device. Encrypted backup with user's iCloud key",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Data loss is catastrophic for health apps. Users switch phones frequently in India. Must have before backend is ready", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p5_022",
+    "title": "UPI payment for teleconsult & premium features",
+    "desc": "Razorpay/PhonePe SDK integration. UPI intent flow (opens GPay/PhonePe directly), UPI QR, cards, netbanking. UPI is 80%+ of digital payments in India. ₹ currency handling",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 5: Connected",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "UPI is non-negotiable for India market. Cards are secondary. PhonePe + GPay cover 85% of transactions", "date": "2026-03-16"}]
+  },
+
+  {
+    "id": "p6_009",
+    "title": "Gamified points system — earn for every healthy action",
+    "desc": "Earn MedCoins: take dose on time (+10), log symptoms (+5), 100% daily adherence (+25), complete health mission (+15). Redeem for premium features trial. Leaderboard with family members. Inspired by Medisafe gamification",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Medisafe awards points, badges, raffle entries. Gamification drives 30-40% better adherence in studies. Family leaderboard adds social motivation", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p6_010",
+    "title": "Family adherence competition",
+    "desc": "Weekly family adherence challenge. Compare adherence % across family profiles. Winner gets crown badge. Push notification: 'Mom is at 95% this week — can you beat her?' Builds accountability and fun",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Medisafe lets users compete with friends/family. Indian joint families are naturally competitive about health — leverage this", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p6_011",
+    "title": "Morning health briefing notification",
+    "desc": "8 AM daily notification: 'Good morning Gaurav! 4 medicines today, 2 appointments. Streak: 12 days. You're doing great!' Personalized, encouraging, informative. Sets up the day",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 6: Engagement",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "CareClinic and MyTherapy have daily health dashboards. A proactive morning notification reduces cognitive load — user knows what's ahead", "date": "2026-03-16"}]
+  },
+
+  {
+    "id": "p3_027",
+    "title": "Empty states with helpful illustrations",
+    "desc": "Design beautiful empty states for: no episodes yet, no medicines, no symptoms logged, no documents. Each with illustration, helpful text, and CTA button. First impression matters",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": []
+  },
+  {
+    "id": "p3_028",
+    "title": "Pull-to-refresh with custom animation",
+    "desc": "Custom pull-to-refresh animation on Home screen — teal pill dropping into container. Smooth 60fps. Refreshes dose schedule, syncs data",
+    "category": "design",
+    "priority": "low",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": []
+  },
+  {
+    "id": "p3_029",
+    "title": "Skeleton loading screens",
+    "desc": "Replace spinners with skeleton shimmer loading states on all data-heavy screens (Home, Episodes, History). Feels faster and more polished",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": []
+  },
+  {
+    "id": "p3_030",
+    "title": "Smooth page transitions & micro-interactions",
+    "desc": "Custom navigation transitions between screens. Card expansion animation when opening episode. Tab bar icon bounce on tap. Subtle spring animations on buttons. Makes app feel premium",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Healthcare app design best practice: animations reduce cognitive load and make medical apps feel less clinical", "date": "2026-03-16"}]
+  },
+  {
+    "id": "p3_031",
+    "title": "Contextual tooltips for first-time actions",
+    "desc": "Show tooltip on first use of key features: 'Swipe left to skip dose', 'Tap to add notes', 'Long-press for options'. Auto-dismiss after interaction. Track shown state in UserDefaults",
+    "category": "design",
+    "priority": "low",
+    "phase": "Phase 3: Polish",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": []
+  },
+
+  {
+    "id": "p7_009",
+    "title": "Spotlight search integration",
+    "desc": "Index medicines, episodes, and profiles in iOS Spotlight. Search 'Paracetamol' from home screen to jump directly to that medicine's schedule. CoreSpotlight framework",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": []
+  },
+  {
+    "id": "p7_010",
+    "title": "Control Center toggle for Do Not Disturb override",
+    "desc": "Allow medicine reminders to break through DND/Focus modes. Critical for bedtime doses when phone is in Sleep focus. ControlWidget for iOS 18+",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 7: Platform",
+    "status": "backlog",
+    "created": "2026-03-16",
+    "notes": [{"text": "Indian users frequently use DND at night. Bedtime medicines get missed because notifications are silenced", "date": "2026-03-16"}]
   }
 ]

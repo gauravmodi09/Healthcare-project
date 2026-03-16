@@ -1,167 +1,239 @@
-# MedCare — Smart Health Companion App
+# MedCare — Smart Health Companion for India
 
 <div align="center">
 
-![MedCare](docs/design/screens/screen_01_splash.png)
-
 **Turn any prescription into a structured, trackable care plan — powered by AI.**
 
-[![Status](https://img.shields.io/badge/Status-Pre--Build-orange)]()
-[![Platform](https://img.shields.io/badge/Platform-iOS%20(SwiftUI)-blue)]()
+Built for Indian patients and families managing daily medications, chronic conditions, and post-hospital recovery.
+
+[![Status](https://img.shields.io/badge/Status-Active%20Development-brightgreen)]()
+[![Platform](https://img.shields.io/badge/Platform-iOS%2018%2B%20(SwiftUI)-blue)]()
+[![AI](https://img.shields.io/badge/AI-Groq%20Llama%203.3%2070B-purple)]()
 [![License](https://img.shields.io/badge/License-Proprietary-red)]()
 
 </div>
 
 ---
 
-## 🩺 What is MedCare?
+## What is MedCare?
 
-MedCare is a mobile health companion that converts physical prescriptions and hospital discharge summaries into structured, actionable care plans with automated medication reminders. It uses **GPT-4 Vision** for intelligent OCR extraction and **Google Stitch MCP** for pharmaceutical database verification.
+MedCare is a mobile health companion designed for the Indian market. It converts physical prescriptions and medicine packaging photos into structured care plans with smart reminders, adherence tracking, and an AI health companion.
 
-### The Two-Door Concept
-
-| Door A — Consult a Doctor | Door B — Upload Prescription |
-|---|---|
-| For users who need to see a doctor first | For users who already have a plan |
-| *Phase 3 feature* | **v1 primary focus** |
+**The dual-capture approach:** Since Indian doctor handwriting is notoriously hard to OCR, MedCare asks users to photograph both the prescription (for context) and the medicine box/strip (for reliable data extraction from CDSCO-mandated printed text).
 
 ---
 
-## ✨ Key Features (v1)
+## Features
 
-- 📸 **AI Prescription Scanner** — Snap a photo, get a structured care plan
-- ⚠️ **Safety-First Confirmation** — Amber warnings on low-confidence AI fields
-- ⏰ **Smart Reminders** — Actionable push notifications (Taken / Skip / Snooze)
-- 👨‍👩‍👧 **Family Profiles** — Manage medications for parents, children, and self
-- 📊 **Adherence Tracking** — Daily/weekly charts with PDF export
-- 🔒 **Privacy by Design** — AES-256 encryption, DPDP Act compliant
+### Core (Implemented)
+- **AI Prescription Scanner** — Snap a photo of prescription + medicine box, get a structured care plan
+- **Smart Reminders** — Push notifications with Dynamic Island countdown, Take/Skip/Snooze actions
+- **Family Profiles** — Manage medications for parents, children, and self from one account
+- **AI Health Companion** — Context-aware chat powered by Groq (Llama 3.3 70B), supports Hinglish
+- **Emergency Detection** — Auto-detects crisis keywords and surfaces 112 emergency calling
+- **Smart Nudges** — Behavioral nudges for missed doses, low adherence, course endings
+- **Document Management** — Store prescriptions, lab reports, bills, insurance docs per episode
+- **Symptom Tracking** — Log daily symptoms with severity, track recovery over time
+
+### Phase 3: Polish (Recently Implemented)
+- **Dark Mode** — Full adaptive color system (light/dark) across all screens
+- **Dose Format Types** — Tablet, capsule, syrup, injection, drops, cream, inhaler, patch
+- **Meal Timing Labels** — Before/after/with meal, empty stomach indicators on dose cards
+- **Overdose Prevention** — Duplicate dose alert if same medicine taken within 2-hour window
+- **Today View** — Consolidated daily schedule with timeline, progress ring, all doses + tasks
+- **Dose Confirmation Animation** — Haptic feedback + animated checkmark overlay on dose taken
+- **AI Chat Quick Reply Chips** — Tappable suggestions: medicines, progress, side effects, diet
+- **Adherence Streak Tracking** — Consecutive-day streaks with flame icon on episode cards
+- **Welcome Onboarding** — 4-page carousel for first-time users
+- **Chat History Persistence** — Conversations persist across app sessions via SwiftData
+
+### Planned
+- **WhatsApp Reminders** — Dose alerts via WhatsApp (critical for India market)
+- **ABHA Health ID** — Integration with India's national health records
+- **UPI Payments** — Medicine refill and teleconsult payments
+- **Apple Watch App** — Glanceable dose reminders on wrist
+- **Home Screen Widgets** — Today's schedule at a glance
+- **Gamification** — Adherence streaks, points, family competitions
+
+> Full backlog of 100+ tasks tracked in [`tracker/`](tracker/) — a Kanban board built for planning between developer and AI.
 
 ---
 
-## 📱 App Screens
-
-<table>
-<tr>
-<td align="center"><strong>Splash</strong><br><img src="docs/design/screens/screen_01_splash.png" width="150"/></td>
-<td align="center"><strong>Login</strong><br><img src="docs/design/screens/screen_02_phone_login.png" width="150"/></td>
-<td align="center"><strong>OTP</strong><br><img src="docs/design/screens/screen_03_otp.png" width="150"/></td>
-<td align="center"><strong>Profile</strong><br><img src="docs/design/screens/screen_04_profile.png" width="150"/></td>
-</tr>
-<tr>
-<td align="center"><strong>Home</strong><br><img src="docs/design/screens/stitch_home.png" width="150"/></td>
-<td align="center"><strong>Upload</strong><br><img src="docs/design/screens/screen_05_upload.png" width="150"/></td>
-<td align="center"><strong>Confirm</strong><br><img src="docs/design/screens/stitch_confirmation.png" width="150"/></td>
-<td align="center"><strong>Plan</strong><br><img src="docs/design/screens/screen_06_episode_plan.png" width="150"/></td>
-</tr>
-<tr>
-<td align="center"><strong>Reminders</strong><br><img src="docs/design/screens/screen_07_reminders.png" width="150"/></td>
-<td align="center"><strong>Symptoms</strong><br><img src="docs/design/screens/screen_08_symptoms.png" width="150"/></td>
-<td align="center"><strong>History</strong><br><img src="docs/design/screens/screen_09_history.png" width="150"/></td>
-<td></td>
-</tr>
-</table>
-
----
-
-## 🏗️ Architecture
+## Architecture
 
 ```
-Mobile Client (SwiftUI)
-    ↓ HTTPS/TLS 1.3
-API Gateway + Core REST API (Node.js)
-    ↓                    ↓
-PostgreSQL         GPT-4 Vision API
-    ↓                    ↓
-AWS S3           Stitch MCP Server
-(Encrypted)      (Pharma DB Validation)
+┌─────────────────────────────────────────┐
+│           iOS App (SwiftUI)             │
+│                                         │
+│  ┌──────────┐  ┌──────────┐  ┌───────┐ │
+│  │  Views   │  │ Services │  │Models │ │
+│  │ (MVVM)   │  │(@Observable)│ │(SwiftData)│
+│  └──────────┘  └──────────┘  └───────┘ │
+│                                         │
+│  ┌──────────┐  ┌──────────┐  ┌───────┐ │
+│  │Live      │  │Notif     │  │LLM    │ │
+│  │Activity  │  │Service   │  │Service │ │
+│  │(Dynamic  │  │(UNNotif) │  │(Groq) │ │
+│  │ Island)  │  │          │  │       │ │
+│  └──────────┘  └──────────┘  └───────┘ │
+└─────────────────────────────────────────┘
+         │                    │
+    SwiftData             Groq API
+    (SQLite)          (Llama 3.3 70B)
 ```
 
-> For the full architecture diagram, see [HLD](docs/architecture/hld_medcare.md).
+**Single-device, offline-first.** All data stored locally via SwiftData. AI chat requires network for Groq API, with mock fallback responses when offline.
 
 ---
 
-## 📂 Repository Structure
-
-```
-Healthcare-project/
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
-├── .gitignore
-│
-├── docs/
-│   ├── product/                    # What & Why
-│   │   ├── prd_medcare.md          # Product Requirements
-│   │   ├── trd_medcare.md          # Technical Requirements
-│   │   ├── product_creation_plan.md # 12-Sprint Execution Plan
-│   │   ├── MedCare_PRD_TechSpec.txt # Original specification
-│   │   └── MedCare_PRD_TechSpec.docx
-│   │
-│   ├── architecture/               # How It Connects
-│   │   ├── hld_medcare.md          # High-Level Design
-│   │   ├── lld_medcare.md          # Low-Level Design (schemas, APIs)
-│   │   └── project_understanding.md
-│   │
-│   └── design/                     # How It Looks
-│       ├── app_design_spec.md      # Screen inventory & flows
-│       ├── ui_mockups.md           # Mockup reference
-│       └── screens/                # 11 Stitch-generated PNGs
-│
-├── ios/                            # (Sprint 1) SwiftUI app
-├── backend/                        # (Sprint 1) Node.js API
-└── .agent/workflows/               # Dev workflows
-```
-
----
-
-## 🗺️ Roadmap
-
-| Phase | Timeline | Milestone |
-|---|---|---|
-| **v1 — Core** | Months 1-3 | Upload → AI Extract → Confirm → Plan → Reminders |
-| **v2 — Wearables** | Months 4-6 | HealthKit / Health Connect integration |
-| **v3 — Teleconsult** | Months 7-12 | In-app doctor consultations + payments |
-
----
-
-## 🛠️ Tech Stack
+## Tech Stack
 
 | Layer | Technology |
 |---|---|
-| **iOS Frontend** | SwiftUI · iOS 16+ · SwiftData |
-| **Backend API** | Node.js · Express · JWT Auth |
-| **Database** | PostgreSQL 15+ |
-| **File Storage** | AWS S3 (SSE-S3 encrypted) |
-| **AI Extraction** | GPT-4 Vision API |
-| **Integration** | Google Stitch MCP Server |
-| **Push Notifications** | Firebase Cloud Messaging |
-| **Job Queue** | Redis + BullMQ |
-| **CI/CD** | GitHub Actions + Fastlane |
+| **UI Framework** | SwiftUI · iOS 18+ |
+| **Data Persistence** | SwiftData (SQLite) |
+| **AI Chat** | Groq API · Llama 3.3 70B · Streaming responses |
+| **Notifications** | UNUserNotificationCenter · Actionable notifications |
+| **Live Activities** | ActivityKit · Dynamic Island dose countdown |
+| **Design System** | Custom MCColors/MCTypography/MCSpacing tokens |
+| **Auth** | OTP-based phone login (simulated) |
+| **Project Tracker** | Single-file HTML Kanban board ([`tracker/index.html`](tracker/index.html)) |
 
 ---
 
-## 📖 Documentation
+## Project Structure
 
-| Document | Description |
-|---|---|
-| [Product Requirements (PRD)](docs/product/prd_medcare.md) | Features, personas, monetization |
-| [Technical Requirements (TRD)](docs/product/trd_medcare.md) | Stack, security, compliance |
-| [High-Level Design (HLD)](docs/architecture/hld_medcare.md) | System architecture & data flows |
-| [Low-Level Design (LLD)](docs/architecture/lld_medcare.md) | Database schemas, API contracts, Swift MVVM |
-| [Product Creation Plan](docs/product/product_creation_plan.md) | 12-sprint execution roadmap |
-| [App Design Spec](docs/design/app_design_spec.md) | Complete screen inventory |
+```
+MedCare/
+├── App/
+│   ├── MedCareApp.swift              # @main entry, environment setup
+│   └── RootView.swift                # Auth/onboarding/home routing
+│
+├── Core/
+│   ├── DesignSystem/                 # MCColors, MCTypography, MCSpacing
+│   ├── Components/                   # MCCard, MCButton, MCBadge, MCTextField
+│   ├── Navigation/                   # AppRouter (centralized routing)
+│   └── Extensions/                   # DateExtensions
+│
+├── Models/                           # SwiftData @Model entities
+│   ├── User.swift                    # Account with subscription tiers
+│   ├── UserProfile.swift             # Family member profiles
+│   ├── Episode.swift                 # Health journeys (acute/chronic/post-discharge)
+│   ├── Medicine.swift                # Medicines with dose form, meal timing, frequency
+│   ├── DoseLog.swift                 # Individual dose tracking
+│   ├── CareTask.swift                # Follow-ups, lab tests, lifestyle tasks
+│   ├── SymptomLog.swift              # Symptom tracking with severity
+│   ├── ChatMessage.swift             # AI chat with emergency detection
+│   ├── EpisodeImage.swift            # Document storage
+│   └── Nudge.swift                   # Smart behavioral nudges
+│
+├── Services/                         # Business logic (@Observable)
+│   ├── DataService.swift             # SwiftData CRUD + demo data seeding
+│   ├── AuthService.swift             # OTP phone authentication
+│   ├── AIChatService.swift           # Context-aware AI chat + streaming
+│   ├── NotificationService.swift     # Push notification scheduling
+│   ├── LiveActivityService.swift     # Dynamic Island management
+│   ├── SmartNudgeService.swift       # Behavioral nudge evaluation
+│   └── LLM/                         # LLMService, GroqProvider, LLMConfig
+│
+├── Features/
+│   ├── Auth/Views/                   # Splash, Login, OTP, Profile Setup, Onboarding
+│   ├── Home/Views/                   # HomeView, TodayView, MainTabView
+│   ├── Episode/Views/                # EpisodeDetail, Timeline, DoseActionCard
+│   ├── Reminders/Views/              # RemindersView with dose confirmation
+│   ├── AIChat/Views/                 # AIChatView, ChatBubble, EmergencyAlert
+│   ├── Symptoms/Views/               # SymptomLogView
+│   ├── Files/Views/                  # Document management views
+│   ├── Profile/Views/                # ProfileManagementView
+│   └── History/Views/                # HistoryView
+│
+├── MedCareWidgetExtension/           # Dynamic Island widget
+├── Shared/                           # ActivityKit attributes
+├── MedCareTests/                     # Unit + service tests
+│
+└── tracker/                          # Project planning Kanban board
+    ├── index.html                    # Clean Medical themed tracker
+    └── tasks.json                    # 100+ tasks across 8 phases
+```
 
 ---
 
-## ⚠️ Safety & Compliance
+## Data Model
 
-- **AI is extraction only** — never diagnosis or prescription
-- **Human-in-the-loop** — all AI output requires explicit user confirmation
-- **DPDP Act (India, 2023)** compliant — right to data deletion, PII scrubbing
-- **Encrypted everywhere** — AES-256 at rest, TLS 1.3 in transit
+```
+User (1) ──── (N) UserProfile
+UserProfile (1) ──── (N) Episode
+Episode (1) ──── (N) Medicine
+Episode (1) ──── (N) CareTask
+Episode (1) ──── (N) SymptomLog
+Episode (1) ──── (N) EpisodeImage
+Medicine (1) ──── (N) DoseLog
+```
+
+**Demo data included:** 3 profiles (Rahul, Mom, Dad) with 4 episodes, 12 Indian medicines (Augmentin, Pan 40, Glycomet GP 2, Ecosprin, etc.), realistic dose logs, symptom trajectories, and 20+ documents.
 
 ---
 
-## 📄 License
+## Roadmap
 
-This project is proprietary software. All rights reserved. See [LICENSE](LICENSE) for details.
+| Phase | Status | Key Features |
+|---|---|---|
+| **Phase 1: Core Foundation** | Done | Auth, profiles, episodes, medicines, reminders, notifications |
+| **Phase 2: Wearable + AI** | Done | Dynamic Island, AI chat (Groq), smart nudges, document management |
+| **Phase 3: Polish** | In Progress | Dark mode, dose forms, meal timing, today view, onboarding, streaks |
+| **Phase 4: Intelligence** | Planned | Real OCR (Vision framework), drug interactions, medicine photo ID |
+| **Phase 5: Connected Care** | Planned | WhatsApp reminders, ABHA integration, UPI payments, cloud sync |
+| **Phase 6: Engagement** | Planned | Gamification, family competitions, health briefings |
+| **Phase 7: Platform** | Planned | Widgets, Apple Watch, Hindi localization, accessibility |
+| **Phase 8: Growth** | Planned | Subscriptions, StoreKit 2, analytics, ASO |
+
+---
+
+## Getting Started
+
+### Prerequisites
+- Xcode 16+
+- iOS 18+ Simulator or device
+- (Optional) Groq API key for live AI chat
+
+### Run
+1. Clone the repo
+2. Open `MedCare.xcodeproj` in Xcode
+3. Select iPhone simulator and hit Run
+4. Enter any phone number, use **123456** as OTP
+5. Demo data loads automatically on the home screen
+
+### AI Chat Setup (Optional)
+Add your Groq API key to `MedCare/Resources/Secrets.plist`:
+```xml
+<key>GROQ_API_KEY</key>
+<string>your-key-here</string>
+```
+Without a key, the chat uses contextual mock responses.
+
+---
+
+## India-Specific Design Decisions
+
+- **Dual-capture OCR** — Prescription photo for context + medicine box/strip photo for reliable data (CDSCO-mandated printed text)
+- **Hinglish AI chat** — Understands mixed Hindi-English queries
+- **Indian medicine brands** — Augmentin, Pan 40, Montek LC, Glycomet, Ecosprin recognized
+- **Emergency number 112** — Not 911
+- **MRP tracking** — Medicine prices in INR
+- **Family-first design** — Managing parents' medications is a primary use case in India
+
+---
+
+## Safety
+
+- AI is a **health companion, not a doctor** — never diagnoses or prescribes
+- All AI output requires **explicit user confirmation** before creating care plans
+- **Emergency detection** in chat with immediate 112 calling prompt
+- **Duplicate dose prevention** — Alerts if same medicine taken within 2 hours
+- **DPDP Act (India, 2023)** compliant design
+
+---
+
+## License
+
+Proprietary software. All rights reserved.

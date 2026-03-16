@@ -7,11 +7,11 @@ final class Medicine {
     var brandName: String
     var genericName: String?
     var dosage: String
-    var doseForm: DoseForm
+    var doseForm: DoseForm = DoseForm.tablet
     var frequency: MedicineFrequency
     var timing: [MedicineTiming]
     var duration: Int? // days
-    var mealTiming: MealTiming
+    var mealTiming: MealTiming = MealTiming.noPreference
     var instructions: String?
     var manufacturer: String?
     var mrp: Double?

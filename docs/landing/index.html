@@ -1,0 +1,1961 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedCare — Your Family's AI Health Companion</title>
+<meta name="description" content="MedCare turns prescriptions into smart reminders with AI. Track medicines, manage family health, and never miss a dose again. Built for India.">
+<meta name="theme-color" content="#0A7E8C">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@300;400;500;600;700;800&family=Noto+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+/* ───────── Reset & Base ───────── */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --teal: #0A7E8C;
+  --teal-dark: #066570;
+  --teal-light: #E6F5F7;
+  --teal-50: #F0FAFB;
+  --coral: #E8734A;
+  --coral-hover: #D4612F;
+  --coral-light: #FFF1EC;
+  --white: #FFFFFF;
+  --off-white: #F7F9FC;
+  --gray-50: #F8FAFB;
+  --gray-100: #F1F4F8;
+  --gray-200: #E2E8F0;
+  --gray-300: #CBD5E1;
+  --gray-400: #94A3B8;
+  --gray-500: #64748B;
+  --gray-600: #475569;
+  --gray-700: #334155;
+  --gray-800: #1E293B;
+  --gray-900: #0F172A;
+  --success: #10B981;
+  --warning: #F59E0B;
+  --error: #EF4444;
+  --purple: #8B5CF6;
+  --font-display: 'Figtree', system-ui, sans-serif;
+  --font-body: 'Noto Sans', system-ui, sans-serif;
+  --radius: 16px;
+  --radius-sm: 10px;
+  --radius-xs: 6px;
+  --shadow-sm: 0 1px 3px rgba(10,126,140,.06), 0 1px 2px rgba(10,126,140,.04);
+  --shadow-md: 0 4px 20px rgba(10,126,140,.08), 0 2px 8px rgba(10,126,140,.04);
+  --shadow-lg: 0 12px 40px rgba(10,126,140,.12), 0 4px 16px rgba(10,126,140,.06);
+  --shadow-xl: 0 24px 60px rgba(10,126,140,.16), 0 8px 24px rgba(10,126,140,.08);
+  --transition-fast: 150ms ease;
+  --transition-base: 250ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --white: #0F172A;
+    --off-white: #1E293B;
+    --gray-50: #1E293B;
+    --gray-100: #283548;
+    --gray-200: #334155;
+    --gray-300: #475569;
+    --gray-400: #94A3B8;
+    --gray-500: #94A3B8;
+    --gray-600: #CBD5E1;
+    --gray-700: #E2E8F0;
+    --gray-800: #F1F4F8;
+    --gray-900: #F8FAFB;
+    --teal-light: #0D2D31;
+    --teal-50: #0D2D31;
+    --coral-light: #2D1A12;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,.2);
+    --shadow-md: 0 4px 20px rgba(0,0,0,.25);
+    --shadow-lg: 0 12px 40px rgba(0,0,0,.35);
+    --shadow-xl: 0 24px 60px rgba(0,0,0,.45);
+  }
+}
+
+/* ───────── Accessibility ───────── */
+.skip-link {
+  position: absolute;
+  top: -100%;
+  left: 1rem;
+  background: var(--teal);
+  color: #fff;
+  padding: .75rem 1.5rem;
+  border-radius: var(--radius-xs);
+  font-weight: 600;
+  z-index: 10000;
+  transition: top var(--transition-fast);
+}
+.skip-link:focus { top: 1rem; }
+
+*:focus-visible {
+  outline: 3px solid var(--teal);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+html { scroll-behavior: smooth; font-size: 16px; }
+
+body {
+  font-family: var(--font-body);
+  color: var(--gray-700);
+  background: var(--white);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+img { max-width: 100%; display: block; }
+a { color: inherit; text-decoration: none; }
+button { cursor: pointer; border: none; font-family: inherit; }
+
+/* ───────── Scroll-reveal ───────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity .6s cubic-bezier(.22,1,.36,1), transform .6s cubic-bezier(.22,1,.36,1);
+}
+.reveal.visible { opacity: 1; transform: none; }
+.reveal-d1 { transition-delay: .08s; }
+.reveal-d2 { transition-delay: .16s; }
+.reveal-d3 { transition-delay: .24s; }
+.reveal-d4 { transition-delay: .30s; }
+.reveal-d5 { transition-delay: .36s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { transition: opacity .3s ease; transform: none; }
+  .reveal.visible { opacity: 1; }
+  .hero-float, .pulse-dot { animation: none !important; }
+  * { scroll-behavior: auto !important; }
+}
+
+/* ───────── Typography ───────── */
+h1, h2, h3 { font-family: var(--font-display); color: var(--gray-900); line-height: 1.15; }
+h1 { font-size: clamp(2.4rem, 5vw, 3.6rem); font-weight: 800; letter-spacing: -.03em; }
+h2 { font-size: clamp(1.8rem, 3.5vw, 2.6rem); font-weight: 700; letter-spacing: -.02em; }
+h3 { font-size: 1.2rem; font-weight: 600; }
+.section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-family: var(--font-display);
+  font-size: .78rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: .75rem;
+}
+.section-label svg { width: 16px; height: 16px; }
+.section-subtitle {
+  font-size: clamp(1.02rem, 1.8vw, 1.15rem);
+  color: var(--gray-500);
+  max-width: 560px;
+  margin: .85rem auto 0;
+}
+
+/* ───────── SVG Icon system ───────── */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.icon svg { width: 100%; height: 100%; }
+.icon-sm { width: 16px; height: 16px; }
+.icon-md { width: 20px; height: 20px; }
+.icon-lg { width: 24px; height: 24px; }
+.icon-xl { width: 32px; height: 32px; }
+
+/* ───────── Layout ───────── */
+.container { max-width: 1140px; margin: 0 auto; padding: 0 1.5rem; }
+section { padding: 5.5rem 0; }
+
+/* ───────── Nav ───────── */
+.nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding: .9rem 0;
+  transition: background var(--transition-base), box-shadow var(--transition-base), padding var(--transition-fast);
+}
+.nav.scrolled {
+  background: var(--white);
+  box-shadow: var(--shadow-sm);
+  padding: .6rem 0;
+}
+@supports (backdrop-filter: blur(12px)) {
+  .nav.scrolled { background: color-mix(in srgb, var(--white) 85%, transparent); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
+}
+.nav .container { display: flex; align-items: center; justify-content: space-between; }
+.nav-logo {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.nav-logo-icon {
+  width: 34px;
+  height: 34px;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  border-radius: 9px;
+  display: grid;
+  place-items: center;
+  color: #fff;
+}
+.nav-logo-icon svg { width: 18px; height: 18px; }
+.nav-links { display: flex; gap: 1.75rem; align-items: center; }
+.nav-links a {
+  font-size: .88rem;
+  font-weight: 500;
+  color: var(--gray-600);
+  transition: color var(--transition-fast);
+}
+.nav-links a:hover { color: var(--teal); }
+.nav-cta {
+  background: var(--coral);
+  color: #fff !important;
+  padding: .5rem 1.2rem;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: .85rem;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.nav-cta:hover { background: var(--coral-hover); transform: translateY(-1px); }
+.nav-mobile-toggle {
+  display: none;
+  background: none;
+  color: var(--gray-700);
+  padding: .3rem;
+}
+.nav-mobile-toggle svg { width: 24px; height: 24px; }
+
+/* ───────── Hero ───────── */
+.hero {
+  min-height: 100vh;
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  padding-top: 5rem;
+  background:
+    radial-gradient(ellipse 65% 45% at 18% 82%, rgba(10,126,140,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 45% 55% at 88% 18%, rgba(232,115,74,.04) 0%, transparent 60%),
+    var(--white);
+}
+.hero .container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3.5rem;
+  align-items: center;
+}
+.hero-content { max-width: 520px; }
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  background: var(--teal-light);
+  color: var(--teal);
+  font-size: .8rem;
+  font-weight: 600;
+  padding: .38rem .95rem;
+  border-radius: 50px;
+  margin-bottom: 1.5rem;
+}
+.hero-badge .pulse-dot {
+  width: 7px;
+  height: 7px;
+  background: var(--coral);
+  border-radius: 50%;
+  animation: pulse-dot 2s ease infinite;
+}
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: .5; transform: scale(1.5); }
+}
+.hero h1 { margin-bottom: 1.2rem; }
+.hero h1 .accent { color: var(--teal); }
+.hero-desc {
+  font-size: 1.08rem;
+  color: var(--gray-500);
+  margin-bottom: 2rem;
+  max-width: 440px;
+  line-height: 1.75;
+}
+.hero-actions { display: flex; gap: .85rem; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  background: var(--coral);
+  color: #fff;
+  font-size: .95rem;
+  font-weight: 600;
+  padding: .8rem 1.7rem;
+  border-radius: 50px;
+  transition: background var(--transition-fast), transform var(--transition-fast), box-shadow var(--transition-fast);
+  box-shadow: 0 4px 16px rgba(232,115,74,.3);
+}
+.btn-primary:hover { background: var(--coral-hover); transform: translateY(-2px); box-shadow: 0 6px 24px rgba(232,115,74,.35); }
+.btn-primary svg { width: 20px; height: 20px; }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  background: var(--gray-100);
+  color: var(--gray-700);
+  font-size: .95rem;
+  font-weight: 600;
+  padding: .8rem 1.7rem;
+  border-radius: 50px;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.btn-secondary:hover { background: var(--gray-200); transform: translateY(-1px); }
+.btn-secondary svg { width: 18px; height: 18px; }
+
+.hero-social-proof {
+  display: flex;
+  align-items: center;
+  gap: 1.15rem;
+  margin-top: 2.25rem;
+  padding-top: 1.75rem;
+  border-top: 1px solid var(--gray-200);
+}
+.hero-avatars { display: flex; }
+.hero-avatars span {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  border: 2.5px solid var(--white);
+  margin-left: -9px;
+  display: grid;
+  place-items: center;
+  font-size: .65rem;
+  font-weight: 700;
+  color: #fff;
+}
+.hero-avatars span:first-child { margin-left: 0; background: var(--teal); }
+.hero-avatars span:nth-child(2) { background: var(--coral); }
+.hero-avatars span:nth-child(3) { background: var(--purple); }
+.hero-avatars span:nth-child(4) { background: var(--warning); }
+.hero-social-text { font-size: .85rem; color: var(--gray-500); }
+.hero-social-text strong { color: var(--gray-800); }
+
+/* Phone mockup */
+.hero-phone-wrapper {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.phone-mockup {
+  width: 272px;
+  height: 556px;
+  background: var(--gray-900);
+  border-radius: 38px;
+  padding: 11px;
+  box-shadow: var(--shadow-xl), inset 0 0 0 1.5px rgba(255,255,255,.08);
+  position: relative;
+  z-index: 2;
+}
+.phone-screen {
+  width: 100%;
+  height: 100%;
+  border-radius: 28px;
+  overflow: hidden;
+  background: linear-gradient(175deg, var(--teal) 0%, var(--teal-dark) 55%, #054B54 100%);
+  display: flex;
+  flex-direction: column;
+  color: #fff;
+  position: relative;
+}
+.phone-notch {
+  width: 110px;
+  height: 26px;
+  background: var(--gray-900);
+  border-radius: 0 0 16px 16px;
+  margin: 0 auto;
+}
+.phone-status {
+  padding: .5rem 1.1rem 0;
+  display: flex;
+  justify-content: space-between;
+  font-size: .6rem;
+  font-weight: 500;
+  opacity: .65;
+}
+.phone-app-content {
+  flex: 1;
+  padding: 1rem 1.1rem;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+.phone-greeting { font-size: .72rem; opacity: .75; }
+.phone-greeting strong {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  opacity: 1;
+}
+.phone-card {
+  background: rgba(255,255,255,.11);
+  backdrop-filter: blur(8px);
+  border-radius: 13px;
+  padding: .8rem;
+  border: 1px solid rgba(255,255,255,.08);
+}
+.phone-card-title {
+  font-size: .6rem;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  font-weight: 600;
+  opacity: .65;
+  margin-bottom: .4rem;
+}
+.phone-adherence-bar {
+  height: 5px;
+  background: rgba(255,255,255,.12);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-top: .3rem;
+}
+.phone-adherence-fill {
+  height: 100%;
+  width: 87%;
+  background: linear-gradient(90deg, #34D399, #10B981);
+  border-radius: 3px;
+}
+.phone-dose-item {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  background: rgba(255,255,255,.07);
+  border-radius: 10px;
+  padding: .55rem .7rem;
+}
+.phone-dose-pill {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+}
+.phone-dose-pill svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; }
+.phone-dose-pill.pink { background: rgba(232,115,74,.22); color: #F97316; }
+.phone-dose-pill.blue { background: rgba(99,102,241,.22); color: #818CF8; }
+.phone-dose-pill.green { background: rgba(16,185,129,.22); color: #34D399; }
+.phone-dose-name { font-size: .75rem; font-weight: 600; }
+.phone-dose-detail { font-size: .58rem; opacity: .6; }
+.phone-dose-check {
+  margin-left: auto;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  border: 1.5px solid rgba(255,255,255,.25);
+  display: grid;
+  place-items: center;
+}
+.phone-dose-check svg { width: 12px; height: 12px; stroke: #fff; fill: none; stroke-width: 2.5; }
+.phone-dose-check.done { background: var(--success); border-color: var(--success); }
+
+.hero-phone-wrapper::before {
+  content: '';
+  position: absolute;
+  width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(10,126,140,.08), transparent 70%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+}
+.hero-float {
+  position: absolute;
+  background: var(--white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: .55rem .8rem;
+  font-size: .75rem;
+  font-weight: 600;
+  color: var(--gray-800);
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  z-index: 3;
+  animation: float 4.5s ease-in-out infinite;
+}
+.hero-float.float-1 { top: 16%; left: -10%; animation-delay: 0s; }
+.hero-float.float-2 { bottom: 20%; right: -6%; animation-delay: 1.8s; }
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+.hero-float-icon {
+  width: 26px;
+  height: 26px;
+  border-radius: 7px;
+  display: grid;
+  place-items: center;
+}
+.hero-float-icon svg { width: 14px; height: 14px; }
+
+/* ───────── Stats ribbon ───────── */
+.stats {
+  padding: 3rem 0;
+  background: var(--off-white);
+  border-top: 1px solid var(--gray-200);
+  border-bottom: 1px solid var(--gray-200);
+}
+.stats .container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+  text-align: center;
+}
+.stat-item h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 3vw, 2.5rem);
+  color: var(--teal);
+  margin-bottom: .15rem;
+  font-weight: 800;
+}
+.stat-item p { font-size: .85rem; color: var(--gray-500); font-weight: 500; }
+
+/* ───────── Problem ───────── */
+.problem { background: var(--white); }
+.problem-header { text-align: center; margin-bottom: 3rem; }
+.problem-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.problem-card {
+  background: var(--off-white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.problem-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-md); }
+.problem-icon-wrap {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.1rem;
+}
+.problem-icon-wrap svg { width: 22px; height: 22px; stroke-width: 2; }
+.problem-icon-wrap.red { background: #FEE2E2; color: var(--error); }
+.problem-icon-wrap.amber { background: #FEF3C7; color: #D97706; }
+.problem-icon-wrap.slate { background: #E2E8F0; color: var(--gray-600); }
+.problem-card h3 { margin-bottom: .5rem; }
+.problem-card p { color: var(--gray-500); font-size: .9rem; line-height: 1.65; }
+.problem-stat {
+  display: inline-block;
+  margin-top: .85rem;
+  font-size: .78rem;
+  font-weight: 700;
+  color: var(--error);
+  background: #FEF2F2;
+  padding: .3rem .7rem;
+  border-radius: 50px;
+}
+
+/* ───────── Features ───────── */
+.features {
+  background:
+    radial-gradient(ellipse 55% 40% at 82% 88%, rgba(10,126,140,.04) 0%, transparent 70%),
+    var(--off-white);
+}
+.features-header { text-align: center; margin-bottom: 3rem; }
+.features-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.feature-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: transform var(--transition-base), box-shadow var(--transition-base), border-color var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+.feature-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--coral));
+  opacity: 0;
+  transition: opacity var(--transition-base);
+}
+.feature-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); border-color: var(--teal); }
+.feature-card:hover::before { opacity: 1; }
+.feature-icon-wrap {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  background: var(--teal-light);
+  color: var(--teal);
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+}
+.feature-icon-wrap svg { width: 22px; height: 22px; stroke-width: 2; }
+.feature-icon-wrap.coral { background: var(--coral-light); color: var(--coral); }
+.feature-icon-wrap.purple { background: #EDE9FE; color: var(--purple); }
+.feature-icon-wrap.green { background: #D1FAE5; color: var(--success); }
+.feature-icon-wrap.amber { background: #FEF3C7; color: #D97706; }
+.feature-card h3 { margin-bottom: .4rem; font-size: 1.05rem; }
+.feature-card p { color: var(--gray-500); font-size: .88rem; line-height: 1.6; }
+
+/* ───────── AI Spotlight ───────── */
+.ai-spotlight {
+  background: linear-gradient(135deg, var(--gray-900) 0%, #0D1F30 50%, #0A2930 100%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.ai-spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(10,126,140,.2), transparent 45%),
+    radial-gradient(circle at 80% 30%, rgba(139,92,246,.12), transparent 40%);
+}
+.ai-spotlight .container { position: relative; z-index: 2; }
+.ai-spotlight-header { text-align: center; margin-bottom: 3rem; }
+.ai-spotlight-header .section-label { color: rgba(255,255,255,.45); }
+.ai-spotlight-header h2 { color: #fff; }
+.ai-spotlight-header .section-subtitle { color: rgba(255,255,255,.55); }
+.ai-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.25rem;
+}
+.ai-card {
+  background: rgba(255,255,255,.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,.08);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: background var(--transition-base), transform var(--transition-base);
+}
+.ai-card:hover { background: rgba(255,255,255,.1); transform: translateY(-3px); }
+.ai-card-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 1rem;
+}
+.ai-card-icon svg { width: 22px; height: 22px; }
+.ai-card-icon.teal { background: rgba(10,126,140,.25); color: #5EEAD4; }
+.ai-card-icon.coral { background: rgba(232,115,74,.2); color: #FB923C; }
+.ai-card-icon.purple { background: rgba(139,92,246,.2); color: #A78BFA; }
+.ai-card-icon.green { background: rgba(16,185,129,.2); color: #34D399; }
+.ai-card h3 { color: #fff; margin-bottom: .4rem; font-size: 1.08rem; }
+.ai-card p { color: rgba(255,255,255,.55); font-size: .88rem; line-height: 1.6; }
+
+/* ───────── How it works ───────── */
+.how-it-works { background: var(--white); position: relative; }
+.how-header { text-align: center; margin-bottom: 3.5rem; }
+.steps {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  position: relative;
+}
+.steps::before {
+  content: '';
+  position: absolute;
+  top: 40px;
+  left: 16.67%;
+  right: 16.67%;
+  height: 2px;
+  background: linear-gradient(90deg, var(--teal), var(--coral), var(--teal));
+  opacity: .18;
+}
+.step { text-align: center; position: relative; }
+.step-number {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 800;
+  display: grid;
+  place-items: center;
+  margin: 0 auto 1.3rem;
+  position: relative;
+  z-index: 2;
+  box-shadow: 0 4px 14px rgba(10,126,140,.25);
+}
+.step-visual {
+  width: 100%;
+  height: 140px;
+  background: var(--off-white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  display: grid;
+  place-items: center;
+  margin-bottom: 1.1rem;
+}
+.step-visual svg { width: 48px; height: 48px; color: var(--teal); stroke-width: 1.5; }
+.step h3 { margin-bottom: .4rem; }
+.step p { color: var(--gray-500); font-size: .88rem; max-width: 270px; margin: 0 auto; line-height: 1.6; }
+
+/* ───────── India section ───────── */
+.india-section {
+  background:
+    radial-gradient(ellipse 50% 50% at 15% 85%, rgba(232,115,74,.05) 0%, transparent 60%),
+    var(--off-white);
+}
+.india-header { text-align: center; margin-bottom: 3rem; }
+.india-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 3rem;
+  align-items: center;
+}
+.india-stats-list { display: flex; flex-direction: column; gap: 1.25rem; }
+.india-stat-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.india-stat-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.india-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.india-stat-icon svg { width: 20px; height: 20px; }
+.india-stat-icon.teal { background: var(--teal-light); color: var(--teal); }
+.india-stat-icon.coral { background: var(--coral-light); color: var(--coral); }
+.india-stat-icon.purple { background: #EDE9FE; color: var(--purple); }
+.india-stat-icon.green { background: #D1FAE5; color: var(--success); }
+.india-stat-content h3 { font-size: 1.05rem; margin-bottom: .25rem; }
+.india-stat-content p { font-size: .85rem; color: var(--gray-500); line-height: 1.55; }
+.india-features {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 2rem;
+}
+.india-features h3 {
+  font-size: 1.15rem;
+  margin-bottom: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.india-features h3 svg { width: 22px; height: 22px; color: var(--coral); }
+.india-feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: .7rem;
+}
+.india-feature-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: .55rem;
+  font-size: .9rem;
+  color: var(--gray-600);
+  line-height: 1.55;
+}
+.india-feature-list li svg { width: 16px; height: 16px; color: var(--teal); flex-shrink: 0; margin-top: 3px; }
+
+/* ───────── Elder Mode ───────── */
+.elder-mode { background: var(--white); }
+.elder-header { text-align: center; margin-bottom: 3rem; }
+.elder-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: center;
+}
+.elder-phone {
+  width: 250px;
+  margin: 0 auto;
+  background: var(--gray-900);
+  border-radius: 34px;
+  padding: 10px;
+  box-shadow: var(--shadow-xl);
+}
+.elder-phone-screen {
+  border-radius: 25px;
+  background: var(--white);
+  overflow: hidden;
+  padding: 1.5rem 1.2rem;
+}
+.elder-phone-screen h4 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: 1rem;
+}
+.elder-dose-big {
+  background: var(--teal-light);
+  border: 2px solid var(--teal);
+  border-radius: var(--radius);
+  padding: 1.2rem;
+  margin-bottom: .8rem;
+  text-align: center;
+}
+.elder-dose-big .name {
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gray-900);
+}
+.elder-dose-big .detail {
+  font-size: 1rem;
+  color: var(--gray-600);
+  margin-top: .25rem;
+}
+.elder-take-btn {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background: var(--success);
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border-radius: var(--radius);
+  text-align: center;
+  border: none;
+}
+.elder-features-list { display: flex; flex-direction: column; gap: 1.2rem; }
+.elder-feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: .85rem;
+}
+.elder-feature-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: var(--teal-light);
+  color: var(--teal);
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.elder-feature-icon svg { width: 20px; height: 20px; }
+.elder-feature-item h3 { font-size: 1rem; margin-bottom: .2rem; }
+.elder-feature-item p { font-size: .85rem; color: var(--gray-500); line-height: 1.55; }
+
+/* ───────── Full features grid ───────── */
+.all-features { background: var(--off-white); }
+.all-features-header { text-align: center; margin-bottom: 3rem; }
+.all-features-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+}
+.mini-feature {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius-sm);
+  padding: 1.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: .65rem;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.mini-feature:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+.mini-feature-icon {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+}
+.mini-feature-icon svg { width: 16px; height: 16px; stroke-width: 2; }
+.mini-feature-icon.teal { background: var(--teal-light); color: var(--teal); }
+.mini-feature-icon.coral { background: var(--coral-light); color: var(--coral); }
+.mini-feature-icon.purple { background: #EDE9FE; color: var(--purple); }
+.mini-feature-icon.green { background: #D1FAE5; color: var(--success); }
+.mini-feature-icon.amber { background: #FEF3C7; color: #D97706; }
+.mini-feature h4 { font-family: var(--font-display); font-size: .82rem; font-weight: 600; color: var(--gray-800); line-height: 1.3; }
+
+/* ───────── Pricing ───────── */
+.pricing {
+  background:
+    radial-gradient(ellipse 55% 45% at 18% 82%, rgba(232,115,74,.04) 0%, transparent 60%),
+    var(--white);
+}
+.pricing-header { text-align: center; margin-bottom: 3rem; }
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+  align-items: start;
+}
+.pricing-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 2.25rem 1.75rem;
+  text-align: center;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+  position: relative;
+}
+.pricing-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+.pricing-card.featured {
+  border-color: var(--teal);
+  box-shadow: var(--shadow-lg);
+  transform: scale(1.02);
+}
+.pricing-card.featured:hover { transform: scale(1.02) translateY(-3px); }
+.pricing-badge {
+  position: absolute;
+  top: -11px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, var(--teal), var(--teal-dark));
+  color: #fff;
+  font-size: .7rem;
+  font-weight: 700;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  padding: .3rem .9rem;
+  border-radius: 50px;
+}
+.pricing-plan {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--gray-900);
+  margin-bottom: .2rem;
+}
+.pricing-desc { font-size: .82rem; color: var(--gray-500); margin-bottom: 1.25rem; }
+.pricing-price {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: .2rem;
+}
+.pricing-price span { font-size: .9rem; font-weight: 400; color: var(--gray-400); }
+.pricing-period { font-size: .78rem; color: var(--gray-400); margin-bottom: 1.75rem; }
+.pricing-features {
+  list-style: none;
+  text-align: left;
+  margin-bottom: 1.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+}
+.pricing-features li {
+  font-size: .85rem;
+  color: var(--gray-600);
+  display: flex;
+  align-items: flex-start;
+  gap: .45rem;
+}
+.pricing-features li svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; }
+.pricing-features li .check-icon { color: var(--teal); }
+.pricing-features li.disabled { opacity: .4; }
+.pricing-features li.disabled svg { color: var(--gray-400); }
+.pricing-btn {
+  display: block;
+  width: 100%;
+  padding: .75rem;
+  border-radius: 50px;
+  font-size: .9rem;
+  font-weight: 600;
+  transition: background var(--transition-fast), transform var(--transition-fast);
+}
+.pricing-btn.outline {
+  background: transparent;
+  border: 2px solid var(--gray-200);
+  color: var(--gray-700);
+}
+.pricing-btn.outline:hover { background: var(--gray-100); }
+.pricing-btn.filled {
+  background: var(--coral);
+  color: #fff;
+  border: 2px solid var(--coral);
+}
+.pricing-btn.filled:hover { background: var(--coral-hover); border-color: var(--coral-hover); transform: translateY(-1px); }
+
+/* ───────── Testimonials ───────── */
+.testimonials { background: var(--off-white); }
+.testimonials-header { text-align: center; margin-bottom: 3rem; }
+.testimonials-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.25rem;
+}
+.testimonial-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  border-radius: var(--radius);
+  padding: 1.75rem;
+  transition: transform var(--transition-base), box-shadow var(--transition-base);
+}
+.testimonial-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.testimonial-stars { color: #F59E0B; margin-bottom: .85rem; display: flex; gap: 2px; }
+.testimonial-stars svg { width: 16px; height: 16px; fill: currentColor; }
+.testimonial-text {
+  font-size: .92rem;
+  color: var(--gray-600);
+  line-height: 1.7;
+  margin-bottom: 1.25rem;
+  font-style: italic;
+}
+.testimonial-author { display: flex; align-items: center; gap: .7rem; }
+.testimonial-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: .78rem;
+  font-weight: 700;
+  color: #fff;
+}
+.testimonial-name { font-weight: 600; font-size: .88rem; color: var(--gray-800); }
+.testimonial-role { font-size: .76rem; color: var(--gray-400); }
+
+/* ───────── Download CTA ───────── */
+.download-cta {
+  background: linear-gradient(135deg, var(--teal) 0%, var(--teal-dark) 55%, #044B54 100%);
+  color: #fff;
+  text-align: center;
+  padding: 5.5rem 0;
+  position: relative;
+  overflow: hidden;
+}
+.download-cta::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 50%, rgba(232,115,74,.12), transparent 50%),
+    radial-gradient(circle at 80% 50%, rgba(255,255,255,.04), transparent 40%);
+}
+.download-cta .container { position: relative; z-index: 2; }
+.download-cta h2 { color: #fff; margin-bottom: .6rem; }
+.download-cta .section-subtitle { color: rgba(255,255,255,.7); margin-bottom: 2.25rem; }
+.download-cta .btn-primary {
+  background: #fff;
+  color: var(--teal);
+  box-shadow: 0 4px 20px rgba(0,0,0,.12);
+  font-size: 1rem;
+  padding: .9rem 2rem;
+}
+.download-cta .btn-primary:hover { background: var(--gray-100); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(0,0,0,.18); }
+
+/* ───────── Footer ───────── */
+.footer {
+  background: var(--gray-900);
+  color: rgba(255,255,255,.55);
+  padding: 3.5rem 0 1.75rem;
+}
+@media (prefers-color-scheme: dark) {
+  .footer { background: #060E18; }
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 2.5rem;
+  margin-bottom: 2.5rem;
+}
+.footer-brand-desc { font-size: .85rem; line-height: 1.65; margin-top: .6rem; max-width: 280px; }
+.footer h4 {
+  font-family: var(--font-display);
+  font-size: .76rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.3);
+  margin-bottom: 1rem;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: .5rem; }
+.footer-links a { font-size: .85rem; transition: color var(--transition-fast); }
+.footer-links a:hover { color: #fff; }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,.07);
+  padding-top: 1.75rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .78rem;
+}
+.footer-social { display: flex; gap: .75rem; }
+.footer-social a {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255,255,255,.06);
+  display: grid;
+  place-items: center;
+  transition: background var(--transition-fast), color var(--transition-fast);
+}
+.footer-social a svg { width: 16px; height: 16px; }
+.footer-social a:hover { background: var(--teal); color: #fff; }
+
+/* ───────── Mobile ───────── */
+@media (max-width: 768px) {
+  section { padding: 3.5rem 0; }
+  .nav-links { display: none; }
+  .nav-mobile-toggle { display: block; }
+  .nav-links.open {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--white);
+    padding: 1.25rem;
+    box-shadow: var(--shadow-md);
+    gap: .85rem;
+  }
+  .hero { min-height: auto; padding: 6.5rem 0 3rem; }
+  .hero .container { grid-template-columns: 1fr; gap: 2.5rem; text-align: center; }
+  .hero-content { max-width: 100%; }
+  .hero-desc { margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-social-proof { justify-content: center; }
+  .phone-mockup { width: 230px; height: 470px; }
+  .hero-float { display: none; }
+
+  .stats .container { grid-template-columns: repeat(2, 1fr); }
+  .problem-grid,
+  .features-grid,
+  .steps,
+  .pricing-grid,
+  .testimonials-grid { grid-template-columns: 1fr; max-width: 420px; margin: 0 auto; }
+  .ai-grid { grid-template-columns: 1fr; }
+  .india-grid { grid-template-columns: 1fr; }
+  .elder-grid { grid-template-columns: 1fr; }
+  .all-features-grid { grid-template-columns: repeat(2, 1fr); }
+  .steps::before { display: none; }
+  .pricing-card.featured { transform: none; }
+  .pricing-card.featured:hover { transform: translateY(-3px); }
+  .footer-grid { grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  .footer-bottom { flex-direction: column; gap: .85rem; text-align: center; }
+}
+
+@media (min-width: 769px) and (max-width: 1024px) {
+  .hero .container { gap: 2rem; }
+  .phone-mockup { width: 230px; height: 470px; }
+  .features-grid { grid-template-columns: repeat(2, 1fr); }
+  .all-features-grid { grid-template-columns: repeat(3, 1fr); }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Accessibility: Skip link -->
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<!-- ────── Nav ────── -->
+<nav class="nav" id="nav" aria-label="Main navigation">
+  <div class="container">
+    <a href="#" class="nav-logo" aria-label="MedCare home">
+      <div class="nav-logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+      </div>
+      MedCare
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#pricing">Pricing</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#download" class="nav-cta">Download App</a>
+    </div>
+    <button class="nav-mobile-toggle" id="navToggle" aria-label="Toggle navigation menu" aria-expanded="false">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg>
+    </button>
+  </div>
+</nav>
+
+<!-- ────── Hero ────── -->
+<section class="hero" id="hero">
+  <div class="container">
+    <div class="hero-content">
+      <div class="hero-badge reveal"><span class="pulse-dot"></span> Now available on iOS</div>
+      <h1 class="reveal reveal-d1">Your family's <span class="accent">AI health</span> companion</h1>
+      <p class="hero-desc reveal reveal-d2">Scan prescriptions, get smart reminders, and track every dose for your entire family. Built with AI, designed for India.</p>
+      <div class="hero-actions reveal reveal-d3">
+        <a href="#download" class="btn-primary">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+          Download on App Store
+        </a>
+        <a href="#how-it-works" class="btn-secondary">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="10 8 16 12 10 16 10 8"/></svg>
+          See how it works
+        </a>
+      </div>
+      <div class="hero-social-proof reveal reveal-d4">
+        <div class="hero-avatars">
+          <span>RS</span><span>PK</span><span>AM</span><span>DG</span>
+        </div>
+        <div class="hero-social-text"><strong>50,000+</strong> Indian families trust MedCare</div>
+      </div>
+    </div>
+    <div class="hero-phone-wrapper reveal reveal-d2">
+      <div class="phone-mockup" role="img" aria-label="MedCare app showing dashboard with dose tracking">
+        <div class="phone-screen">
+          <div class="phone-notch"></div>
+          <div class="phone-status"><span>9:41</span><span>5G</span></div>
+          <div class="phone-app-content">
+            <div class="phone-greeting">Good morning,<strong>Priya's Dashboard</strong></div>
+            <div class="phone-card">
+              <div class="phone-card-title">Today's Adherence</div>
+              <div style="display:flex;justify-content:space-between;align-items:baseline;">
+                <span style="font-size:1.3rem;font-weight:700;">87%</span>
+                <span style="font-size:.6rem;opacity:.55;">5 of 6 doses taken</span>
+              </div>
+              <div class="phone-adherence-bar"><div class="phone-adherence-fill"></div></div>
+            </div>
+            <div style="font-size:.62rem;font-weight:600;text-transform:uppercase;letter-spacing:.08em;opacity:.55;margin-top:.2rem;">Upcoming Doses</div>
+            <div class="phone-dose-item">
+              <div class="phone-dose-pill pink"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="7" rx="3"/><path d="M12 11V7a4 4 0 00-8 0v4"/></svg></div>
+              <div><div class="phone-dose-name">Thyronorm 50mcg</div><div class="phone-dose-detail">Before breakfast &middot; 8:00 AM</div></div>
+              <div class="phone-dose-check done"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+            </div>
+            <div class="phone-dose-item">
+              <div class="phone-dose-pill blue"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="7" rx="3"/><path d="M12 11V7a4 4 0 00-8 0v4"/></svg></div>
+              <div><div class="phone-dose-name">Metformin 500mg</div><div class="phone-dose-detail">After lunch &middot; 1:30 PM</div></div>
+              <div class="phone-dose-check"></div>
+            </div>
+            <div class="phone-dose-item">
+              <div class="phone-dose-pill green"><svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="7" rx="3"/><path d="M12 11V7a4 4 0 00-8 0v4"/></svg></div>
+              <div><div class="phone-dose-name">Dolo 650mg</div><div class="phone-dose-detail">After dinner &middot; 9:00 PM</div></div>
+              <div class="phone-dose-check"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="hero-float float-1">
+        <div class="hero-float-icon" style="background:#DCFCE7;color:#16A34A;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+        </div>
+        Dose taken!
+      </div>
+      <div class="hero-float float-2">
+        <div class="hero-float-icon" style="background:#FEF3C7;color:#D97706;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        Reminder in 15m
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Stats ────── -->
+<section class="stats" aria-label="Key statistics">
+  <div class="container">
+    <div class="stat-item reveal">
+      <h3><span class="counter" data-target="1000000" data-suffix="+">0</span></h3>
+      <p>Doses tracked reliably</p>
+    </div>
+    <div class="stat-item reveal reveal-d1">
+      <h3><span class="counter" data-target="50000" data-suffix="+">0</span></h3>
+      <p>Families across India</p>
+    </div>
+    <div class="stat-item reveal reveal-d2">
+      <h3><span class="counter" data-target="48" data-decimal="4.8">0</span></h3>
+      <p>App Store rating</p>
+    </div>
+    <div class="stat-item reveal reveal-d3">
+      <h3><span class="counter" data-target="87" data-suffix="%">0</span></h3>
+      <p>Adherence improvement</p>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Main content ────── -->
+<main id="main">
+
+<!-- ────── Problem ────── -->
+<section class="problem" id="problem">
+  <div class="container">
+    <div class="problem-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+        The Problem
+      </div>
+      <h2 class="reveal reveal-d1">Managing medicines shouldn't be this hard</h2>
+      <p class="section-subtitle reveal reveal-d2">Every day, millions of Indians struggle with confusing prescriptions and forgotten doses. The consequences are real.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="problem-card reveal">
+        <div class="problem-icon-wrap red">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/><line x1="1" y1="1" x2="23" y2="23"/></svg>
+        </div>
+        <h3>Forgetting doses</h3>
+        <p>Between work calls and school runs, that afternoon Metformin slips through. Missed doses mean slower recovery and wasted money.</p>
+        <span class="problem-stat">57% of Indians miss doses regularly</span>
+      </div>
+      <div class="problem-card reveal reveal-d1">
+        <div class="problem-icon-wrap amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+        </div>
+        <h3>Scattered prescriptions</h3>
+        <p>Paper prescriptions pile up. When your doctor asks "what are you taking?" you're stuck guessing. Critical dosage details lost in illegible handwriting.</p>
+        <span class="problem-stat">3.2 avg active prescriptions per family</span>
+      </div>
+      <div class="problem-card reveal reveal-d2">
+        <div class="problem-icon-wrap slate">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>No way to track progress</h3>
+        <p>Are the medicines working? Is your father actually taking his BP tablets? Without tracking, families are left anxious and doctors decide with incomplete data.</p>
+        <span class="problem-stat">68% of doctors want adherence data</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Core Features ────── -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="features-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        Features
+      </div>
+      <h2 class="reveal reveal-d1">Everything your family's health needs</h2>
+      <p class="section-subtitle reveal reveal-d2">Thoughtfully designed tools that work together to keep your loved ones on track.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <h3>AI Prescription Scanner</h3>
+        <p>Photograph any prescription or medicine strip. Our AI extracts medicines, dosages, and schedules in seconds, even from handwritten scripts.</p>
+      </div>
+      <div class="feature-card reveal reveal-d1">
+        <div class="feature-icon-wrap coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        <h3>Smart Dose Reminders</h3>
+        <p>Meal-aware, snooze-smart reminders that adapt to your routine. Get nudged at the right time, not just the scheduled time.</p>
+      </div>
+      <div class="feature-card reveal reveal-d2">
+        <div class="feature-icon-wrap purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>AI Health Companion</h3>
+        <p>Ask about side effects, drug interactions, or symptoms. Get reliable, medicine-aware responses grounded in your active prescriptions.</p>
+      </div>
+      <div class="feature-card reveal reveal-d3">
+        <div class="feature-icon-wrap green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+        </div>
+        <h3>Family Profiles</h3>
+        <p>Manage medicines for up to 5 family members from one account. Parents, children, grandparents, all with individual schedules.</p>
+      </div>
+      <div class="feature-card reveal reveal-d4">
+        <div class="feature-icon-wrap amber">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+        </div>
+        <h3>Adherence Analytics</h3>
+        <p>Visual charts showing who took what and when. Export PDF reports for doctor visits. Spot patterns, celebrate streaks.</p>
+      </div>
+      <div class="feature-card reveal reveal-d5">
+        <div class="feature-icon-wrap">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+        </div>
+        <h3>Live Activities & Dynamic Island</h3>
+        <p>Your next dose lives on your iPhone's Dynamic Island and Lock Screen. Glanceable, always there, impossible to miss.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── AI Spotlight ────── -->
+<section class="ai-spotlight" id="ai-features">
+  <div class="container">
+    <div class="ai-spotlight-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a3 3 0 013 3v1a2 2 0 012 2"/><path d="M6 13V8a6 6 0 0112 0v5"/><path d="M12 19a7 7 0 01-7-7"/><path d="M12 19a7 7 0 007-7"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        AI-Powered Intelligence
+      </div>
+      <h2 class="reveal reveal-d1">AI that understands your health</h2>
+      <p class="section-subtitle reveal reveal-d2">Four powerful AI engines working together, all running on-device for privacy.</p>
+    </div>
+    <div class="ai-grid">
+      <div class="ai-card reveal">
+        <div class="ai-card-icon teal">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <h3>Vision AI Scanner</h3>
+        <p>Dual-capture system reads both prescriptions and medicine strips. Handles handwritten scripts, blurry photos, and Indian medicine brands with 95%+ accuracy.</p>
+      </div>
+      <div class="ai-card reveal reveal-d1">
+        <div class="ai-card-icon coral">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        </div>
+        <h3>Health Chat Companion</h3>
+        <p>Conversational AI that's aware of your prescriptions. Ask about side effects, interactions, or symptoms in English or Hindi. Gets smarter with your health history.</p>
+      </div>
+      <div class="ai-card reveal reveal-d2">
+        <div class="ai-card-icon purple">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+        </div>
+        <h3>Symptom Clarifier</h3>
+        <p>Describe symptoms in everyday language (including Hindi). Gets context through smart follow-up questions, suggests self-care, and tells you when to see a doctor.</p>
+      </div>
+      <div class="ai-card reveal reveal-d3">
+        <div class="ai-card-icon green">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg>
+        </div>
+        <h3>Weekly Health Journal</h3>
+        <p>AI-generated weekly narratives that summarize your mood, symptoms, and adherence patterns. Automatically detects improvements and flags concerns.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── How It Works ────── -->
+<section class="how-it-works" id="how-it-works">
+  <div class="container">
+    <div class="how-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        How It Works
+      </div>
+      <h2 class="reveal reveal-d1">From prescription to peace of mind</h2>
+      <p class="section-subtitle reveal reveal-d2">Three steps. Under sixty seconds. That's all it takes.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-number">1</div>
+        <div class="step-visual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 01-2 2H3a2 2 0 01-2-2V8a2 2 0 012-2h4l2-3h6l2 3h4a2 2 0 012 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        </div>
+        <h3>Upload your prescription</h3>
+        <p>Take a photo of your prescription and medicine strips. Our dual-capture system reads both for maximum accuracy.</p>
+      </div>
+      <div class="step reveal reveal-d1">
+        <div class="step-number">2</div>
+        <div class="step-visual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 014 4v1a3 3 0 013 3v1a2 2 0 012 2"/><path d="M6 13V8a6 6 0 0112 0v5"/><path d="M12 19a7 7 0 01-7-7"/><path d="M12 19a7 7 0 007-7"/><line x1="12" y1="19" x2="12" y2="22"/></svg>
+        </div>
+        <h3>AI extracts your medicines</h3>
+        <p>Advanced vision AI identifies every medicine, dosage, frequency, and duration. You review and confirm before anything is set.</p>
+      </div>
+      <div class="step reveal reveal-d2">
+        <div class="step-number">3</div>
+        <div class="step-visual">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+        </div>
+        <h3>Get smart reminders</h3>
+        <p>Sit back. MedCare handles the rest with timely reminders, adherence tracking, and nudges for your whole family.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── India Section ────── -->
+<section class="india-section" id="india">
+  <div class="container">
+    <div class="india-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Built for India
+      </div>
+      <h2 class="reveal reveal-d1">Designed for how India takes medicine</h2>
+      <p class="section-subtitle reveal reveal-d2">Not another Western health app. MedCare understands Indian prescriptions, medicines, and family dynamics.</p>
+    </div>
+    <div class="india-grid">
+      <div class="india-stats-list">
+        <div class="india-stat-card reveal">
+          <div class="india-stat-icon teal">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          </div>
+          <div class="india-stat-content">
+            <h3>Reads Indian prescriptions</h3>
+            <p>Trained on thousands of Indian doctor handwriting styles. Recognizes Crocin, Dolo, Thyronorm, and 10,000+ Indian brands.</p>
+          </div>
+        </div>
+        <div class="india-stat-card reveal reveal-d1">
+          <div class="india-stat-icon coral">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          </div>
+          <div class="india-stat-content">
+            <h3>Hindi & Hinglish support</h3>
+            <p>Describe symptoms as "sar dard" or "pet me jalan." The AI understands Indian colloquial health terms naturally.</p>
+          </div>
+        </div>
+        <div class="india-stat-card reveal reveal-d2">
+          <div class="india-stat-icon purple">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+          </div>
+          <div class="india-stat-content">
+            <h3>Joint family friendly</h3>
+            <p>Manage medicines for grandparents, parents, and kids from one phone. One caregiver, multiple profiles, zero confusion.</p>
+          </div>
+        </div>
+        <div class="india-stat-card reveal reveal-d3">
+          <div class="india-stat-icon green">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+          </div>
+          <div class="india-stat-content">
+            <h3>Works offline</h3>
+            <p>Core features work without internet. Reminders fire on time even with no data, perfect for tier-2 and tier-3 cities.</p>
+          </div>
+        </div>
+      </div>
+      <div class="india-features reveal reveal-d2">
+        <h3>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          India-specific remedies & advice
+        </h3>
+        <ul class="india-feature-list">
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            ORS, jeera water, tulsi kadha suggested for common ailments
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Meal timings adjusted for Indian eating patterns (breakfast, lunch, dinner)
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            "Before food" / "After food" dose timing intelligence
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Recognizes common brands: Crocin, Dolo, Combiflam, Pan-D, Shelcal
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Doctor visit preparation with symptom summaries in English & Hindi
+          </li>
+          <li>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            Pricing in INR with plans affordable for every Indian family
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Elder Mode ────── -->
+<section class="elder-mode" id="elder-mode">
+  <div class="container">
+    <div class="elder-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Elder Mode
+      </div>
+      <h2 class="reveal reveal-d1">Designed for your parents & grandparents</h2>
+      <p class="section-subtitle reveal reveal-d2">Extra-large text, simplified interface, and one-tap dose confirmation. So simple, Dadi can use it.</p>
+    </div>
+    <div class="elder-grid">
+      <div class="reveal">
+        <div class="elder-phone">
+          <div class="elder-phone-screen">
+            <h4>Today's Doses</h4>
+            <div class="elder-dose-big">
+              <div class="name">Amlodipine 5mg</div>
+              <div class="detail">Morning &middot; With water</div>
+            </div>
+            <button class="elder-take-btn" aria-label="Mark dose as taken">TAKE NOW</button>
+          </div>
+        </div>
+      </div>
+      <div class="elder-features-list">
+        <div class="elder-feature-item reveal">
+          <div class="elder-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+          </div>
+          <div>
+            <h3>Extra-large text & buttons</h3>
+            <p>Everything is sized for easy reading. No squinting, no tiny buttons. Touch targets exceed 60pt for comfortable tapping.</p>
+          </div>
+        </div>
+        <div class="elder-feature-item reveal reveal-d1">
+          <div class="elder-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M12 6v6l4 2"/></svg>
+          </div>
+          <div>
+            <h3>Simplified daily view</h3>
+            <p>Just today's medicines, one at a time. No charts, no settings, no complexity. Just "Take" or "Skip."</p>
+          </div>
+        </div>
+        <div class="elder-feature-item reveal reveal-d2">
+          <div class="elder-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+          </div>
+          <div>
+            <h3>Persistent reminders</h3>
+            <p>Reminders that keep nudging until the dose is confirmed. Auto-alerts the caregiver if a dose is missed.</p>
+          </div>
+        </div>
+        <div class="elder-feature-item reveal reveal-d3">
+          <div class="elder-feature-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2" ry="2"/><path d="M12 18h.01"/></svg>
+          </div>
+          <div>
+            <h3>Haptic confirmation</h3>
+            <p>Strong haptic feedback on dose confirmation, so they know the tap was registered. Visual + tactile = confidence.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── All Features ────── -->
+<section class="all-features" id="all-features">
+  <div class="container">
+    <div class="all-features-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        Everything Included
+      </div>
+      <h2 class="reveal reveal-d1">32+ features, one app</h2>
+      <p class="section-subtitle reveal reveal-d2">From prescription scanning to health journaling, MedCare covers every aspect of family medicine management.</p>
+    </div>
+    <div class="all-features-grid">
+      <div class="mini-feature reveal"><div class="mini-feature-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></div><h4>AI Prescription Scanner</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg></div><h4>Smart Dose Reminders</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg></div><h4>AI Health Chat</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg></div><h4>Family Profiles (5)</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div><h4>Adherence Analytics</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><h4>Dynamic Island</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div><h4>Symptom Tracker</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 014 4v14a3 3 0 00-3-3H2z"/><path d="M22 3h-6a4 4 0 00-4 4v14a3 3 0 013-3h7z"/></svg></div><h4>Health Journal</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><h4>PDF Export Reports</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><h4>Elder Mode</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div><h4>Streak Rewards</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h4>Lock Screen Widgets</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><h4>Symptom Clarifier</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><h4>Meal-Aware Timing</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><h4>India-First Design</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><h4>On-Device Privacy</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg></div><h4>Snooze & Reschedule</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><h4>Doctor Visit Prep</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div><h4>Drug Interactions</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon amber"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div><h4>Mood & Energy Log</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon teal"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2" ry="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div><h4>Subscription Plans</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon coral"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg></div><h4>Offline Support</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon purple"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22 6 12 13 2 6"/></svg></div><h4>Caregiver Alerts</h4></div>
+      <div class="mini-feature reveal"><div class="mini-feature-icon green"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20V10"/><path d="M18 20V4"/><path d="M6 20v-4"/></svg></div><h4>Weekly Summaries</h4></div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Pricing ────── -->
+<section class="pricing" id="pricing">
+  <div class="container">
+    <div class="pricing-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        Pricing
+      </div>
+      <h2 class="reveal reveal-d1">Simple, transparent plans</h2>
+      <p class="section-subtitle reveal reveal-d2">Start free. Upgrade when your family needs more.</p>
+    </div>
+    <div class="pricing-grid">
+      <div class="pricing-card reveal">
+        <div class="pricing-plan">Free</div>
+        <div class="pricing-desc">For individuals getting started</div>
+        <div class="pricing-price">&#8377;0</div>
+        <div class="pricing-period">free forever</div>
+        <ul class="pricing-features">
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>1 user profile</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Up to 3 active prescriptions</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Basic dose reminders</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>AI scanner (5/month)</li>
+          <li class="disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>AI Health Companion</li>
+          <li class="disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>Adherence analytics & PDF</li>
+          <li class="disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>Dynamic Island support</li>
+        </ul>
+        <button class="pricing-btn outline">Get Started Free</button>
+      </div>
+      <div class="pricing-card featured reveal reveal-d1">
+        <div class="pricing-badge">Most Popular</div>
+        <div class="pricing-plan">Pro</div>
+        <div class="pricing-desc">For families who want peace of mind</div>
+        <div class="pricing-price">&#8377;149<span>/mo</span></div>
+        <div class="pricing-period">billed monthly</div>
+        <ul class="pricing-features">
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Up to 3 family profiles</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited prescriptions</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Smart meal-aware reminders</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited AI scanner</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>AI Health Companion</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Analytics & PDF export</li>
+          <li class="disabled"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>Dynamic Island support</li>
+        </ul>
+        <button class="pricing-btn filled">Start 7-Day Free Trial</button>
+      </div>
+      <div class="pricing-card reveal reveal-d2">
+        <div class="pricing-plan">Premium</div>
+        <div class="pricing-desc">For large families & caregivers</div>
+        <div class="pricing-price">&#8377;299<span>/mo</span></div>
+        <div class="pricing-period">billed monthly</div>
+        <ul class="pricing-features">
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Up to 5 family profiles</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited prescriptions</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Smart reminders + buddy alerts</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Unlimited AI scanner</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>AI Companion (priority)</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Advanced analytics & PDF</li>
+          <li><svg class="check-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>Dynamic Island support</li>
+        </ul>
+        <button class="pricing-btn outline">Start 7-Day Free Trial</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Testimonials ────── -->
+<section class="testimonials" id="testimonials">
+  <div class="container">
+    <div class="testimonials-header">
+      <div class="section-label reveal">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+        Testimonials
+      </div>
+      <h2 class="reveal reveal-d1">Loved by families across India</h2>
+      <p class="section-subtitle reveal reveal-d2">Real stories from real people managing health with MedCare.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card reveal">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">"My father has diabetes and hypertension with 6 daily medicines. Before MedCare, I used to call him three times a day. Now the app handles it, and I can check his adherence from my phone. Total game changer."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--teal);">AK</div>
+          <div>
+            <div class="testimonial-name">Ananya Krishnan</div>
+            <div class="testimonial-role">IT Professional, Bangalore</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-d1">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">"The prescription scanner is unbelievable. I photographed my doctor's handwriting that even I couldn't read, and MedCare extracted every medicine correctly. Much better than typing everything manually."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--coral);">RP</div>
+          <div>
+            <div class="testimonial-name">Rajesh Patel</div>
+            <div class="testimonial-role">Business Owner, Ahmedabad</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card reveal reveal-d2">
+        <div class="testimonial-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        </div>
+        <p class="testimonial-text">"I manage medicines for my two kids and my mother-in-law. The family profiles feature is exactly what I needed. The AI chat helped me understand a side effect at 11 PM when no doctor was available."</p>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar" style="background:var(--purple);">SM</div>
+          <div>
+            <div class="testimonial-name">Sneha Mukherjee</div>
+            <div class="testimonial-role">Homemaker, Kolkata</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ────── Download CTA ────── -->
+<section class="download-cta" id="download">
+  <div class="container">
+    <div class="section-label reveal" style="color:rgba(255,255,255,.4);">Get Started</div>
+    <h2 class="reveal reveal-d1">Start your health journey today</h2>
+    <p class="section-subtitle reveal reveal-d2">Join 50,000+ Indian families who never miss a dose. Free to download, no credit card required.</p>
+    <div class="reveal reveal-d3">
+      <a href="#" class="btn-primary" style="margin-top:.5rem;">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="currentColor"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+        Download on App Store
+      </a>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<!-- ────── Footer ────── -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="nav-logo" style="color:#fff;margin-bottom:.2rem;">
+          <div class="nav-logo-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
+          </div>
+          MedCare
+        </div>
+        <p class="footer-brand-desc">Your family's AI health companion. Built in India, for India. Turning prescriptions into peace of mind, one dose at a time.</p>
+      </div>
+      <div>
+        <h4>Product</h4>
+        <ul class="footer-links">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="#how-it-works">How It Works</a></li>
+          <li><a href="#download">Download</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Company</h4>
+        <ul class="footer-links">
+          <li><a href="#">About Us</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Careers</a></li>
+          <li><a href="#">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul class="footer-links">
+          <li><a href="#">Privacy Policy</a></li>
+          <li><a href="#">Terms of Service</a></li>
+          <li><a href="#">Data Security</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 MedCare Health Technologies Pvt. Ltd.</span>
+      <div class="footer-social">
+        <a href="#" aria-label="Twitter">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 3a10.9 10.9 0 01-3.14 1.53 4.48 4.48 0 00-7.86 3v1A10.66 10.66 0 013 4s-4 9 5 13a11.64 11.64 0 01-7 2c9 5 20 0 20-11.5a4.5 4.5 0 00-.08-.83A7.72 7.72 0 0023 3z"/></svg>
+        </a>
+        <a href="#" aria-label="Instagram">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1112.63 8 4 4 0 0116 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
+        </a>
+        <a href="#" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 8a6 6 0 016 6v7h-4v-7a2 2 0 00-2-2 2 2 0 00-2 2v7h-4v-7a6 6 0 016-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+        </a>
+        <a href="#" aria-label="YouTube">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22.54 6.42a2.78 2.78 0 00-1.94-2C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 00-1.94 2A29 29 0 001 11.75a29 29 0 00.46 5.33A2.78 2.78 0 003.4 19.1c1.72.46 8.6.46 8.6.46s6.88 0 8.6-.46a2.78 2.78 0 001.94-2 29 29 0 00.46-5.25 29 29 0 00-.46-5.43z"/><polygon points="9.75 15.02 15.5 11.75 9.75 8.48 9.75 15.02"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Scroll reveal with IntersectionObserver
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) entry.target.classList.add('visible');
+  });
+}, { threshold: 0.08, rootMargin: '0px 0px -30px 0px' });
+document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+// Nav scroll state
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 50);
+}, { passive: true });
+
+// Mobile nav toggle
+const navToggle = document.getElementById('navToggle');
+const navLinks = document.getElementById('navLinks');
+navToggle.addEventListener('click', () => {
+  const isOpen = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen);
+});
+document.querySelectorAll('.nav-links a').forEach(a => {
+  a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  });
+});
+
+// Counter animation
+function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(0) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(0) + 'K';
+  return n.toString();
+}
+const counterObs = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting || entry.target.dataset.counted) return;
+    entry.target.dataset.counted = 'true';
+    const el = entry.target;
+    const target = parseInt(el.dataset.target);
+    const suffix = el.dataset.suffix || '';
+    const dec = el.dataset.decimal;
+    const dur = 1800;
+    const start = performance.now();
+    function tick(now) {
+      const p = Math.min((now - start) / dur, 1);
+      const e = 1 - Math.pow(1 - p, 4);
+      if (dec) {
+        el.textContent = (parseFloat(dec) * e).toFixed(1) + suffix;
+      } else {
+        el.textContent = formatNum(Math.floor(target * e)) + suffix;
+      }
+      if (p < 1) requestAnimationFrame(tick);
+      else el.textContent = dec ? dec + suffix : formatNum(target) + suffix;
+    }
+    // Respect reduced motion
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.textContent = dec ? dec + suffix : formatNum(target) + suffix;
+    } else {
+      requestAnimationFrame(tick);
+    }
+  });
+}, { threshold: 0.5 });
+document.querySelectorAll('.counter').forEach(el => counterObs.observe(el));
+
+// Smooth scroll for anchor links
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', (e) => {
+    const t = document.querySelector(a.getAttribute('href'));
+    if (t) { e.preventDefault(); t.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  });
+});
+</script>
+
+</body>
+</html>

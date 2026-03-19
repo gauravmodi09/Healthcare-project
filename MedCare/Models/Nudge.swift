@@ -81,7 +81,7 @@ enum NudgeType: String, Codable, CaseIterable {
 
     var actionLabel: String {
         switch self {
-        case .missedDose: return "Log Now"
+        case .missedDose: return "What should I do?"
         case .noImprovement: return "Chat with AI"
         case .courseEnding: return "View Plan"
         case .courseCompleted: return "View Summary"

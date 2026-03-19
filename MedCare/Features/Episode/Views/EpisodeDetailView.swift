@@ -11,6 +11,7 @@ struct EpisodeDetailView: View {
     @Environment(DataService.self) private var dataService
     @Query private var episodes: [Episode]
     @State private var selectedTab: EpisodeTab = .plan
+    @State private var showQuickAddMedicine = false
 
     private var episode: Episode? {
         episodes.first { $0.id == episodeId }
@@ -58,6 +59,10 @@ struct EpisodeDetailView: View {
             .navigationBarTitleDisplayMode(.inline)
             .navigationDestination(for: DocumentNavID.self) { nav in
                 DocumentDetailView(documentId: nav.id)
+            }
+            .sheet(isPresented: $showQuickAddMedicine) {
+                QuickAddMedicineView(episode: episode)
+                    .environment(dataService)
             }
         } else {
             ContentUnavailableView("Episode not found", systemImage: "doc.questionmark")
@@ -127,7 +132,7 @@ struct EpisodeDetailView: View {
                         .font(MCTypography.headline)
                     Spacer()
                     Button {
-                        // Add medicine
+                        showQuickAddMedicine = true
                     } label: {
                         Image(systemName: "plus.circle")
                             .foregroundStyle(MCColors.primaryTeal)

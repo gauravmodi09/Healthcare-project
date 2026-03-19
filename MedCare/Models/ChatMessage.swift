@@ -11,6 +11,8 @@ final class ChatMessage {
     var profileId: UUID?
     var isEmergency: Bool
     var actionButtons: [ChatAction]
+    var suggestedReplies: [String] = []
+    var sessionId: UUID?
 
     init(
         role: MessageRole,
@@ -18,7 +20,9 @@ final class ChatMessage {
         episodeId: UUID? = nil,
         profileId: UUID? = nil,
         isEmergency: Bool = false,
-        actionButtons: [ChatAction] = []
+        actionButtons: [ChatAction] = [],
+        suggestedReplies: [String] = [],
+        sessionId: UUID? = nil
     ) {
         self.id = UUID()
         self.role = role
@@ -28,6 +32,8 @@ final class ChatMessage {
         self.profileId = profileId
         self.isEmergency = isEmergency
         self.actionButtons = actionButtons
+        self.suggestedReplies = suggestedReplies
+        self.sessionId = sessionId
     }
 }
 
@@ -63,6 +69,7 @@ enum ChatActionType: String, Codable {
     case viewEpisode = "view_episode"
     case callEmergency = "call_emergency"
     case openURL = "open_url"
+    case missedDoseChat = "missed_dose_chat"
 }
 
 // MARK: - Emergency Detection

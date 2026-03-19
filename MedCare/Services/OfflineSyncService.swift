@@ -77,7 +77,7 @@ final class OfflineSyncService {
     func syncPendingActions() {
         guard isOnline else { return }
 
-        var actions = loadStoredActions()
+        let actions = loadStoredActions()
         guard !actions.isEmpty else { return }
 
         // Process each action

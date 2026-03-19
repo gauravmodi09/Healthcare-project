@@ -46,8 +46,14 @@
     </array>
     <key>NSCameraUsageDescription</key>
     <string>MedCare needs camera access to take photos of your prescriptions and medicine packaging.</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>MedCare needs microphone access for voice input in the AI health chat.</string>
+    <key>NSSpeechRecognitionUsageDescription</key>
+    <string>MedCare uses speech recognition to convert your voice into text for the AI health companion.</string>
     <key>NSPhotoLibraryUsageDescription</key>
     <string>MedCare needs photo library access to select prescription and medicine photos.</string>
+    <key>NSHealthShareUsageDescription</key>
+    <string>MedCare reads your health data (steps, heart rate, sleep, blood pressure, blood glucose) to provide a complete picture of your health alongside your medication tracking.</string>
     <key>UIUserInterfaceStyle</key>
     <string>Light</string>
     <key>NSSupportsLiveActivities</key>

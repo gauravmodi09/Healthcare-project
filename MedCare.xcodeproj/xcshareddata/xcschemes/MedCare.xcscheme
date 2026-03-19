@@ -20,20 +20,6 @@
                ReferencedContainer = "container:MedCare.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "A9C1A74D135C95F7225C9EB6"
-               BuildableName = "MedCareWidgetExtension.appex"
-               BlueprintName = "MedCareWidgetExtension"
-               ReferencedContainer = "container:MedCare.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction

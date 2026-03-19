@@ -27,7 +27,7 @@ actor APIService {
         path: String,
         body: Encodable? = nil
     ) async throws -> T {
-        var url = baseURL.appendingPathComponent(path)
+        let url = baseURL.appendingPathComponent(path)
         var request = URLRequest(url: url)
         request.httpMethod = method
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

@@ -4,6 +4,7 @@ import SwiftData
 struct HomeView: View {
     @Environment(AppRouter.self) private var router
     @Environment(DataService.self) private var dataService
+    @Environment(SmartNudgeService.self) private var nudgeService
     @Query private var users: [User]
     @State private var showUpload = false
 
@@ -17,17 +18,23 @@ struct HomeView: View {
                     // Header with greeting & profile switcher
                     headerSection
 
-                    // Two-door CTA
-                    twoDoorCTA
-
-                    // Today's medication summary
                     if let profile = activeProfile {
-                        todaysMedicationSection(profile: profile)
+                        // Nudge banner
+                        nudgeBannerSection(profile: profile)
 
-                        // Active episodes
+                        // Next Dose Hero Card
+                        nextDoseHeroCard(profile: profile)
+
+                        // Metrics Row — Streak + Today's Progress
+                        metricsRow(profile: profile)
+
+                        // Quick Actions Row
+                        quickActionsRow
+
+                        // Active Episodes
                         activeEpisodesSection(profile: profile)
 
-                        // Upcoming tasks
+                        // Upcoming Tasks
                         upcomingTasksSection(profile: profile)
                     }
                 }
@@ -89,108 +96,308 @@ struct HomeView: View {
         .padding(.top, MCSpacing.xs)
     }
 
-    // MARK: - Two-Door CTA
+    // MARK: - Nudge Banner
 
-    private var twoDoorCTA: some View {
-        HStack(spacing: MCSpacing.sm) {
-            // Door A: Consult Doctor (Phase 3)
-            Button {
-                // Future: teleconsultation
-            } label: {
-                VStack(spacing: MCSpacing.xs) {
+    @ViewBuilder
+    private func nudgeBannerSection(profile: UserProfile) -> some View {
+        ForEach(nudgeService.activeNudges) { nudge in
+            NudgeBannerView(nudge: nudge) {
+                nudgeService.markActedOn(nudge)
+            } onDismiss: {
+                nudgeService.dismissNudge(nudge)
+            }
+        }
+    }
+
+    // MARK: - Next Dose Hero Card
+
+    private func nextDoseHeroCard(profile: UserProfile) -> some View {
+        let upcoming = dataService.upcomingDoses(for: profile, limit: 1)
+        let todaysDosesList = dataService.todaysDoses(for: profile)
+        let allDone = todaysDosesList.allSatisfy { $0.status == .taken } && !todaysDosesList.isEmpty
+
+        return Group {
+            if let nextDose = upcoming.first {
+                // Has upcoming dose
+                VStack(alignment: .leading, spacing: MCSpacing.sm) {
+                    HStack(spacing: MCSpacing.sm) {
+                        // Pill icon
+                        ZStack {
+                            Circle()
+                                .fill(.white.opacity(0.2))
+                                .frame(width: 52, height: 52)
+                            Image(systemName: nextDose.medicine?.doseForm.icon ?? "pills")
+                                .font(.system(size: 24, weight: .medium))
+                                .foregroundStyle(.white)
+                        }
+
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text("Next Dose")
+                                .font(MCTypography.caption)
+                                .foregroundStyle(.white.opacity(0.8))
+
+                            Text(nextDose.medicine?.brandName ?? "Medicine")
+                                .font(MCTypography.title2)
+                                .foregroundStyle(.white)
+                                .fontWeight(.bold)
+
+                            Text(nextDose.medicine?.dosage ?? "")
+                                .font(MCTypography.subheadline)
+                                .foregroundStyle(.white.opacity(0.85))
+                        }
+
+                        Spacer()
+
+                        // Time countdown
+                        VStack(alignment: .trailing, spacing: 4) {
+                            Text(nextDose.scheduledTime, style: .time)
+                                .font(MCTypography.headline)
+                                .foregroundStyle(.white)
+
+                            Text(timeUntil(nextDose.scheduledTime))
+                                .font(MCTypography.caption)
+                                .foregroundStyle(.white.opacity(0.8))
+                        }
+                    }
+
+                    // Take Now button (if within reminder window — within 30 min)
+                    if nextDose.scheduledTime.timeIntervalSinceNow < 30 * 60 {
+                        Button {
+                            withAnimation {
+                                dataService.logDose(nextDose, status: .taken)
+                            }
+                        } label: {
+                            HStack {
+                                Image(systemName: "checkmark.circle.fill")
+                                Text("Take Now")
+                                    .fontWeight(.semibold)
+                            }
+                            .font(MCTypography.subheadline)
+                            .foregroundStyle(MCColors.primaryTeal)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, MCSpacing.xs)
+                            .background(.white)
+                            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+                        }
+                    }
+                }
+                .padding(MCSpacing.cardPadding)
+                .background(
+                    LinearGradient(
+                        colors: [MCColors.primaryTeal, MCColors.primaryTealDark],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                .shadow(color: MCColors.primaryTeal.opacity(0.3), radius: 12, y: 6)
+            } else if allDone {
+                // All done for today
+                HStack(spacing: MCSpacing.md) {
+                    ZStack {
+                        Circle()
+                            .fill(MCColors.success.opacity(0.15))
+                            .frame(width: 52, height: 52)
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 28))
+                            .foregroundStyle(MCColors.success)
+                    }
+
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("All done for today!")
+                            .font(MCTypography.title2)
+                            .foregroundStyle(MCColors.textPrimary)
+                            .fontWeight(.bold)
+                        Text("Great job keeping up with your medications")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textSecondary)
+                    }
+
+                    Spacer()
+                }
+                .padding(MCSpacing.cardPadding)
+                .background(MCColors.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                .overlay(
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                        .stroke(MCColors.success.opacity(0.3), lineWidth: 1)
+                )
+            } else {
+                // No doses scheduled
+                HStack(spacing: MCSpacing.md) {
                     ZStack {
                         Circle()
                             .fill(MCColors.primaryTeal.opacity(0.1))
-                            .frame(width: 48, height: 48)
-                        Image(systemName: "stethoscope")
-                            .font(.system(size: 20))
+                            .frame(width: 52, height: 52)
+                        Image(systemName: "pills")
+                            .font(.system(size: 24))
                             .foregroundStyle(MCColors.primaryTeal)
                     }
-                    Text("Consult\nDoctor")
-                        .font(MCTypography.subheadline)
-                        .foregroundStyle(MCColors.textPrimary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
 
-                    MCBadge("Coming Soon", color: MCColors.textTertiary, style: .outlined)
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("No doses scheduled")
+                            .font(MCTypography.title2)
+                            .foregroundStyle(MCColors.textPrimary)
+                            .fontWeight(.bold)
+                        Text("Upload a prescription to get started")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textSecondary)
+                    }
+
+                    Spacer()
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, MCSpacing.md)
+                .padding(MCSpacing.cardPadding)
                 .background(MCColors.cardBackground)
                 .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
-                .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
             }
-            .disabled(true)
-            .opacity(0.7)
+        }
+    }
 
-            // Door B: Upload Prescription
+    // MARK: - Metrics Row
+
+    private func metricsRow(profile: UserProfile) -> some View {
+        let doses = dataService.todaysDoses(for: profile)
+        let taken = doses.filter { $0.status == .taken }.count
+        let totalDoses = doses.count
+        let adherence = totalDoses > 0 ? Double(taken) / Double(totalDoses) : 0.0
+        let streak = bestStreak(for: profile)
+        let level = StreakLevel(streak: streak)
+
+        return LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+            // Left: Streak Card
+            VStack(spacing: MCSpacing.sm) {
+                HStack {
+                    Image(systemName: level.icon)
+                        .font(.system(size: 18, weight: .semibold))
+                        .foregroundStyle(level.color)
+                    Spacer()
+                }
+
+                HStack(alignment: .firstTextBaseline, spacing: 4) {
+                    Text("\(streak)")
+                        .font(.system(size: 32, weight: .bold, design: .rounded))
+                        .foregroundStyle(MCColors.textPrimary)
+                    Text("days")
+                        .font(MCTypography.caption)
+                        .foregroundStyle(MCColors.textSecondary)
+                    Spacer()
+                }
+
+                HStack {
+                    Text(level.label)
+                        .font(MCTypography.captionBold)
+                        .foregroundStyle(level.color)
+                        .padding(.horizontal, MCSpacing.xs)
+                        .padding(.vertical, 2)
+                        .background(level.color.opacity(0.12))
+                        .clipShape(Capsule())
+                    Spacer()
+                }
+            }
+            .padding(MCSpacing.cardPadding)
+            .background(MCColors.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+            .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
+
+            // Right: Today's Progress Card
+            VStack(spacing: MCSpacing.sm) {
+                HStack {
+                    Text("Today")
+                        .font(MCTypography.caption)
+                        .foregroundStyle(MCColors.textSecondary)
+                    Spacer()
+                }
+
+                ActivityRingView(
+                    progress: adherence,
+                    size: 56,
+                    lineWidth: 7,
+                    color: MCColors.primaryTeal
+                )
+
+                Text("\(taken)/\(totalDoses) doses")
+                    .font(MCTypography.captionBold)
+                    .foregroundStyle(MCColors.textSecondary)
+            }
+            .padding(MCSpacing.cardPadding)
+            .background(MCColors.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+            .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
+        }
+    }
+
+    // MARK: - Quick Actions Row
+
+    private var quickActionsRow: some View {
+        LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 12) {
+            // Upload Prescription
             Button {
                 showUpload = true
             } label: {
-                VStack(spacing: MCSpacing.xs) {
+                HStack(spacing: MCSpacing.xs) {
                     ZStack {
                         Circle()
                             .fill(MCColors.accentCoral.opacity(0.1))
-                            .frame(width: 48, height: 48)
-                        Image(systemName: "doc.text.viewfinder")
-                            .font(.system(size: 20))
+                            .frame(width: 36, height: 36)
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 16))
                             .foregroundStyle(MCColors.accentCoral)
                     }
-                    Text("Upload\nPrescription")
-                        .font(MCTypography.subheadline)
-                        .foregroundStyle(MCColors.textPrimary)
-                        .multilineTextAlignment(.center)
-                        .lineLimit(2)
-                        .fixedSize(horizontal: false, vertical: true)
 
-                    MCBadge("AI Powered", color: MCColors.accentCoral, style: .soft)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Upload")
+                            .font(MCTypography.bodyMedium)
+                            .foregroundStyle(MCColors.textPrimary)
+                        Text("Prescription")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textSecondary)
+                    }
+
+                    Spacer()
                 }
-                .frame(maxWidth: .infinity)
-                .padding(.vertical, MCSpacing.md)
+                .padding(MCSpacing.cardPadding)
                 .background(MCColors.cardBackground)
                 .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
                 .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
                 .overlay(
                     RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
-                        .stroke(MCColors.accentCoral.opacity(0.3), lineWidth: 1)
+                        .stroke(MCColors.accentCoral.opacity(0.2), lineWidth: 1)
                 )
             }
-        }
-    }
 
-    // MARK: - Today's Medication
+            // AI Health Chat
+            Button {
+                router.selectedTab = .ai
+            } label: {
+                HStack(spacing: MCSpacing.xs) {
+                    ZStack {
+                        Circle()
+                            .fill(MCColors.primaryTeal.opacity(0.1))
+                            .frame(width: 36, height: 36)
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 16))
+                            .foregroundStyle(MCColors.primaryTeal)
+                    }
 
-    private func todaysMedicationSection(profile: UserProfile) -> some View {
-        VStack(alignment: .leading, spacing: MCSpacing.sm) {
-            HStack {
-                Text("Today's Medication")
-                    .font(MCTypography.headline)
-                    .foregroundStyle(MCColors.textPrimary)
-                Spacer()
-                let doses = dataService.todaysDoses(for: profile)
-                let taken = doses.filter { $0.status == .taken }.count
-                Text("\(taken)/\(doses.count)")
-                    .font(MCTypography.subheadline)
-                    .foregroundStyle(MCColors.primaryTeal)
-            }
-
-            let upcoming = dataService.upcomingDoses(for: profile, limit: 4)
-            if upcoming.isEmpty {
-                MCCard {
-                    HStack {
-                        Image(systemName: "checkmark.circle.fill")
-                            .foregroundStyle(MCColors.success)
-                        Text("All doses for today are done!")
-                            .font(MCTypography.body)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("AI Health")
+                            .font(MCTypography.bodyMedium)
+                            .foregroundStyle(MCColors.textPrimary)
+                        Text("Chat")
+                            .font(MCTypography.caption)
                             .foregroundStyle(MCColors.textSecondary)
                     }
-                    .frame(maxWidth: .infinity)
+
+                    Spacer()
                 }
-            } else {
-                ForEach(upcoming) { dose in
-                    DoseReminderCard(doseLog: dose)
-                }
+                .padding(MCSpacing.cardPadding)
+                .background(MCColors.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
+                .overlay(
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                        .stroke(MCColors.primaryTeal.opacity(0.2), lineWidth: 1)
+                )
             }
         }
     }
@@ -244,6 +451,8 @@ struct HomeView: View {
         }
     }
 
+    // MARK: - Helpers
+
     private var greetingText: String {
         let hour = Calendar.current.component(.hour, from: Date())
         switch hour {
@@ -252,6 +461,24 @@ struct HomeView: View {
         case 17..<21: return "Good evening"
         default: return "Good night"
         }
+    }
+
+    private func timeUntil(_ date: Date) -> String {
+        let interval = date.timeIntervalSinceNow
+        guard interval > 0 else { return "now" }
+        let hours = Int(interval) / 3600
+        let minutes = (Int(interval) % 3600) / 60
+        if hours > 0 {
+            return "in \(hours)h \(minutes)m"
+        } else {
+            return "in \(minutes)m"
+        }
+    }
+
+    private func bestStreak(for profile: UserProfile) -> Int {
+        let episodes = dataService.activeEpisodes(for: profile)
+        guard !episodes.isEmpty else { return 0 }
+        return episodes.map { $0.adherenceStreak }.max() ?? 0
     }
 }
 

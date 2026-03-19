@@ -146,10 +146,10 @@ struct DrugInteractionBanner: View {
 
 /// Enhancement #9: Medicine Expiry Alert View
 struct ExpiryAlertView: View {
-    let alerts: [MedicineExpiryService.ExpiryAlert]
+    let alerts: [ExpiryAlert]
 
     var body: some View {
-        let urgentAlerts = alerts.filter { $0.urgency != .safe }
+        let urgentAlerts = alerts.filter { $0.status != .ok }
         if !urgentAlerts.isEmpty {
             VStack(alignment: .leading, spacing: MCSpacing.xs) {
                 HStack {
@@ -161,25 +161,23 @@ struct ExpiryAlertView: View {
 
                 ForEach(urgentAlerts) { alert in
                     HStack(spacing: MCSpacing.sm) {
-                        Image(systemName: alert.urgency.icon)
-                            .foregroundStyle(Color(hex: alert.urgency.color))
+                        Image(systemName: alert.status.icon)
+                            .foregroundStyle(Color(hex: alert.status.color))
 
                         VStack(alignment: .leading, spacing: 2) {
                             Text(alert.medicineName)
                                 .font(MCTypography.bodyMedium)
-                            Text(alert.urgency == .expired
-                                 ? "Expired!"
-                                 : "Expires in \(alert.daysUntilExpiry) days")
+                            Text(alert.message)
                                 .font(MCTypography.caption)
-                                .foregroundStyle(Color(hex: alert.urgency.color))
+                                .foregroundStyle(Color(hex: alert.status.color))
                         }
 
                         Spacer()
 
-                        MCBadge(alert.urgency.rawValue, color: Color(hex: alert.urgency.color))
+                        MCBadge(alert.status.rawValue, color: Color(hex: alert.status.color))
                     }
                     .padding(MCSpacing.xs)
-                    .background(Color(hex: alert.urgency.color).opacity(0.05))
+                    .background(Color(hex: alert.status.color).opacity(0.05))
                     .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
                 }
             }

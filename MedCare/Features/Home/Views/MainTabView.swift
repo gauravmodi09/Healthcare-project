@@ -17,21 +17,21 @@ struct MainTabView: View {
                 }
                 .tag(AppTab.home)
 
-            TodayView()
-                .tabItem {
-                    Label("Today", systemImage: "calendar")
-                }
-                .tag(AppTab.today)
-
             RemindersView()
                 .tabItem {
-                    Label("Reminders", systemImage: "bell.fill")
+                    Label("Medications", systemImage: "pills.fill")
                 }
-                .tag(AppTab.reminders)
+                .tag(AppTab.meds)
+
+            HistoryView()
+                .tabItem {
+                    Label("Health", systemImage: "heart.text.square.fill")
+                }
+                .tag(AppTab.health)
 
             aiChatTab
                 .tabItem {
-                    Label("AI Chat", systemImage: "sparkles")
+                    Label("AI", systemImage: "sparkles")
                 }
                 .tag(AppTab.ai)
 

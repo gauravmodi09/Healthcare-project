@@ -59,19 +59,17 @@ final class AppRouter {
 
 enum AppTab: String, CaseIterable {
     case home = "Home"
-    case today = "Today"
-    case reminders = "Reminders"
-    case ai = "AI Chat"
-    case history = "History"
+    case meds = "Medications"
+    case health = "Health"
+    case ai = "AI"
     case profile = "Profile"
 
     var icon: String {
         switch self {
         case .home: return "house.fill"
-        case .today: return "calendar"
-        case .reminders: return "bell.fill"
+        case .meds: return "pills.fill"
+        case .health: return "heart.text.square.fill"
         case .ai: return "sparkles"
-        case .history: return "clock.fill"
         case .profile: return "person.fill"
         }
     }

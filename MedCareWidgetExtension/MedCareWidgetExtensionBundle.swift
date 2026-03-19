@@ -5,5 +5,6 @@ import SwiftUI
 struct MedCareWidgetExtensionBundle: WidgetBundle {
     var body: some Widget {
         DoseReminderLiveActivity()
+        MedCareHomeWidget()
     }
 }

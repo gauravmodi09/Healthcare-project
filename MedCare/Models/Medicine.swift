@@ -16,7 +16,11 @@ final class Medicine {
     var manufacturer: String?
     var mrp: Double?
     var expiryDate: Date?
+    var totalPillCount: Int?       // Total pills in the pack
+    var pillsRemaining: Int?       // Current remaining count
+    var refillAlertDays: Int = 5   // Alert X days before running out
     var isActive: Bool
+    var isCritical: Bool = false
     var source: MedicineSource
     var confidenceScore: Double
     var startDate: Date
@@ -36,7 +40,8 @@ final class Medicine {
         duration: Int? = nil,
         mealTiming: MealTiming = .noPreference,
         source: MedicineSource = .manual,
-        confidenceScore: Double = 1.0
+        confidenceScore: Double = 1.0,
+        isCritical: Bool = false
     ) {
         self.id = UUID()
         self.brandName = brandName
@@ -52,6 +57,7 @@ final class Medicine {
         self.mrp = nil
         self.expiryDate = nil
         self.isActive = true
+        self.isCritical = isCritical
         self.source = source
         self.confidenceScore = confidenceScore
         self.startDate = Date()

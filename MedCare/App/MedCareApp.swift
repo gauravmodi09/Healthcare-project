@@ -10,6 +10,7 @@ struct MedCareApp: App {
     @State private var chatService = AIChatService()
     @State private var nudgeService = SmartNudgeService()
     @State private var liveActivityService = LiveActivityService()
+    @State private var elderModeService = ElderModeService()
     @Environment(\.scenePhase) private var scenePhase
 
     var body: some Scene {
@@ -22,6 +23,7 @@ struct MedCareApp: App {
                 .environment(chatService)
                 .environment(nudgeService)
                 .environment(liveActivityService)
+                .environment(\.elderModeService, elderModeService)
                 .modelContainer(dataService.modelContainer)
                 .onOpenURL { url in
                     handleDeepLink(url)

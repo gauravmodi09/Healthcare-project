@@ -5,8 +5,8 @@ import SwiftData
 struct AIChatView: View {
     @Environment(AIChatService.self) private var chatService
     @Environment(\.modelContext) private var modelContext
+    @StateObject private var speechService = SpeechService()
     @State private var messageText = ""
-    @State private var showQuickReplies = true
     @FocusState private var isInputFocused: Bool
 
     let profile: UserProfile
@@ -23,12 +23,21 @@ struct AIChatView: View {
                 // Disclaimer banner
                 disclaimerBanner
 
+                // Greeting banner (only when chat is fresh)
+                if chatService.messages.count <= 1 {
+                    mediGreetingBanner
+                }
+
                 // Messages
                 messagesList
 
-                // Quick reply chips
-                if showQuickReplies && !chatService.isStreaming {
-                    quickReplyChips
+                // Quick action chips at start, dynamic chips after conversation
+                if !chatService.isStreaming {
+                    if chatService.messages.count <= 1 {
+                        quickActionChips
+                    } else {
+                        quickReplyChips
+                    }
                 }
 
                 // Input bar
@@ -68,16 +77,16 @@ struct AIChatView: View {
 
             VStack(spacing: 2) {
                 HStack(spacing: 6) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(Color(hex: "0A7E8C"))
-                    Text("MedCare AI")
+                    Image(systemName: "stethoscope.circle.fill")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(MCColors.primaryTeal)
+                    Text("Medi")
                         .font(.system(size: 17, weight: .bold))
-                        .foregroundColor(Color(hex: "1F2937"))
+                        .foregroundColor(MCColors.textPrimary)
                 }
-                Text("Health Companion")
+                Text("Your Health Companion")
                     .font(.system(size: 12))
-                    .foregroundColor(.secondary)
+                    .foregroundColor(MCColors.textSecondary)
             }
 
             Spacer()
@@ -127,7 +136,7 @@ struct AIChatView: View {
                         if message.role != .system {
                             VStack(alignment: .leading, spacing: 4) {
                                 if !message.role.isUser && (index == 0 || chatService.messages[index - 1].role.isUser) {
-                                    AIBadgeView()
+                                    MediAvatarBadge()
                                         .padding(.leading, 4)
                                 }
                                 ChatBubbleView(message: message) { action in
@@ -141,7 +150,7 @@ struct AIChatView: View {
                     // Typing indicator
                     if chatService.isStreaming {
                         VStack(alignment: .leading, spacing: 4) {
-                            AIBadgeView()
+                            MediAvatarBadge()
                                 .padding(.leading, 4)
 
                             if !chatService.currentStreamedText.isEmpty {
@@ -149,16 +158,16 @@ struct AIChatView: View {
                                 HStack {
                                     Text(LocalizedStringKey(chatService.currentStreamedText))
                                         .font(.system(size: 15))
-                                        .foregroundColor(Color(hex: "1F2937"))
+                                        .foregroundColor(MCColors.textPrimary)
                                         .lineSpacing(3)
                                         .padding(14)
-                                        .background(Color(hex: "F0F2F5"))
+                                        .background(MCColors.surface)
                                         .clipShape(RoundedRectangle(cornerRadius: 16))
 
                                     Spacer(minLength: 60)
                                 }
                             } else {
-                                TypingIndicatorView()
+                                MediTypingIndicator()
                             }
                         }
                         .id("typing")
@@ -180,14 +189,29 @@ struct AIChatView: View {
 
     // MARK: - Quick Reply Chips
 
+    /// Dynamic chips sourced from the last assistant message's suggestedReplies, with fallback defaults
+    private var dynamicChips: [String] {
+        if let lastAssistant = chatService.messages.last(where: { $0.role == .assistant }),
+           !lastAssistant.suggestedReplies.isEmpty {
+            return lastAssistant.suggestedReplies
+        }
+        return ["My medicines", "My progress", "Side effects?"]
+    }
+
     private var quickReplyChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                quickChip("💊 My medicines", query: "What are my current medicines?")
-                quickChip("📊 My progress", query: "How is my recovery going?")
-                quickChip("😵 Side effects?", query: "Are my symptoms normal side effects?")
-                quickChip("🍽️ Diet tips", query: "What diet should I follow with my treatment?")
-                quickChip("⏰ Missed a dose", query: "I missed my last dose, what should I do?")
+                ForEach(Array(dynamicChips.enumerated()), id: \.offset) { index, chip in
+                    quickChip(chip, query: chip)
+                        .transition(.asymmetric(
+                            insertion: .opacity.combined(with: .move(edge: .bottom)),
+                            removal: .opacity
+                        ))
+                        .animation(
+                            .easeOut(duration: 0.35).delay(Double(index) * 0.08),
+                            value: dynamicChips
+                        )
+                }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 6)
@@ -199,7 +223,6 @@ struct AIChatView: View {
         Button {
             messageText = query
             sendMessage()
-            showQuickReplies = false
         } label: {
             Text(label)
                 .font(.system(size: 13, weight: .medium))
@@ -216,33 +239,128 @@ struct AIChatView: View {
 
     private var inputBar: some View {
         HStack(spacing: 10) {
-            // Text field
-            TextField("Ask about your health...", text: $messageText, axis: .vertical)
-                .font(.system(size: 15))
-                .padding(.horizontal, 16)
-                .padding(.vertical, 10)
-                .background(Color(hex: "F0F2F5"))
-                .clipShape(RoundedRectangle(cornerRadius: 22))
-                .lineLimit(1...4)
-                .focused($isInputFocused)
-
-            // Send button
-            Button {
-                sendMessage()
-            } label: {
-                Image(systemName: messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "mic.fill" : "arrow.up.circle.fill")
-                    .font(.system(size: 30))
-                    .foregroundColor(
-                        messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
-                            ? Color(hex: "9CA3AF")
-                            : Color(hex: "0A7E8C")
-                    )
+            if speechService.isRecording {
+                // Recording overlay replacing the text field
+                recordingOverlay
+            } else {
+                // Text field
+                TextField("Ask about your health...", text: $messageText, axis: .vertical)
+                    .font(.system(size: 15))
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 10)
+                    .background(Color(hex: "F0F2F5"))
+                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                    .lineLimit(1...4)
+                    .focused($isInputFocused)
             }
-            .disabled(messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty && !chatService.isStreaming)
+
+            // Send / Mic / Stop button
+            if speechService.isRecording {
+                Button {
+                    finishRecording()
+                } label: {
+                    Image(systemName: "stop.circle.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(Color(hex: "EF4444"))
+                }
+            } else if messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                Button {
+                    startVoiceInput()
+                } label: {
+                    Image(systemName: "mic.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(Color(hex: "9CA3AF"))
+                }
+            } else {
+                Button {
+                    sendMessage()
+                } label: {
+                    Image(systemName: "arrow.up.circle.fill")
+                        .font(.system(size: 30))
+                        .foregroundColor(Color(hex: "0A7E8C"))
+                }
+            }
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
         .background(.ultraThinMaterial)
+        .alert("Voice Input Error", isPresented: .init(
+            get: { speechService.error != nil },
+            set: { if !$0 { speechService.error = nil } }
+        )) {
+            Button("OK", role: .cancel) { speechService.error = nil }
+        } message: {
+            Text(speechService.error ?? "")
+        }
+    }
+
+    // MARK: - Recording Overlay
+
+    private var recordingOverlay: some View {
+        HStack(spacing: 8) {
+            // Waveform bars
+            waveformBars
+
+            VStack(alignment: .leading, spacing: 2) {
+                Text("Listening...")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundColor(Color(hex: "EF4444"))
+
+                if !speechService.transcribedText.isEmpty {
+                    Text(speechService.transcribedText)
+                        .font(.system(size: 14))
+                        .foregroundColor(Color(hex: "1F2937"))
+                        .lineLimit(2)
+                }
+            }
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(Color(hex: "FEF2F2"))
+        .clipShape(RoundedRectangle(cornerRadius: 22))
+    }
+
+    private var waveformBars: some View {
+        HStack(spacing: 3) {
+            ForEach(0..<5, id: \.self) { index in
+                RoundedRectangle(cornerRadius: 2)
+                    .fill(Color(hex: "EF4444"))
+                    .frame(width: 3, height: waveformBarHeight(for: index))
+                    .animation(.easeInOut(duration: 0.15), value: speechService.audioLevel)
+            }
+        }
+        .frame(height: 24)
+    }
+
+    private func waveformBarHeight(for index: Int) -> CGFloat {
+        let base: CGFloat = 6.0
+        let maxExtra: CGFloat = 18.0
+        // Each bar uses a different multiplier for visual variety
+        let multipliers: [CGFloat] = [0.5, 0.8, 1.0, 0.7, 0.4]
+        let level = CGFloat(speechService.audioLevel) * multipliers[index]
+        return base + maxExtra * level
+    }
+
+    // MARK: - Voice Input
+
+    private func startVoiceInput() {
+        speechService.requestAuthorization()
+        do {
+            try speechService.startRecording()
+        } catch {
+            speechService.error = "Could not start recording: \(error.localizedDescription)"
+        }
+    }
+
+    private func finishRecording() {
+        speechService.stopRecording()
+        let text = speechService.transcribedText.trimmingCharacters(in: .whitespacesAndNewlines)
+        if !text.isEmpty {
+            messageText = text
+            isInputFocused = true
+        }
     }
 
     // MARK: - Actions
@@ -266,24 +384,93 @@ struct AIChatView: View {
     }
 
     private func addWelcomeMessage() {
+        let hour = Calendar.current.component(.hour, from: Date())
+        let timeGreeting: String
+        switch hour {
+        case 5..<12: timeGreeting = "Good morning"
+        case 12..<17: timeGreeting = "Good afternoon"
+        case 17..<21: timeGreeting = "Good evening"
+        default: timeGreeting = "Hey there"
+        }
+
         let welcome = ChatMessage(
             role: .assistant,
             content: """
-            Hi \(profile.name)! 👋 I'm your MedCare AI health companion.
+            \(timeGreeting), \(profile.name)! 👋 I'm **Medi**, your health companion.
 
-            I can help you with:
+            I'm here to help you with:
             • 💊 Understanding your medicines
             • 📊 Tracking your recovery progress
-            • ❓ Answering health questions about your treatment
+            • ❓ Answering health questions
             • 🔔 Managing your care plan
 
-            How can I help you today?
+            Aapko kisi bhi cheez mein help chahiye toh bas pooch lijiye! 😊
             """,
             profileId: profile.id
         )
         chatService.messages.append(welcome)
         modelContext.insert(welcome)
         try? modelContext.save()
+    }
+
+    // MARK: - Medi Greeting Banner
+
+    private var mediGreetingBanner: some View {
+        HStack(spacing: 10) {
+            Image(systemName: "stethoscope.circle.fill")
+                .font(.system(size: 28))
+                .foregroundStyle(.white)
+                .background(
+                    Circle()
+                        .fill(MCColors.primaryTeal)
+                        .frame(width: 36, height: 36)
+                )
+
+            Text("Hi \(profile.name)! I'm Medi, your health companion 💚")
+                .font(.system(size: 14, weight: .semibold))
+                .foregroundColor(MCColors.textPrimary)
+
+            Spacer()
+        }
+        .padding(.horizontal, 16)
+        .padding(.vertical, 10)
+        .background(MCColors.primaryTeal.opacity(0.08))
+    }
+
+    // MARK: - Quick Action Chips (shown at start)
+
+    private var quickActionChips: some View {
+        ScrollView(.horizontal, showsIndicators: false) {
+            HStack(spacing: 8) {
+                quickActionChip("How am I doing?", icon: "chart.line.uptrend.xyaxis")
+                quickActionChip("Side effects?", icon: "exclamationmark.triangle")
+                quickActionChip("My medicines", icon: "pills")
+                quickActionChip("Feel unwell", icon: "heart.text.square")
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 8)
+        }
+        .background(MCColors.backgroundLight.opacity(0.9))
+    }
+
+    private func quickActionChip(_ label: String, icon: String) -> some View {
+        Button {
+            messageText = label
+            sendMessage()
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: icon)
+                    .font(.system(size: 12, weight: .semibold))
+                Text(label)
+                    .font(.system(size: 13, weight: .medium))
+            }
+            .foregroundColor(MCColors.primaryTeal)
+            .padding(.horizontal, 14)
+            .padding(.vertical, 9)
+            .background(MCColors.primaryTeal.opacity(0.08))
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(MCColors.primaryTeal.opacity(0.15), lineWidth: 1))
+        }
     }
 
     private func handleAction(_ action: ChatAction) {
@@ -305,6 +492,68 @@ struct AIChatView: View {
         case .openURL:
             if let payload = action.payload, let url = URL(string: payload) {
                 UIApplication.shared.open(url)
+            }
+        case .missedDoseChat:
+            break // Handled by nudge system
+        }
+    }
+}
+
+// MARK: - Medi Avatar Badge
+
+/// Replaces the old AIBadgeView with a Medi-branded avatar + label
+struct MediAvatarBadge: View {
+    var body: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "stethoscope.circle.fill")
+                .font(.system(size: 18))
+                .foregroundStyle(.white, MCColors.primaryTeal)
+            Text("Medi")
+                .font(.system(size: 11, weight: .bold))
+                .foregroundColor(MCColors.primaryTeal)
+        }
+        .padding(.horizontal, 8)
+        .padding(.vertical, 3)
+        .background(MCColors.primaryTeal.opacity(0.1))
+        .clipShape(Capsule())
+    }
+}
+
+// MARK: - Medi Typing Indicator (3 bouncing dots with Medi branding)
+
+struct MediTypingIndicator: View {
+    @State private var dotOffset: [CGFloat] = [0, 0, 0]
+
+    var body: some View {
+        HStack {
+            HStack(spacing: 5) {
+                ForEach(0..<3, id: \.self) { index in
+                    Circle()
+                        .fill(MCColors.primaryTeal.opacity(0.6))
+                        .frame(width: 8, height: 8)
+                        .offset(y: dotOffset[index])
+                }
+            }
+            .padding(.horizontal, 16)
+            .padding(.vertical, 12)
+            .background(MCColors.surface)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+
+            Spacer()
+        }
+        .onAppear {
+            animateDots()
+        }
+    }
+
+    private func animateDots() {
+        for i in 0..<3 {
+            withAnimation(
+                .easeInOut(duration: 0.5)
+                .repeatForever(autoreverses: true)
+                .delay(Double(i) * 0.15)
+            ) {
+                dotOffset[i] = -6
             }
         }
     }

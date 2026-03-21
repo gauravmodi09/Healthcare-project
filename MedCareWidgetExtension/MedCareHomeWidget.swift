@@ -156,6 +156,16 @@ struct MedCareSmallWidgetView: View {
                     .foregroundStyle(teal)
             }
 
+            // Taken count
+            HStack(spacing: 2) {
+                Text("\(entry.taken)/\(entry.total)")
+                    .font(.system(size: 11, weight: .semibold))
+                    .foregroundStyle(.primary)
+                Text("taken")
+                    .font(.system(size: 9))
+                    .foregroundStyle(.secondary)
+            }
+
             Spacer()
 
             // Next dose info
@@ -170,9 +180,21 @@ struct MedCareSmallWidgetView: View {
                         .foregroundStyle(.primary)
                         .lineLimit(1)
 
-                    Text(time, style: .time)
-                        .font(.system(size: 12, weight: .medium))
-                        .foregroundStyle(teal)
+                    HStack(spacing: 4) {
+                        Text(time, style: .time)
+                            .font(.system(size: 12, weight: .medium))
+                            .foregroundStyle(teal)
+
+                        if entry.streak > 0 {
+                            HStack(spacing: 1) {
+                                Image(systemName: "flame.fill")
+                                    .font(.system(size: 8))
+                                Text("\(entry.streak)")
+                                    .font(.system(size: 10, weight: .bold))
+                            }
+                            .foregroundStyle(.orange)
+                        }
+                    }
                 }
             } else {
                 VStack(alignment: .leading, spacing: 2) {
@@ -184,7 +206,7 @@ struct MedCareSmallWidgetView: View {
                         .font(.system(size: 14, weight: .bold))
                         .foregroundStyle(.primary)
 
-                    Text("No upcoming doses")
+                    Text("\(entry.taken)/\(entry.total) doses taken")
                         .font(.system(size: 11))
                         .foregroundStyle(.secondary)
                 }
@@ -194,6 +216,11 @@ struct MedCareSmallWidgetView: View {
         .containerBackground(for: .widget) {
             Color(.systemBackground)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(entry.nextDoseName != nil
+            ? "MedCare: Next dose \(entry.nextDoseName!), \(entry.taken) of \(entry.total) taken today"
+            : "MedCare: All done, \(entry.taken) of \(entry.total) doses taken today"
+        )
     }
 }
 
@@ -317,6 +344,8 @@ struct MedCareMediumWidgetView: View {
         .containerBackground(for: .widget) {
             Color(.systemBackground)
         }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("MedCare: \(entry.taken) of \(entry.total) doses taken, \(entry.upcomingDoses.count) upcoming, \(entry.streak) day streak")
     }
 }
 

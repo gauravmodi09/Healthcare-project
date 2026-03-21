@@ -82,7 +82,22 @@ enum MoodTrend {
 @Observable
 final class MoodTrackingService {
 
-    private static let storageKey = "com.medcare.moodEntries"
+    private static let storageKeyPrefix = "com.medcare.moodEntries"
+
+    /// The profile ID this service instance is scoped to.
+    /// When nil, falls back to a shared key (backward-compatible).
+    private let profileId: String?
+
+    init(profileId: String? = nil) {
+        self.profileId = profileId
+    }
+
+    private var storageKey: String {
+        if let profileId {
+            return "\(Self.storageKeyPrefix)_\(profileId)"
+        }
+        return Self.storageKeyPrefix
+    }
 
     // MARK: - Public API
 
@@ -310,12 +325,12 @@ final class MoodTrackingService {
     // MARK: - Persistence (UserDefaults)
 
     private func loadAll() -> [MoodEntry] {
-        guard let data = UserDefaults.standard.data(forKey: Self.storageKey) else { return [] }
+        guard let data = UserDefaults.standard.data(forKey: storageKey) else { return [] }
         return (try? JSONDecoder().decode([MoodEntry].self, from: data)) ?? []
     }
 
     private func save(_ entries: [MoodEntry]) {
         guard let data = try? JSONEncoder().encode(entries) else { return }
-        UserDefaults.standard.set(data, forKey: Self.storageKey)
+        UserDefaults.standard.set(data, forKey: storageKey)
     }
 }

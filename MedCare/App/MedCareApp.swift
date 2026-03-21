@@ -1,5 +1,6 @@
 import SwiftUI
 import SwiftData
+import UserNotifications
 
 @main
 struct MedCareApp: App {
@@ -12,6 +13,24 @@ struct MedCareApp: App {
     @State private var liveActivityService = LiveActivityService()
     @State private var elderModeService = ElderModeService()
     @Environment(\.scenePhase) private var scenePhase
+    @State private var liveActivityTimer: Timer?
+
+    /// Handles notification actions (Take Now, Snooze, Skip) when tapped from lock screen or banner
+    private let notificationDelegate: NotificationDelegate
+
+    init() {
+        let dataService = DataService()
+        self._dataService = State(wrappedValue: dataService)
+
+        let delegate = NotificationDelegate(modelContainer: dataService.modelContainer)
+        self.notificationDelegate = delegate
+        UNUserNotificationCenter.current().delegate = delegate
+
+        // Ensure notification categories are registered on every launch
+        Task {
+            await NotificationService.shared.registerCategories()
+        }
+    }
 
     var body: some Scene {
         WindowGroup {
@@ -30,8 +49,15 @@ struct MedCareApp: App {
                 }
         }
         .onChange(of: scenePhase) { _, newPhase in
-            if newPhase == .active {
+            switch newPhase {
+            case .active:
                 evaluateUpcomingDoses()
+                // Re-evaluate every 5 minutes while app is active
+                startLiveActivityPolling()
+            case .background:
+                stopLiveActivityPolling()
+            default:
+                break
             }
         }
     }
@@ -88,6 +114,22 @@ struct MedCareApp: App {
         default:
             break
         }
+    }
+
+    // MARK: - Live Activity Polling
+
+    private func startLiveActivityPolling() {
+        stopLiveActivityPolling()
+        liveActivityTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: true) { _ in
+            Task { @MainActor in
+                evaluateUpcomingDoses()
+            }
+        }
+    }
+
+    private func stopLiveActivityPolling() {
+        liveActivityTimer?.invalidate()
+        liveActivityTimer = nil
     }
 
     // MARK: - Evaluate Upcoming Doses for Live Activities

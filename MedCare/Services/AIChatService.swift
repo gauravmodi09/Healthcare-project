@@ -501,153 +501,63 @@ final class AIChatService {
             default:
                 energyNote = "I'm here for you even at this hour 🌙"
             }
-            return """
-            \(timeGreeting), \(patientName)! 😊 I'm **Medi**, your health companion.
-
-            \(energyNote)
-
-            Here's what I can help you with:
-            • 💊 **Explain your medicines** — what they do, when to take them
-            • 📈 **Check your progress** — how your recovery is going
-            • 🤔 **Answer questions** — side effects, diet, lifestyle tips
-            • 📝 **Log symptoms** — track how you're feeling
-
-            Aapko kisi bhi cheez mein help chahiye toh bas pooch lijiye! 😊
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
-            """
+            return "\(timeGreeting), \(patientName)! 😊 I'm **Medi**, your health companion. \(energyNote)\n\nAsk me about your medicines, side effects, symptoms, or progress. Bas pooch lijiye!"
         }
 
         // --- Thank you / appreciation ---
         let thanks = ["thank", "thanks", "thx", "dhanyavaad", "dhanyawad", "shukriya", "appreciate"]
         if thanks.contains(where: { lower.contains($0) }) {
-            return """
-            You're welcome, \(patientName)! 😊 Medi is always here for you — din ho ya raat!
-
-            Is there anything else you'd like to know about your treatment or how you're feeling?
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
-            """
+            return "You're welcome, \(patientName)! 😊 Anything else about your treatment?"
         }
 
         // --- How are you / casual chat ---
         let casualChat = ["how are you", "how r u", "kaise ho", "kaisa hai", "what's up", "wassup", "kya haal"]
         if casualChat.contains(where: { lower.contains($0) }) {
-            return """
-            Main bilkul theek hoon, shukriya! 😄 But more importantly — how are **you** feeling today, \(patientName)?
-
-            If you've noticed any changes in your symptoms or have questions about your medicines, I'm all ears. Or if you just want to check in on your progress, Medi is here for you!
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
-            """
+            return "Main theek hoon! 😄 Aap batao, \(patientName) — how are you feeling today? Any symptoms or questions about your medicines?"
         }
 
         // --- Help / what can you do ---
         let helpPhrases = ["help", "what can you do", "kya kar sakte", "what do you do", "options", "menu"]
         if helpPhrases.contains(where: { lower.contains($0) }) {
             return """
-            Of course! Here's how Medi can help you, \(patientName):
+            I can help with, \(patientName):
+            • Explain your medicines & side effects
+            • Check if symptoms are normal
+            • Track your progress
+            • Guide on missed doses
 
-            🔹 **\"What does my medicine do?\"** — I'll explain your prescriptions in simple terms
-            🔹 **\"I'm feeling dizzy\"** — I'll check if it's a known side effect and share tips
-            🔹 **\"Can I stop my medicine?\"** — I'll explain why completing the course matters
-            🔹 **\"How's my progress?\"** — I'll review your symptom logs and adherence
-            🔹 **\"I'm not improving\"** — I'll help you understand recovery timelines
-
-            Just type naturally — Hinglish bhi chalega! I'm here to make your recovery smoother. 💪
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
+            Just ask naturally — Hinglish bhi chalega! 💪
             """
         }
 
         if lower.contains("side effect") || lower.contains("dizzy") || lower.contains("nausea") {
             return """
-            ## What's Happening
-            Mild dizziness or nausea is a common reaction to many medicines, especially antibiotics. This is usually your body adjusting to the medication and tends to settle within the first 2-3 days.
+            Mild dizziness/nausea is common with many medicines and usually settles in 2-3 days.
 
-            ## What to Do
-            - **Take medicines with food** — this reduces stomach-related side effects significantly
-            - **Stay hydrated** — drink at least 8 glasses of water daily to help your body process the medicine
-            - **Avoid sudden movements** — sit up slowly if you feel dizzy, especially after lying down
+            **Quick tips:** Take with food, stay hydrated, avoid sudden movements.
 
-            ## When to See a Doctor
-            - Symptoms persist beyond 3-4 days or get significantly worse
-            - You experience severe vomiting, rash, or difficulty breathing
-            - Dizziness causes falls or fainting episodes
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
+            **See a doctor if:** symptoms worsen, you get a rash, or experience difficulty breathing.
             """
         }
 
         if lower.contains("stop") || lower.contains("feel better") || lower.contains("can i quit") {
-            return """
-            That's amazing news, \(patientName)! 🎉 Bahut accha! I'm so happy the treatment is working!
-
-            However, **it's really important to complete the full course** your doctor prescribed. Here's why:
-
-            • Stopping antibiotics early can allow bacteria to develop resistance
-            • Your symptoms may return, sometimes stronger than before
-            • Your doctor prescribed the specific duration for a medical reason
-
-            You're doing SO well — don't stop now! Thoda aur patience, and you'll cross the finish line strong! 💪
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
-            """
+            return "Great that you're feeling better, \(patientName)! 🎉 But please **complete the full course** — stopping early can cause resistance and symptoms may return. Thoda aur patience! 💪"
         }
 
         if lower.contains("not working") || lower.contains("no improvement") || lower.contains("kaam nahi kar raha") {
             return """
-            I completely understand how frustrating this must be, \(patientName). It's tough when you don't see results right away, and your feelings are totally valid. 🤗 Let me help explain what might be happening.
+            I understand, \(patientName). Many medicines need 48-72 hours to show effect. Anti-inflammatory ones may take 3-5 days.
 
-            ## What's Happening
-            Many medicines need time to build up in your system. Antibiotics typically need 48-72 hours, and anti-inflammatory medicines may take 3-5 days for their full effect. Your adherence has been good, which means the medicine is working behind the scenes — aapki mehnat rang laayegi!
-
-            ## What to Do
-            - **Continue the full course** — stopping early can make the infection harder to treat next time
-            - **Track your symptoms daily** — small improvements add up even if they don't feel dramatic yet
-            - **Prepare questions for your doctor** — if no improvement after completing the course, your doctor can reassess
-
-            ## When to See a Doctor
-            - No improvement at all after completing the full course
-            - Symptoms are getting worse instead of staying stable
-            - New symptoms appear that weren't there before
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
+            **Keep going** — continue the full course and track symptoms daily. If no improvement after completing the course, consult your doctor.
             """
         }
 
         if lower.contains("what is") || lower.contains("what does") || lower.contains("kya hai") {
-            return """
-            Great question! Let me explain based on what your doctor has prescribed for you.
-
-            Your current medicines are working together as a team:
-            • One fights the infection directly
-            • Another protects your stomach from the antibiotic's effects
-            • The third helps manage your symptoms (cough, congestion) so you feel more comfortable
-
-            Each medicine has a specific role, and they work best when taken together at the times your doctor recommended.
-
-            Would you like me to explain any specific medicine in more detail?
-
-            💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
-            """
+            return "Your medicines work as a team — one fights the infection, another protects your stomach, and the third manages symptoms. They work best taken together at the prescribed times.\n\nWant details on a specific medicine?"
         }
 
         // Default conversational response
-        return """
-        That's a great question, \(patientName)! Medi is here to help 😊
-
-        While I work best with specific health questions about your treatment, here are some things I can assist with right now:
-
-        • **Ask about your medicines** — \"What does Augmentin do?\"
-        • **Report how you feel** — \"I'm feeling dizzy after my dose\"
-        • **Check your progress** — \"How am I doing?\"
-        • **Understand your recovery** — \"Why isn't my medicine working yet?\"
-
-        Just ask naturally — Hinglish bhi chalega! I'm here to help you feel informed and confident about your care! 😊
-
-        💊 Remember: I'm Medi, your health companion, not your doctor. Always follow your doctor's advice.
-        """
+        return "I can help with your medicines, side effects, symptoms, or recovery progress, \(patientName). Just ask! Hinglish bhi chalega 😊"
     }
 
     // MARK: - Missed Dose Guidance

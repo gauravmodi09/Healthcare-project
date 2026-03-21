@@ -3,14 +3,15 @@ import AVFoundation
 
 /// Speech-to-text service for AI Chat voice input (MEDCA-007)
 @MainActor
-class SpeechService: ObservableObject {
+@Observable
+final class SpeechService {
 
-    // MARK: - Published Properties
+    // MARK: - Properties
 
-    @Published var isRecording = false
-    @Published var transcribedText = ""
-    @Published var audioLevel: Float = 0.0
-    @Published var error: String?
+    var isRecording = false
+    var transcribedText = ""
+    var audioLevel: Float = 0.0
+    var error: String?
 
     // MARK: - Private Properties
 
@@ -102,7 +103,7 @@ class SpeechService: ObservableObject {
             self?.recognitionRequest?.append(buffer)
 
             // Calculate RMS power for waveform visualization
-            let level = Self.rmsLevel(from: buffer)
+            let level = SpeechService.rmsLevel(from: buffer)
             Task { @MainActor [weak self] in
                 self?.audioLevel = level
             }

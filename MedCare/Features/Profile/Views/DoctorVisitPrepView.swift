@@ -11,6 +11,7 @@ struct DoctorVisitPrepView: View {
     @State private var summary: DoctorVisitSummary?
     @State private var showShareSheet = false
     @State private var copiedToClipboard = false
+    @State private var showWhatsAppAlert = false
 
     private let service = DoctorVisitPrepService()
     private let dateRangeOptions = [7, 14, 30]
@@ -47,6 +48,11 @@ struct DoctorVisitPrepView: View {
             if let text = summary?.formattedText {
                 ShareSheet(items: [text])
             }
+        }
+        .alert("WhatsApp Not Installed", isPresented: $showWhatsAppAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text("Please install WhatsApp to share reports directly.")
         }
     }
 
@@ -404,6 +410,24 @@ struct DoctorVisitPrepView: View {
                         .stroke(MCColors.primaryTeal, lineWidth: 1.5)
                 )
             }
+
+            // WhatsApp share button
+            Button {
+                shareViaWhatsApp(summary)
+            } label: {
+                HStack(spacing: MCSpacing.xs) {
+                    Image(systemName: "message.fill")
+                    Text("Share via WhatsApp")
+                        .font(MCTypography.bodyMedium)
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: MCSpacing.buttonHeight)
+                .background(
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                        .fill(Color(red: 0.15, green: 0.68, blue: 0.38))
+                )
+            }
         }
     }
 
@@ -420,6 +444,19 @@ struct DoctorVisitPrepView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.vertical, MCSpacing.xxl)
+    }
+
+    // MARK: - WhatsApp Sharing
+
+    private func shareViaWhatsApp(_ summary: DoctorVisitSummary) {
+        guard let text = summary.formattedText.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed),
+              let url = URL(string: "whatsapp://send?text=\(text)") else { return }
+
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        } else {
+            showWhatsAppAlert = true
+        }
     }
 
     // MARK: - Helpers

@@ -202,42 +202,67 @@ struct DoseReminderLiveActivity: Widget {
 
     @ViewBuilder
     private func countdownBadge(state: DoseReminderAttributes.ContentState, scheduledTime: Date) -> some View {
-        let text = countdownText(state: state)
         let color = countdownColor(state: state)
 
-        Text(text)
-            .font(.system(size: 12, weight: .bold))
-            .foregroundStyle(color)
-            .padding(.horizontal, 8)
-            .padding(.vertical, 4)
-            .background(color.opacity(0.12))
-            .clipShape(Capsule())
+        Group {
+            switch state.status {
+            case .upcoming:
+                // Use system timer for real-time countdown
+                Text(timerInterval: Date.now...scheduledTime, countsDown: true)
+                    .font(.system(size: 12, weight: .bold))
+                    .monospacedDigit()
+                    .multilineTextAlignment(.center)
+            case .due:
+                Text("NOW")
+                    .font(.system(size: 12, weight: .bold))
+            case .overdue:
+                Text("\(abs(state.minutesRemaining))m late")
+                    .font(.system(size: 12, weight: .bold))
+            case .snoozed:
+                if let snoozedUntil = state.snoozedUntil, snoozedUntil > .now {
+                    Text(timerInterval: Date.now...snoozedUntil, countsDown: true)
+                        .font(.system(size: 12, weight: .bold))
+                        .monospacedDigit()
+                        .multilineTextAlignment(.center)
+                } else {
+                    Text("Snoozed")
+                        .font(.system(size: 12, weight: .bold))
+                }
+            case .completed:
+                Text("Done")
+                    .font(.system(size: 12, weight: .bold))
+            }
+        }
+        .foregroundStyle(color)
+        .padding(.horizontal, 8)
+        .padding(.vertical, 4)
+        .background(color.opacity(0.12))
+        .clipShape(Capsule())
     }
 
     @ViewBuilder
     private func compactCountdown(state: DoseReminderAttributes.ContentState, scheduledTime: Date) -> some View {
-        let text = countdownText(state: state)
         let color = countdownColor(state: state)
 
-        Text(text)
-            .font(.system(size: 12, weight: .bold))
-            .monospacedDigit()
-            .foregroundStyle(color)
-    }
-
-    private func countdownText(state: DoseReminderAttributes.ContentState) -> String {
-        switch state.status {
-        case .upcoming:
-            return "in \(state.minutesRemaining)m"
-        case .due:
-            return "NOW"
-        case .overdue:
-            return "\(abs(state.minutesRemaining))m late"
-        case .snoozed:
-            return "Snoozed"
-        case .completed:
-            return "Done"
+        Group {
+            switch state.status {
+            case .upcoming:
+                Text(timerInterval: Date.now...scheduledTime, countsDown: true)
+                    .monospacedDigit()
+                    .multilineTextAlignment(.trailing)
+            case .due:
+                Text("NOW")
+            case .overdue:
+                Text("-\(abs(state.minutesRemaining))m")
+            case .snoozed:
+                Text("ZZZ")
+            case .completed:
+                Text("OK")
+            }
         }
+        .font(.system(size: 12, weight: .bold))
+        .monospacedDigit()
+        .foregroundStyle(color)
     }
 
     private func countdownColor(state: DoseReminderAttributes.ContentState) -> Color {

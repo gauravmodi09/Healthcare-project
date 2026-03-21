@@ -4,7 +4,7 @@ import SwiftData
 @Model
 final class Nudge {
     @Attribute(.unique) var id: UUID
-    var type: NudgeType
+    var typeRawValue: String
     var title: String
     var body: String
     var triggerDate: Date
@@ -15,6 +15,11 @@ final class Nudge {
     var expiresAt: Date?
     var createdAt: Date
 
+    @Transient var type: NudgeType {
+        get { NudgeType(rawValue: typeRawValue) ?? .missedDose }
+        set { typeRawValue = newValue.rawValue }
+    }
+
     init(
         type: NudgeType,
         title: String,
@@ -24,7 +29,7 @@ final class Nudge {
         expiresAfterHours: Int = 24
     ) {
         self.id = UUID()
-        self.type = type
+        self.typeRawValue = type.rawValue
         self.title = title
         self.body = body
         self.triggerDate = Date()

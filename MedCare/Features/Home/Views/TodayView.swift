@@ -249,11 +249,12 @@ struct TodayView: View {
 
             let mealLabel = dose.medicine?.mealTiming != .noPreference
                 ? " · \(dose.medicine?.mealTiming.shortLabel ?? "")" : ""
+            let genericLabel = dose.medicine?.genericName.map { " (\($0))" } ?? ""
 
             slots.append(TimelineSlot(
                 timeLabel: dose.scheduledTime.formatted(date: .omitted, time: .shortened),
                 title: "\(dose.medicine?.brandName ?? "Medicine") \(dose.medicine?.dosage ?? "")",
-                subtitle: "\(dose.medicine?.doseForm.rawValue ?? "Tablet")\(mealLabel)",
+                subtitle: "\(dose.medicine?.doseForm.rawValue ?? "Tablet")\(mealLabel)\(genericLabel)",
                 badge: badge,
                 badgeColor: badgeColor,
                 dotColor: dotColor,

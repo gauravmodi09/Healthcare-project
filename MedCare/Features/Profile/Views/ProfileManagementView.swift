@@ -10,6 +10,11 @@ struct ProfileManagementView: View {
     @State private var showEditProfile = false
     @State private var showDeleteConfirmation = false
     @State private var showSignOutConfirmation = false
+    @State private var showNotifications = false
+    @State private var showDoctorVisitPrep = false
+    @State private var showElderMode = false
+    @State private var showAbout = false
+    @State private var showAchievements = false
 
     private var currentUser: User? { users.first }
 
@@ -27,7 +32,11 @@ struct ProfileManagementView: View {
 
                     // 3. Quick Stats
                     if let profile = currentUser?.activeProfile {
-                        quickStatsRow(profile)
+                        if profile.episodes.isEmpty {
+                            MCEmptyState.episodes()
+                        } else {
+                            quickStatsRow(profile)
+                        }
                     }
 
                     // 4. Settings List
@@ -42,10 +51,16 @@ struct ProfileManagementView: View {
                 .padding(.vertical, MCSpacing.md)
             }
             .background(MCColors.backgroundLight)
+            .dynamicTypeSize(.xSmall ... .accessibility3)
             .navigationTitle("Profile")
             .navigationDestination(for: String.self) { destination in
                 if destination == "profileFiles" {
                     ProfileFilesView()
+                }
+            }
+            .sheet(isPresented: $showEditProfile) {
+                if let profile = currentUser?.activeProfile {
+                    EditProfileView(profile: profile)
                 }
             }
             .sheet(isPresented: $showAddProfile) {
@@ -57,7 +72,7 @@ struct ProfileManagementView: View {
             .alert("Delete Account", isPresented: $showDeleteConfirmation) {
                 Button("Cancel", role: .cancel) {}
                 Button("Delete", role: .destructive) {
-                    // Handle account deletion
+                    deleteAccount()
                 }
             } message: {
                 Text("This will permanently delete your account and all associated data. This action cannot be undone.")
@@ -69,6 +84,23 @@ struct ProfileManagementView: View {
                 }
             } message: {
                 Text("Are you sure you want to sign out?")
+            }
+            .sheet(isPresented: $showNotifications) {
+                NotificationSettingsView()
+            }
+            .sheet(isPresented: $showDoctorVisitPrep) {
+                DoctorVisitPrepWrapper()
+            }
+            .sheet(isPresented: $showElderMode) {
+                NavigationStack {
+                    ElderModeSettingsView()
+                }
+            }
+            .sheet(isPresented: $showAbout) {
+                AboutMedCareView()
+            }
+            .sheet(isPresented: $showAchievements) {
+                AchievementsView()
             }
         }
     }
@@ -346,7 +378,7 @@ struct ProfileManagementView: View {
                 title: "Notifications",
                 color: MCColors.primaryTeal
             ) {
-                // Navigate to notifications settings
+                showNotifications = true
             }
 
             Divider().padding(.leading, 60)
@@ -362,11 +394,43 @@ struct ProfileManagementView: View {
             Divider().padding(.leading, 60)
 
             settingsRow(
+                icon: "trophy.fill",
+                title: "Achievements",
+                color: MCColors.warning
+            ) {
+                showAchievements = true
+            }
+
+            Divider().padding(.leading, 60)
+
+            settingsRow(
+                icon: "stethoscope",
+                title: "Doctor Visit Prep",
+                color: MCColors.accentCoral
+            ) {
+                showDoctorVisitPrep = true
+            }
+
+            Divider().padding(.leading, 60)
+
+            settingsRow(
+                icon: "figure.walk",
+                title: "Elder Mode",
+                color: MCColors.success
+            ) {
+                showElderMode = true
+            }
+
+            Divider().padding(.leading, 60)
+
+            settingsRow(
                 icon: "lock.fill",
                 title: "Data & Privacy",
                 color: MCColors.success
             ) {
-                // Navigate to data & privacy
+                if let url = URL(string: UIApplication.openSettingsURLString) {
+                    UIApplication.shared.open(url)
+                }
             }
 
             Divider().padding(.leading, 60)
@@ -376,7 +440,9 @@ struct ProfileManagementView: View {
                 title: "Help & Support",
                 color: MCColors.info
             ) {
-                // Navigate to help & support
+                if let url = URL(string: "mailto:support@medcare.app") {
+                    UIApplication.shared.open(url)
+                }
             }
 
             Divider().padding(.leading, 60)
@@ -386,7 +452,7 @@ struct ProfileManagementView: View {
                 title: "About MedCare",
                 color: MCColors.textSecondary
             ) {
-                // Navigate to about
+                showAbout = true
             }
         }
         .background(MCColors.cardBackground)
@@ -480,6 +546,33 @@ struct ProfileManagementView: View {
         .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
         .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
         .padding(.horizontal, MCSpacing.screenPadding)
+    }
+
+    // MARK: - Delete Account
+
+    private func deleteAccount() {
+        let context = dataService.modelContext
+
+        // Delete all model objects
+        try? context.delete(model: Nudge.self)
+        try? context.delete(model: ChatMessage.self)
+        try? context.delete(model: ChatSession.self)
+        try? context.delete(model: DoseLog.self)
+        try? context.delete(model: SymptomLog.self)
+        try? context.delete(model: CareTask.self)
+        try? context.delete(model: EpisodeImage.self)
+        try? context.delete(model: Medicine.self)
+        try? context.delete(model: Episode.self)
+        try? context.delete(model: UserProfile.self)
+        try? context.delete(model: User.self)
+        dataService.save()
+
+        // Clear UserDefaults
+        UserDefaults.standard.removeObject(forKey: "mc_has_seeded_demo")
+        UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
+
+        // Logout
+        authService.logout()
     }
 
     // MARK: - Version Footer

@@ -7,28 +7,28 @@ struct OnboardingView: View {
 
     private let pages: [(icon: String, title: String, subtitle: String, color: Color)] = [
         (
-            "doc.text.viewfinder",
-            "Scan Your Prescription",
-            "Take a photo of your prescription or medicine box — our AI reads it instantly and sets up your reminders.",
+            "heart.circle.fill",
+            "Your Family's Medicine Companion",
+            "Track medicines, doses, and health records for your whole family — all in one secure place.",
             Color(hex: "0A7E8C")
         ),
         (
             "bell.badge.fill",
             "Never Miss a Dose",
-            "Smart reminders with Dynamic Island, persistent alarms for critical medicines, and before/after meal timings.",
+            "Smart reminders, streaks, and gentle nudges keep you and your loved ones on track every single day.",
             Color(hex: "FF6B6B")
         ),
         (
-            "chart.line.uptrend.xyaxis",
-            "Track Your Recovery",
-            "Log symptoms, view adherence streaks, and see how your treatment is progressing over time.",
-            Color(hex: "34C759")
+            "sparkles",
+            "AI-Powered Health Insights",
+            "Chat with Medi for medicine info, symptom correlation, and doctor-ready reports — in English or Hinglish.",
+            Color(hex: "F5A623")
         ),
         (
-            "sparkles",
-            "AI Health Companion",
-            "Ask questions about your medicines, side effects, diet, and recovery. Available 24/7 in English and Hinglish.",
-            Color(hex: "F5A623")
+            "indianrupeesign.circle.fill",
+            "Built for India",
+            "Hindi medicine instructions, Jan Aushadhi generic savings, and Ayurvedic supplement support — designed for you.",
+            Color(hex: "34C759")
         )
     ]
 
@@ -40,14 +40,18 @@ struct OnboardingView: View {
                     VStack(spacing: MCSpacing.lg) {
                         Spacer()
 
-                        // Icon
+                        // Icon with animated ring
                         ZStack {
                             Circle()
-                                .fill(page.color.opacity(0.1))
+                                .fill(page.color.opacity(0.06))
+                                .frame(width: 160, height: 160)
+                            Circle()
+                                .fill(page.color.opacity(0.12))
                                 .frame(width: 120, height: 120)
                             Image(systemName: page.icon)
-                                .font(.system(size: 48, weight: .medium))
+                                .font(.system(size: 52, weight: .medium))
                                 .foregroundStyle(page.color)
+                                .symbolEffect(.pulse, options: .repeating, value: currentPage == index)
                         }
 
                         // Title
@@ -55,6 +59,7 @@ struct OnboardingView: View {
                             .font(MCTypography.display)
                             .foregroundStyle(MCColors.textPrimary)
                             .multilineTextAlignment(.center)
+                            .padding(.horizontal, MCSpacing.md)
 
                         // Subtitle
                         Text(page.subtitle)
@@ -62,6 +67,7 @@ struct OnboardingView: View {
                             .foregroundStyle(MCColors.textSecondary)
                             .multilineTextAlignment(.center)
                             .padding(.horizontal, MCSpacing.xl)
+                            .lineSpacing(4)
 
                         Spacer()
                         Spacer()

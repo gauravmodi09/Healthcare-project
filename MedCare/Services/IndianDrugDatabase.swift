@@ -112,6 +112,88 @@ final class IndianDrugDatabase {
         medicines.filter { $0.category == category }
     }
 
+    // MARK: - Jan Aushadhi Price Comparison
+
+    struct JanAushadhiPrice {
+        let genericName: String
+        let dosage: String
+        let brandMRP: Double
+        let janAushadhiPrice: Double
+
+        var savingsPercent: Int {
+            guard brandMRP > 0 else { return 0 }
+            return Int(((brandMRP - janAushadhiPrice) / brandMRP) * 100)
+        }
+
+        var savingsAmount: Double {
+            brandMRP - janAushadhiPrice
+        }
+    }
+
+    /// Common Jan Aushadhi generic prices vs typical brand MRPs (per strip/unit)
+    private static let janAushadhiPrices: [(generic: String, dosage: String, brandMRP: Double, jaPrice: Double)] = [
+        ("Metformin", "500mg", 185, 18),
+        ("Metformin", "1000mg", 260, 28),
+        ("Atorvastatin", "10mg", 135, 12),
+        ("Atorvastatin", "20mg", 155, 17),
+        ("Atorvastatin", "40mg", 178, 22),
+        ("Pantoprazole", "40mg", 115, 12),
+        ("Telmisartan", "40mg", 135, 15),
+        ("Telmisartan", "80mg", 195, 22),
+        ("Clopidogrel", "75mg", 92, 8),
+        ("Amlodipine", "5mg", 85, 8),
+        ("Amlodipine", "10mg", 120, 12),
+        ("Losartan", "50mg", 105, 10),
+        ("Rosuvastatin", "10mg", 165, 18),
+        ("Rosuvastatin", "20mg", 210, 25),
+        ("Omeprazole", "20mg", 95, 10),
+        ("Rabeprazole", "20mg", 130, 14),
+        ("Glimepiride", "1mg", 75, 7),
+        ("Glimepiride", "2mg", 110, 11),
+        ("Ciprofloxacin", "500mg", 98, 12),
+        ("Azithromycin", "500mg", 105, 15),
+        ("Amoxicillin", "500mg", 85, 10),
+        ("Paracetamol", "500mg", 30, 5),
+        ("Ibuprofen", "400mg", 45, 6),
+        ("Aspirin", "75mg", 35, 4),
+        ("Cetirizine", "10mg", 55, 6),
+        ("Montelukast", "10mg", 145, 16),
+        ("Levothyroxine", "50mcg", 75, 8),
+        ("Levothyroxine", "100mcg", 95, 11),
+        ("Escitalopram", "10mg", 115, 14),
+        ("Dapagliflozin", "10mg", 450, 55),
+        ("Sitagliptin", "100mg", 520, 65),
+        ("Empagliflozin", "25mg", 480, 58),
+    ]
+
+    /// Find Jan Aushadhi pricing for a medicine based on its generic/salt name and dosage
+    func findJanAushadhiPrice(genericName: String?, dosage: String) -> JanAushadhiPrice? {
+        guard let generic = genericName?.lowercased() else { return nil }
+        let dosageLower = dosage.lowercased()
+
+        for entry in Self.janAushadhiPrices {
+            if generic.contains(entry.generic.lowercased()) && dosageLower.contains(entry.dosage.lowercased()) {
+                return JanAushadhiPrice(
+                    genericName: entry.generic,
+                    dosage: entry.dosage,
+                    brandMRP: entry.brandMRP,
+                    janAushadhiPrice: entry.jaPrice
+                )
+            }
+        }
+        return nil
+    }
+
+    /// Find Jan Aushadhi pricing for a Medicine model object
+    func findJanAushadhiPrice(for medicine: Medicine) -> JanAushadhiPrice? {
+        // Try genericName first, then look up from drug database
+        let generic = medicine.genericName ?? {
+            let entry = medicines.first { $0.brandName.lowercased() == medicine.brandName.lowercased() }
+            return entry?.genericName
+        }()
+        return findJanAushadhiPrice(genericName: generic, dosage: medicine.dosage)
+    }
+
     // MARK: - Phonetic Matching
 
     /// Simple phonetic similarity for Indian medicine names

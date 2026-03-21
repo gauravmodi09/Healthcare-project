@@ -5,9 +5,12 @@ import SwiftData
 struct AIChatView: View {
     @Environment(AIChatService.self) private var chatService
     @Environment(\.modelContext) private var modelContext
-    @StateObject private var speechService = SpeechService()
+    @State private var speechService = SpeechService()
     @State private var messageText = ""
     @FocusState private var isInputFocused: Bool
+    @Environment(\.dismiss) private var dismiss
+    @State private var showSymptomLog = false
+    @State private var showTimeline = false
 
     let profile: UserProfile
 
@@ -54,6 +57,24 @@ struct AIChatView: View {
             }
         }
         .navigationBarHidden(true)
+        .dynamicTypeSize(.xSmall ... .accessibility3)
+        .sheet(isPresented: $showSymptomLog) {
+            if let episode = profile.episodes.first(where: { $0.status == .active }) {
+                SymptomLogView(episodeId: episode.id)
+            }
+        }
+        .sheet(isPresented: $showTimeline) {
+            if let episode = profile.episodes.first(where: { $0.status == .active }) {
+                NavigationStack {
+                    TreatmentTimelineView(episode: episode)
+                        .toolbar {
+                            ToolbarItem(placement: .topBarTrailing) {
+                                Button("Done") { showTimeline = false }
+                            }
+                        }
+                }
+            }
+        }
         .onAppear {
             chatService.loadHistory(modelContext: modelContext, profileId: profile.id)
             if chatService.messages.isEmpty {
@@ -66,8 +87,9 @@ struct AIChatView: View {
 
     private var chatHeader: some View {
         HStack {
-            // Back button placeholder (for NavigationStack)
-            Button(action: {}) {
+            Button {
+                dismiss()
+            } label: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .semibold))
                     .foregroundColor(Color(hex: "1F2937"))
@@ -81,11 +103,11 @@ struct AIChatView: View {
                         .font(.system(size: 16, weight: .bold))
                         .foregroundColor(MCColors.primaryTeal)
                     Text("Medi")
-                        .font(.system(size: 17, weight: .bold))
+                        .font(.headline)
                         .foregroundColor(MCColors.textPrimary)
                 }
                 Text("Your Health Companion")
-                    .font(.system(size: 12))
+                    .font(.caption)
                     .foregroundColor(MCColors.textSecondary)
             }
 
@@ -117,7 +139,7 @@ struct AIChatView: View {
             Image(systemName: "info.circle.fill")
                 .font(.system(size: 12))
             Text("I'm your health companion, not your doctor. Always follow your doctor's advice.")
-                .font(.system(size: 11, weight: .medium))
+                .font(.caption2.weight(.medium))
         }
         .foregroundColor(Color(hex: "0A7E8C"))
         .padding(.horizontal, 12)
@@ -157,7 +179,7 @@ struct AIChatView: View {
                                 // Show streaming text
                                 HStack {
                                     Text(LocalizedStringKey(chatService.currentStreamedText))
-                                        .font(.system(size: 15))
+                                        .font(.body)
                                         .foregroundColor(MCColors.textPrimary)
                                         .lineSpacing(3)
                                         .padding(14)
@@ -225,7 +247,7 @@ struct AIChatView: View {
             sendMessage()
         } label: {
             Text(label)
-                .font(.system(size: 13, weight: .medium))
+                .font(.caption.weight(.medium))
                 .foregroundColor(Color(hex: "0A7E8C"))
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
@@ -245,7 +267,7 @@ struct AIChatView: View {
             } else {
                 // Text field
                 TextField("Ask about your health...", text: $messageText, axis: .vertical)
-                    .font(.system(size: 15))
+                    .font(.body)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
                     .background(Color(hex: "F0F2F5"))
@@ -303,12 +325,12 @@ struct AIChatView: View {
 
             VStack(alignment: .leading, spacing: 2) {
                 Text("Listening...")
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.caption.weight(.semibold))
                     .foregroundColor(Color(hex: "EF4444"))
 
                 if !speechService.transcribedText.isEmpty {
                     Text(speechService.transcribedText)
-                        .font(.system(size: 14))
+                        .font(.subheadline)
                         .foregroundColor(Color(hex: "1F2937"))
                         .lineLimit(2)
                 }
@@ -357,7 +379,18 @@ struct AIChatView: View {
     private func finishRecording() {
         speechService.stopRecording()
         let text = speechService.transcribedText.trimmingCharacters(in: .whitespacesAndNewlines)
-        if !text.isEmpty {
+        guard !text.isEmpty else { return }
+
+        let voiceActionService = VoiceActionService()
+        let action = voiceActionService.parseUtterance(text)
+
+        switch action {
+        case .logDose, .logSymptom, .drugQuery, .queryHealth:
+            // Structured action detected — auto-send as chat message with action context
+            messageText = text
+            sendMessage()
+        case .unknown:
+            // No structured action — put text in field for user to review/edit
             messageText = text
             isInputFocused = true
         }
@@ -384,6 +417,13 @@ struct AIChatView: View {
     }
 
     private func addWelcomeMessage() {
+        // Prevent duplicate welcome messages — skip if the last message is already an assistant welcome
+        if let lastMessage = chatService.messages.last,
+           lastMessage.role == .assistant,
+           chatService.messages.count == 1 {
+            return
+        }
+
         let hour = Calendar.current.component(.hour, from: Date())
         let timeGreeting: String
         switch hour {
@@ -396,15 +436,15 @@ struct AIChatView: View {
         let welcome = ChatMessage(
             role: .assistant,
             content: """
-            \(timeGreeting), \(profile.name)! 👋 I'm **Medi**, your health companion.
+            \(timeGreeting), \(profile.name)! I'm **Medi**, your health companion.
 
             I'm here to help you with:
-            • 💊 Understanding your medicines
-            • 📊 Tracking your recovery progress
-            • ❓ Answering health questions
-            • 🔔 Managing your care plan
+            • Understanding your medicines
+            • Tracking your recovery progress
+            • Answering health questions
+            • Managing your care plan
 
-            Aapko kisi bhi cheez mein help chahiye toh bas pooch lijiye! 😊
+            Aapko kisi bhi cheez mein help chahiye toh bas pooch lijiye!
             """,
             profileId: profile.id
         )
@@ -427,7 +467,7 @@ struct AIChatView: View {
                 )
 
             Text("Hi \(profile.name)! I'm Medi, your health companion 💚")
-                .font(.system(size: 14, weight: .semibold))
+                .font(.subheadline.weight(.semibold))
                 .foregroundColor(MCColors.textPrimary)
 
             Spacer()
@@ -460,9 +500,9 @@ struct AIChatView: View {
         } label: {
             HStack(spacing: 6) {
                 Image(systemName: icon)
-                    .font(.system(size: 12, weight: .semibold))
+                    .font(.caption2.weight(.semibold))
                 Text(label)
-                    .font(.system(size: 13, weight: .medium))
+                    .font(.caption.weight(.medium))
             }
             .foregroundColor(MCColors.primaryTeal)
             .padding(.horizontal, 14)
@@ -476,15 +516,15 @@ struct AIChatView: View {
     private func handleAction(_ action: ChatAction) {
         switch action.type {
         case .logSymptom:
-            break // Navigate to symptom log
+            showSymptomLog = true
         case .callDoctor:
-            if let url = URL(string: "tel://") {
+            if let url = URL(string: "tel://1800112233") {
                 UIApplication.shared.open(url)
             }
         case .viewTimeline:
-            break // Navigate to timeline
+            showTimeline = true
         case .viewEpisode:
-            break // Navigate to episode
+            showTimeline = true
         case .callEmergency:
             if let url = URL(string: "tel://112") {
                 UIApplication.shared.open(url)
@@ -494,7 +534,8 @@ struct AIChatView: View {
                 UIApplication.shared.open(url)
             }
         case .missedDoseChat:
-            break // Handled by nudge system
+            messageText = "I missed my dose, what should I do?"
+            sendMessage()
         }
     }
 }

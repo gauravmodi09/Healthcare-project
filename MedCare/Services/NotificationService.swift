@@ -20,7 +20,12 @@ final class NotificationService: Sendable {
         }
     }
 
-    private func registerCategories() async {
+    func registerCategories() async {
+        let takeNowAction = UNNotificationAction(
+            identifier: "TAKE_NOW",
+            title: "✓ Take Now",
+            options: .foreground
+        )
         let takenAction = UNNotificationAction(
             identifier: "TAKEN",
             title: "✓ Taken",
@@ -39,7 +44,15 @@ final class NotificationService: Sendable {
 
         let category = UNNotificationCategory(
             identifier: "DOSE_REMINDER",
-            actions: [takenAction, skipAction, snoozeAction],
+            actions: [takeNowAction, snoozeAction, skipAction],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        // Persistent dose reminder category — used for follow-up stacking notifications
+        let persistentCategory = UNNotificationCategory(
+            identifier: "PERSISTENT_DOSE_REMINDER",
+            actions: [takeNowAction, snoozeAction, skipAction],
             intentIdentifiers: [],
             options: .customDismissAction
         )
@@ -62,7 +75,25 @@ final class NotificationService: Sendable {
             options: .customDismissAction
         )
 
-        UNUserNotificationCenter.current().setNotificationCategories([category, criticalCategory])
+        // Custom reminder category with Done and Snooze actions
+        let customDoneAction = UNNotificationAction(
+            identifier: "CUSTOM_REMINDER_DONE",
+            title: "✓ Done",
+            options: .foreground
+        )
+        let customSnoozeAction = UNNotificationAction(
+            identifier: "CUSTOM_REMINDER_SNOOZE",
+            title: "Snooze 15 min",
+            options: []
+        )
+        let customReminderCategory = UNNotificationCategory(
+            identifier: "CUSTOM_REMINDER",
+            actions: [customDoneAction, customSnoozeAction],
+            intentIdentifiers: [],
+            options: .customDismissAction
+        )
+
+        UNUserNotificationCenter.current().setNotificationCategories([category, persistentCategory, criticalCategory, customReminderCategory])
     }
 
     func scheduleDoseReminder(
@@ -248,6 +279,120 @@ final class NotificationService: Sendable {
         try? await UNUserNotificationCenter.current().add(emergencyRequest)
     }
 
+    // MARK: - Persistent Dose Alarms
+
+    /// Schedules persistent stacking reminders for critical medicines that keep firing until acknowledged.
+    /// Fires at dose time, then +10 min and +20 min follow-ups with escalating urgency.
+    /// All three use actionable categories so the user can "Take Now", "Snooze 15m", or "Skip".
+    func schedulePersistentDoseReminder(
+        medicineId: UUID,
+        medicineName: String,
+        dosage: String,
+        scheduledTime: Date,
+        doseLogId: UUID
+    ) async {
+        let intervals: [(offsetMinutes: Int, suffix: String, title: String, body: String)] = [
+            (0, "", "Time for \(medicineName) 💊", "\(medicineName) \(dosage) — tap to take it now."),
+            (10, "_persist_10m", "⏰ \(medicineName) — 10 min overdue", "\(medicineName) \(dosage) still pending. Please take it now."),
+            (20, "_persist_20m", "🚨 \(medicineName) — 20 min overdue!", "\(medicineName) \(dosage) is significantly overdue. Take it immediately or snooze.")
+        ]
+
+        for interval in intervals {
+            guard let fireDate = Calendar.current.date(byAdding: .minute, value: interval.offsetMinutes, to: scheduledTime) else { continue }
+
+            let content = UNMutableNotificationContent()
+            content.title = interval.title
+            content.body = interval.body
+            content.sound = interval.offsetMinutes == 0 ? .default : .defaultCritical
+            content.categoryIdentifier = interval.offsetMinutes == 0 ? "DOSE_REMINDER" : "PERSISTENT_DOSE_REMINDER"
+            content.interruptionLevel = interval.offsetMinutes == 0 ? .timeSensitive : .critical
+            content.relevanceScore = 1.0
+            content.userInfo = [
+                "medicineId": medicineId.uuidString,
+                "doseLogId": doseLogId.uuidString,
+                "isPersistent": true
+            ]
+
+            let components = Calendar.current.dateComponents(
+                [.year, .month, .day, .hour, .minute],
+                from: fireDate
+            )
+            let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+            let request = UNNotificationRequest(
+                identifier: "\(doseLogId.uuidString)\(interval.suffix)",
+                content: content,
+                trigger: trigger
+            )
+            try? await UNUserNotificationCenter.current().add(request)
+        }
+    }
+
+    /// Cancels all persistent reminder notifications (primary + follow-ups) for a given dose log
+    func cancelPersistentReminders(doseLogId: UUID) {
+        let identifiers = [
+            doseLogId.uuidString,
+            "\(doseLogId.uuidString)_persist_10m",
+            "\(doseLogId.uuidString)_persist_20m"
+        ]
+        UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+        // Also remove delivered ones so they clear from Notification Center
+        UNUserNotificationCenter.current().removeDeliveredNotifications(withIdentifiers: identifiers)
+    }
+
+    // MARK: - Caregiver Missed-Dose Alerts
+
+    /// Schedules a local notification to alert the caregiver when a family member misses a dose.
+    /// Fires 15 minutes after the scheduled dose time to give the patient time to take it.
+    func scheduleCaregiverMissedDoseAlert(
+        profileName: String,
+        medicineName: String,
+        dosage: String,
+        scheduledTime: Date,
+        doseLogId: UUID
+    ) async {
+        let content = UNMutableNotificationContent()
+        content.title = "\(profileName) missed a dose"
+        content.body = "\(profileName) missed their \(medicineName) \(dosage) dose at \(Self.timeFormatter.string(from: scheduledTime))"
+        content.sound = .default
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 0.9
+        content.userInfo = [
+            "doseLogId": doseLogId.uuidString,
+            "isCaregiverAlert": true
+        ]
+
+        // Fire 15 minutes after scheduled time
+        guard let alertTime = Calendar.current.date(byAdding: .minute, value: 15, to: scheduledTime),
+              alertTime > Date() else { return }
+
+        let components = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: alertTime
+        )
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+        let request = UNNotificationRequest(
+            identifier: "caregiver_\(doseLogId.uuidString)",
+            content: content,
+            trigger: trigger
+        )
+
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+
+    /// Cancels a caregiver alert (e.g. when dose is taken before the alert fires)
+    func cancelCaregiverAlert(doseLogId: UUID) {
+        UNUserNotificationCenter.current()
+            .removePendingNotificationRequests(withIdentifiers: ["caregiver_\(doseLogId.uuidString)"])
+    }
+
+    private static let timeFormatter: DateFormatter = {
+        let f = DateFormatter()
+        f.dateFormat = "h:mm a"
+        return f
+    }()
+
     /// Cancels all critical dose reminder notifications (primary + follow-ups) for a given dose log
     func cancelCriticalReminders(doseLogId: UUID) {
         let identifiers = [
@@ -256,5 +401,96 @@ final class NotificationService: Sendable {
             "critical_60m_\(doseLogId.uuidString)"
         ]
         UNUserNotificationCenter.current().removePendingNotificationRequests(withIdentifiers: identifiers)
+    }
+
+    // MARK: - Custom Reminders
+
+    /// Schedules a custom reminder notification at the specified time with optional repeat
+    func scheduleCustomReminder(
+        id: UUID,
+        title: String,
+        notes: String?,
+        time: Date,
+        repeatOption: ReminderRepeat
+    ) async {
+        let content = UNMutableNotificationContent()
+        content.title = title
+        content.body = notes ?? "Tap to view your reminder"
+        content.sound = .default
+        content.categoryIdentifier = "CUSTOM_REMINDER"
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 0.8
+        content.userInfo = [
+            "customReminderId": id.uuidString,
+            "isCustomReminder": true
+        ]
+
+        let calendar = Calendar.current
+        let trigger: UNCalendarNotificationTrigger
+
+        switch repeatOption {
+        case .never:
+            let components = calendar.dateComponents(
+                [.year, .month, .day, .hour, .minute],
+                from: time
+            )
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+        case .daily:
+            let components = calendar.dateComponents([.hour, .minute], from: time)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+
+        case .weekly:
+            let components = calendar.dateComponents([.weekday, .hour, .minute], from: time)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+
+        case .monthly:
+            let components = calendar.dateComponents([.day, .hour, .minute], from: time)
+            trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: true)
+        }
+
+        let request = UNNotificationRequest(
+            identifier: "custom_\(id.uuidString)",
+            content: content,
+            trigger: trigger
+        )
+
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+
+    /// Cancels a custom reminder notification
+    func cancelCustomReminder(id: UUID) {
+        UNUserNotificationCenter.current()
+            .removePendingNotificationRequests(withIdentifiers: ["custom_\(id.uuidString)"])
+        UNUserNotificationCenter.current()
+            .removeDeliveredNotifications(withIdentifiers: ["custom_\(id.uuidString)"])
+    }
+
+    /// Schedules a snooze for a custom reminder (15 minutes from now)
+    func snoozeCustomReminder(id: UUID, title: String, notes: String?) async {
+        let content = UNMutableNotificationContent()
+        content.title = "Snoozed: \(title)"
+        content.body = notes ?? "Your reminder is due now"
+        content.sound = .default
+        content.categoryIdentifier = "CUSTOM_REMINDER"
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 0.8
+        content.userInfo = [
+            "customReminderId": id.uuidString,
+            "isCustomReminder": true
+        ]
+
+        let trigger = UNTimeIntervalNotificationTrigger(
+            timeInterval: 15 * 60,
+            repeats: false
+        )
+
+        let request = UNNotificationRequest(
+            identifier: "custom_snooze_\(id.uuidString)",
+            content: content,
+            trigger: trigger
+        )
+
+        try? await UNUserNotificationCenter.current().add(request)
     }
 }

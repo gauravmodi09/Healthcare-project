@@ -91,6 +91,28 @@ struct ElderModeSettingsView: View {
                     .tint(MCColors.primaryTeal)
                 }
 
+                // MARK: - Regional Language Instructions
+                Section("Dosage Language") {
+                    Picker(selection: Bindable(elderMode).dosageLanguage) {
+                        ForEach(AppLanguage.allCases, id: \.self) { lang in
+                            Text(lang.displayName).tag(lang)
+                        }
+                    } label: {
+                        Label {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Dosage Instructions Language")
+                                    .font(MCTypography.headline)
+                                Text("Show medicine instructions in your regional language")
+                                    .font(MCTypography.caption)
+                                    .foregroundStyle(MCColors.textSecondary)
+                            }
+                        } icon: {
+                            Image(systemName: "character.textbox")
+                        }
+                    }
+                    .tint(MCColors.primaryTeal)
+                }
+
                 // MARK: - Feedback
                 Section("Feedback") {
                     Toggle(isOn: Bindable(elderMode).hapticFeedbackEnabled) {

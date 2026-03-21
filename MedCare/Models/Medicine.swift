@@ -176,6 +176,8 @@ enum MedicineSource: String, Codable {
     case aiExtracted = "AI Extracted"
     case manual = "Manual Entry"
     case edited = "User Edited"
+    case ayurvedic = "Ayurvedic"
+    case homeopathic = "Homeopathic"
 }
 
 enum DoseForm: String, Codable, CaseIterable {
@@ -189,6 +191,11 @@ enum DoseForm: String, Codable, CaseIterable {
     case patch = "Patch"
     case powder = "Powder"
     case suppository = "Suppository"
+    // AYUSH / Traditional medicine forms
+    case churna = "Churna"
+    case kadha = "Kadha"
+    case vati = "Vati"
+    case ark = "Ark"
 
     var icon: String {
         switch self {
@@ -202,6 +209,10 @@ enum DoseForm: String, Codable, CaseIterable {
         case .patch: return "bandage"
         case .powder: return "sparkles"
         case .suppository: return "pill"
+        case .churna: return "leaf"
+        case .kadha: return "cup.and.saucer"
+        case .vati: return "circle.grid.2x2"
+        case .ark: return "drop"
         }
     }
 
@@ -216,6 +227,10 @@ enum DoseForm: String, Codable, CaseIterable {
         case .patch: return "patch"
         case .powder: return "sachet"
         case .suppository: return "unit"
+        case .churna: return "g"
+        case .kadha: return "ml"
+        case .vati: return "tab"
+        case .ark: return "ml"
         }
     }
 }

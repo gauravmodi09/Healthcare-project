@@ -8,12 +8,27 @@ struct HistoryView: View {
     @State private var selectedTab: HealthTab = .overview
     @State private var showExportSheet = false
 
+    private let healthScoreService = HealthScoreService()
+
     private var activeProfile: UserProfile? { users.first?.activeProfile }
+
+    private func healthScoreFor(_ profile: UserProfile) -> HealthScore {
+        let doseLogs = profile.episodes.flatMap { $0.medicines }.flatMap { $0.doseLogs }
+        let symptomLogs = profile.episodes.flatMap { $0.symptomLogs }
+        return healthScoreService.calculateFromLogs(
+            doseLogs: doseLogs,
+            symptomLogs: symptomLogs,
+            totalEpisodeFields: profile.episodes.count * 5,
+            filledEpisodeFields: profile.episodes.filter { $0.diagnosis != nil }.count * 5,
+            documentCount: profile.episodes.flatMap { $0.images }.count
+        )
+    }
 
     enum HealthTab: String, CaseIterable {
         case overview = "Overview"
         case calendar = "Calendar"
         case insights = "Insights"
+        case journal = "Journal"
     }
 
     var body: some View {
@@ -41,6 +56,9 @@ struct HistoryView: View {
                                 profile: profile,
                                 showExportSheet: $showExportSheet
                             )
+                        case .journal:
+                            HealthJournalView(profileId: profile.id.uuidString)
+                                .padding(.horizontal, MCSpacing.screenPadding)
                         }
                     }
                     .padding(.vertical, MCSpacing.md)
@@ -54,7 +72,13 @@ struct HistoryView: View {
             .background(MCColors.backgroundLight)
             .navigationTitle("Health")
             .sheet(isPresented: $showExportSheet) {
-                AdherenceReportView()
+                if let profile = activeProfile {
+                    ShareReportView(
+                        profile: profile,
+                        episodes: profile.episodes,
+                        healthScore: healthScoreFor(profile)
+                    )
+                }
             }
         }
     }
@@ -426,6 +450,7 @@ private struct HealthInsightsSection: View {
     @Binding var showExportSheet: Bool
 
     private let correlationService = SymptomCorrelationService()
+    private let predictiveInsightsService = PredictiveInsightsService()
 
     private var allDoseLogs: [DoseLog] {
         profile.episodes.flatMap { $0.medicines }.flatMap { $0.doseLogs }
@@ -435,22 +460,128 @@ private struct HealthInsightsSection: View {
         profile.episodes.flatMap { $0.symptomLogs }
     }
 
+    private var hasAnyData: Bool {
+        !allDoseLogs.isEmpty || !allSymptomLogs.isEmpty
+    }
+
     var body: some View {
-        VStack(spacing: MCSpacing.lg) {
-            // Symptom-Medicine Correlations
-            correlationsCard
+        if hasAnyData {
+            VStack(spacing: MCSpacing.lg) {
+                // Symptom-Medicine Correlations
+                correlationsCard
 
-            // Adherence Trends
-            adherenceTrendsCard
+                // Adherence Trends
+                adherenceTrendsCard
 
-            // Best / Worst Days
-            bestWorstDaysCard
+                // Best / Worst Days
+                bestWorstDaysCard
 
-            // Share with Doctor
-            MCSecondaryButton("Share with Doctor", icon: "square.and.arrow.up") {
-                showExportSheet = true
+                // Predictive Insights
+                predictiveInsightsCard
+
+                // Share with Doctor
+                MCSecondaryButton("Share with Doctor", icon: "square.and.arrow.up") {
+                    showExportSheet = true
+                }
+                .padding(.horizontal, MCSpacing.screenPadding)
             }
-            .padding(.horizontal, MCSpacing.screenPadding)
+        } else {
+            MCEmptyState(
+                icon: "chart.bar.doc.horizontal",
+                title: "No insights yet",
+                message: "Start logging doses and tracking symptoms to unlock personalized health insights and trends.",
+                iconColor: MCColors.info
+            )
+            .padding(.top, MCSpacing.xl)
+        }
+    }
+
+    // MARK: - Predictive Insights
+
+    private var predictiveInsights: [HealthInsight] {
+        predictiveInsightsService.generateInsights(doseLogs: allDoseLogs, symptomLogs: allSymptomLogs)
+    }
+
+    private var predictiveInsightsCard: some View {
+        let insights = predictiveInsights
+        return VStack(alignment: .leading, spacing: MCSpacing.sm) {
+            Text("Predictive Insights")
+                .font(MCTypography.headline)
+                .foregroundStyle(MCColors.textPrimary)
+                .padding(.horizontal, MCSpacing.screenPadding)
+
+            if insights.isEmpty {
+                MCCard {
+                    VStack(spacing: MCSpacing.sm) {
+                        Image(systemName: "sparkles")
+                            .font(.system(size: 32))
+                            .foregroundStyle(MCColors.textTertiary)
+                        Text("No predictions yet")
+                            .font(MCTypography.bodyMedium)
+                            .foregroundStyle(MCColors.textSecondary)
+                        Text("Keep logging doses and symptoms. We'll detect patterns and predict what's ahead.")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textTertiary)
+                            .multilineTextAlignment(.center)
+                    }
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, MCSpacing.sm)
+                }
+                .padding(.horizontal, MCSpacing.screenPadding)
+            } else {
+                ForEach(insights) { insight in
+                    MCAccentCard(accent: insight.color) {
+                        VStack(alignment: .leading, spacing: MCSpacing.xs) {
+                            HStack(spacing: MCSpacing.xs) {
+                                Image(systemName: insight.icon)
+                                    .foregroundStyle(insight.color)
+                                Text(insight.title)
+                                    .font(MCTypography.bodyMedium)
+                                    .foregroundStyle(MCColors.textPrimary)
+
+                                Spacer()
+
+                                Text(insight.insightType.rawValue.capitalized)
+                                    .font(MCTypography.caption)
+                                    .foregroundStyle(insight.color)
+                                    .padding(.horizontal, MCSpacing.xs)
+                                    .padding(.vertical, 2)
+                                    .background(insight.color.opacity(0.12))
+                                    .clipShape(Capsule())
+                            }
+
+                            Text(insight.description)
+                                .font(MCTypography.caption)
+                                .foregroundStyle(MCColors.textSecondary)
+
+                            // Confidence bar
+                            HStack(spacing: MCSpacing.xs) {
+                                Text("Confidence")
+                                    .font(MCTypography.caption)
+                                    .foregroundStyle(MCColors.textTertiary)
+
+                                GeometryReader { geo in
+                                    ZStack(alignment: .leading) {
+                                        RoundedRectangle(cornerRadius: 2)
+                                            .fill(MCColors.divider)
+                                            .frame(height: 4)
+                                        RoundedRectangle(cornerRadius: 2)
+                                            .fill(MCColors.confidenceColor(insight.confidence))
+                                            .frame(width: geo.size.width * insight.confidence, height: 4)
+                                    }
+                                }
+                                .frame(height: 4)
+
+                                Text("\(Int(insight.confidence * 100))%")
+                                    .font(MCTypography.captionBold)
+                                    .foregroundStyle(MCColors.confidenceColor(insight.confidence))
+                                    .frame(width: 36, alignment: .trailing)
+                            }
+                        }
+                    }
+                    .padding(.horizontal, MCSpacing.screenPadding)
+                }
+            }
         }
     }
 
@@ -799,38 +930,3 @@ struct EpisodeHistoryCard: View {
     }
 }
 
-// MARK: - Adherence Report
-
-struct AdherenceReportView: View {
-    @Environment(\.dismiss) private var dismiss
-
-    var body: some View {
-        NavigationStack {
-            VStack(spacing: MCSpacing.lg) {
-                Image(systemName: "doc.richtext")
-                    .font(.system(size: 48))
-                    .foregroundStyle(MCColors.primaryTeal)
-
-                Text("Adherence Report")
-                    .font(MCTypography.title)
-
-                Text("Generate a PDF report of your medication adherence that you can share with your doctor.")
-                    .font(MCTypography.body)
-                    .foregroundStyle(MCColors.textSecondary)
-                    .multilineTextAlignment(.center)
-
-                MCPrimaryButton("Generate PDF", icon: "doc.badge.arrow.up") {
-                    // Generate and share PDF
-                    dismiss()
-                }
-
-                MCSecondaryButton("Cancel") {
-                    dismiss()
-                }
-            }
-            .padding(MCSpacing.screenPadding)
-            .navigationTitle("Export Report")
-            .navigationBarTitleDisplayMode(.inline)
-        }
-    }
-}

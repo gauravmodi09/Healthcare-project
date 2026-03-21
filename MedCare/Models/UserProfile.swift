@@ -12,6 +12,8 @@ final class UserProfile {
     var knownConditions: [String]
     var allergies: [String]
     var emergencyContact: String?
+    var caregiverName: String?
+    var caregiverPhoneNumber: String?
     var isActive: Bool
     var avatarEmoji: String
     var createdAt: Date
@@ -35,6 +37,8 @@ final class UserProfile {
         self.knownConditions = []
         self.allergies = []
         self.emergencyContact = nil
+        self.caregiverName = nil
+        self.caregiverPhoneNumber = nil
         self.isActive = true
         self.avatarEmoji = avatarEmoji
         self.createdAt = Date()

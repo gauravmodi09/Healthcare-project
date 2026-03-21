@@ -9,9 +9,11 @@ struct DocumentNavID: Hashable {
 struct EpisodeDetailView: View {
     let episodeId: UUID
     @Environment(DataService.self) private var dataService
+    @Environment(LiveActivityService.self) private var liveActivityService
     @Query private var episodes: [Episode]
     @State private var selectedTab: EpisodeTab = .plan
     @State private var showQuickAddMedicine = false
+    @State private var showSymptomLog = false
 
     private var episode: Episode? {
         episodes.first { $0.id == episodeId }
@@ -63,6 +65,12 @@ struct EpisodeDetailView: View {
             .sheet(isPresented: $showQuickAddMedicine) {
                 QuickAddMedicineView(episode: episode)
                     .environment(dataService)
+            }
+            .sheet(isPresented: $showSymptomLog) {
+                NavigationStack {
+                    SymptomLogView(episodeId: episode.id)
+                        .environment(dataService)
+                }
             }
         } else {
             ContentUnavailableView("Episode not found", systemImage: "doc.questionmark")
@@ -139,8 +147,36 @@ struct EpisodeDetailView: View {
                     }
                 }
 
-                ForEach(episode.activeMedicines) { medicine in
-                    MedicineCard(medicine: medicine)
+                if episode.activeMedicines.isEmpty {
+                    MCEmptyState.medications {
+                        showQuickAddMedicine = true
+                    }
+                } else {
+                    ForEach(episode.activeMedicines) { medicine in
+                        MedicineCard(medicine: medicine)
+                    }
+
+                    // Reorder All button
+                    if episode.activeMedicines.count > 1 {
+                        Button {
+                            let names = episode.activeMedicines.map { $0.brandName }.joined(separator: " ")
+                            let query = names.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? names
+                            if let url = URL(string: "https://www.1mg.com/search/all?name=\(query)") {
+                                UIApplication.shared.open(url)
+                            }
+                        } label: {
+                            HStack(spacing: 6) {
+                                Image(systemName: "cart.fill")
+                                Text("Reorder All on 1mg")
+                            }
+                            .font(.system(size: 14, weight: .semibold))
+                            .foregroundStyle(MCColors.primaryTeal)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 40)
+                            .background(MCColors.primaryTeal.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                    }
                 }
             }
 
@@ -189,7 +225,32 @@ struct EpisodeDetailView: View {
             } else {
                 ForEach(todayDoses) { dose in
                     DoseActionCard(doseLog: dose) { status in
+                        // Haptic feedback per action type
+                        switch status {
+                        case .taken:
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                        case .skipped:
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+                        case .snoozed:
+                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                        default:
+                            break
+                        }
                         dataService.logDose(dose, status: status)
+                        // End or update Live Activity
+                        Task {
+                            if status == .taken || status == .skipped {
+                                await liveActivityService.endActivity(doseLogId: dose.id)
+                            } else if status == .snoozed {
+                                let snoozedUntil = Date().addingTimeInterval(15 * 60)
+                                await liveActivityService.updateActivity(
+                                    doseLogId: dose.id,
+                                    status: .snoozed,
+                                    minutesRemaining: 15,
+                                    snoozedUntil: snoozedUntil
+                                )
+                            }
+                        }
                     }
                     .padding(.horizontal, MCSpacing.screenPadding)
                 }
@@ -206,7 +267,9 @@ struct EpisodeDetailView: View {
                 Text("Symptom Log")
                     .font(MCTypography.headline)
                 Spacer()
-                NavigationLink(value: AppRouter.HomeRoute.symptomLog(episodeId: episode.id)) {
+                Button {
+                    showSymptomLog = true
+                } label: {
                     Label("Log Today", systemImage: "plus.circle")
                         .font(MCTypography.subheadline)
                         .foregroundStyle(MCColors.primaryTeal)
@@ -258,7 +321,7 @@ struct MedicineCard: View {
                         if let generic = medicine.genericName {
                             Text(generic)
                                 .font(MCTypography.caption)
-                                .foregroundStyle(MCColors.textSecondary)
+                                .foregroundStyle(MCColors.primaryTeal)
                         }
                     }
 
@@ -293,6 +356,25 @@ struct MedicineCard: View {
                     }
                 }
 
+                // Jan Aushadhi savings badge
+                if let jaPrice = IndianDrugDatabase.shared.findJanAushadhiPrice(for: medicine) {
+                    HStack(spacing: MCSpacing.xs) {
+                        Image(systemName: "indianrupeesign.circle.fill")
+                            .foregroundStyle(MCColors.success)
+                        Text("Save \(jaPrice.savingsPercent)% with generic")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.success)
+                        Spacer()
+                        Text("Jan Aushadhi: \u{20B9}\(Int(jaPrice.janAushadhiPrice))")
+                            .font(MCTypography.caption)
+                            .fontWeight(.medium)
+                            .foregroundStyle(MCColors.success)
+                    }
+                    .padding(MCSpacing.xs)
+                    .background(MCColors.success.opacity(0.08))
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                }
+
                 if let instructions = medicine.instructions {
                     HStack(spacing: MCSpacing.xxs) {
                         Image(systemName: "info.circle")
@@ -300,6 +382,22 @@ struct MedicineCard: View {
                     }
                     .font(MCTypography.caption)
                     .foregroundStyle(MCColors.info)
+                }
+
+                // Reorder on 1mg
+                Button {
+                    let query = medicine.brandName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? medicine.brandName
+                    if let url = URL(string: "https://www.1mg.com/search/all?name=\(query)") {
+                        UIApplication.shared.open(url)
+                    }
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "cart")
+                            .font(.system(size: 11))
+                        Text("Buy Again on 1mg")
+                            .font(.system(size: 12, weight: .medium))
+                    }
+                    .foregroundStyle(MCColors.primaryTeal)
                 }
             }
         }
@@ -345,6 +443,8 @@ struct DoseActionCard: View {
     let doseLog: DoseLog
     let onAction: (DoseStatus) -> Void
     @Environment(DataService.self) private var dataService
+    @Environment(\.elderModeService) private var elderMode
+    @Environment(\.localization) private var l10n
     @State private var showDuplicateAlert = false
     @State private var duplicateTime: Date?
 
@@ -362,6 +462,11 @@ struct DoseActionCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(doseLog.medicine?.brandName ?? "Medicine")
                             .font(MCTypography.bodyMedium)
+                        if let generic = doseLog.medicine?.genericName {
+                            Text(generic)
+                                .font(MCTypography.caption)
+                                .foregroundStyle(MCColors.primaryTeal)
+                        }
                         HStack(spacing: 4) {
                             Text(doseLog.medicine?.dosage ?? "")
                                 .font(MCTypography.caption)
@@ -372,6 +477,21 @@ struct DoseActionCard: View {
                                 Text(med.mealTiming.shortLabel)
                                     .font(MCTypography.caption)
                                     .foregroundStyle(MCColors.warning)
+                            }
+                        }
+
+                        // Regional dosage instruction for elder accessibility
+                        if elderMode.isElderModeEnabled && elderMode.dosageLanguage != .english,
+                           let med = doseLog.medicine {
+                            let regionalLine = l10n.regionalInstructionLine(
+                                mealTiming: med.mealTiming != .noPreference ? med.mealTiming.shortLabel : nil,
+                                doseForm: med.doseForm.rawValue,
+                                language: elderMode.dosageLanguage
+                            )
+                            if let translated = regionalLine {
+                                Text(translated)
+                                    .font(.system(size: 15, weight: .medium))
+                                    .foregroundStyle(MCColors.primaryTeal.opacity(0.85))
                             }
                         }
                     }
@@ -387,6 +507,7 @@ struct DoseActionCard: View {
                 if doseLog.status == .pending {
                     HStack(spacing: MCSpacing.xs) {
                         Button {
+                            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
                             let check = dataService.isDuplicateDose(for: doseLog)
                             if check.isDuplicate {
                                 duplicateTime = check.lastTakenTime
@@ -406,8 +527,11 @@ struct DoseActionCard: View {
                             .background(MCColors.success)
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
+                        .accessibilityLabel("Mark \(doseLog.medicine?.brandName ?? "medicine") as taken")
+                        .accessibilityHint("Double tap to confirm you took this dose")
 
                         Button {
+                            UIImpactFeedbackGenerator(style: .light).impactOccurred()
                             onAction(.skipped)
                         } label: {
                             HStack(spacing: MCSpacing.xxs) {
@@ -421,8 +545,11 @@ struct DoseActionCard: View {
                             .background(MCColors.warning.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
+                        .accessibilityLabel("Skip \(doseLog.medicine?.brandName ?? "medicine")")
+                        .accessibilityHint("Double tap to skip this dose")
 
                         Button {
+                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
                             onAction(.snoozed)
                         } label: {
                             HStack(spacing: MCSpacing.xxs) {
@@ -436,6 +563,8 @@ struct DoseActionCard: View {
                             .background(MCColors.info.opacity(0.1))
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
+                        .accessibilityLabel("Snooze \(doseLog.medicine?.brandName ?? "medicine")")
+                        .accessibilityHint("Double tap to snooze this reminder for 15 minutes")
                     }
                 }
             }

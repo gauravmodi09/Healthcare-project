@@ -58,6 +58,10 @@
     <string>Light</string>
     <key>NSSupportsLiveActivities</key>
     <true/>
+    <key>LSApplicationQueriesSchemes</key>
+    <array>
+        <string>whatsapp</string>
+    </array>
     <key>CFBundleURLTypes</key>
     <array>
         <dict>

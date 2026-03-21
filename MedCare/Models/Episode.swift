@@ -54,10 +54,11 @@ final class Episode {
     }
 
     var adherencePercentage: Double {
-        let allLogs = medicines.flatMap { $0.doseLogs }
-        guard !allLogs.isEmpty else { return 0 }
-        let taken = allLogs.filter { $0.status == .taken }.count
-        return Double(taken) / Double(allLogs.count)
+        let now = Date()
+        let pastLogs = medicines.flatMap { $0.doseLogs }.filter { $0.scheduledTime <= now }
+        guard !pastLogs.isEmpty else { return 0 }
+        let taken = pastLogs.filter { $0.status == .taken }.count
+        return Double(taken) / Double(pastLogs.count)
     }
 
     var daysRemaining: Int? {

@@ -20,7 +20,8 @@ final class DataService {
             EpisodeImage.self,
             ChatMessage.self,
             ChatSession.self,
-            Nudge.self
+            Nudge.self,
+            CustomReminder.self
         ])
         let config = ModelConfiguration(isStoredInMemoryOnly: false)
         do {
@@ -130,6 +131,23 @@ final class DataService {
                 log.medicine = medicine
                 medicine.doseLogs.append(log)
                 modelContext.insert(log)
+
+                // Schedule push notification for future doses
+                if scheduledTime > Date() {
+                    let medicineId = medicine.id
+                    let medicineName = medicine.brandName
+                    let dosage = medicine.dosage
+                    let doseLogId = log.id
+                    Task {
+                        await NotificationService.shared.scheduleDoseReminder(
+                            medicineId: medicineId,
+                            medicineName: medicineName,
+                            dosage: dosage,
+                            scheduledTime: scheduledTime,
+                            doseLogId: doseLogId
+                        )
+                    }
+                }
             }
         }
         save()
@@ -143,10 +161,51 @@ final class DataService {
             doseLog.markSkipped(reason: notes)
         case .snoozed:
             doseLog.markSnoozed()
+            // Reschedule: create a new pending dose 15 minutes later
+            if let medicine = doseLog.medicine {
+                let snoozedDose = DoseLog(scheduledTime: Date().addingTimeInterval(15 * 60))
+                medicine.doseLogs.append(snoozedDose)
+                modelContext.insert(snoozedDose)
+            }
         default:
             doseLog.status = status
         }
         save()
+
+        // Caregiver missed-dose alerts
+        if let medicine = doseLog.medicine,
+           let episode = medicine.episode,
+           let profile = episode.profile {
+
+            // If dose is taken, cancel any pending caregiver alert
+            if status == .taken {
+                NotificationService.shared.cancelCaregiverAlert(doseLogId: doseLog.id)
+            }
+
+            // If dose is missed or skipped, notify the caregiver
+            if status == .missed || status == .skipped,
+               let caregiverName = profile.caregiverName, !caregiverName.isEmpty {
+                let profileName = profile.name
+                let medicineName = medicine.brandName
+                let dosage = medicine.dosage
+                let scheduledTime = doseLog.scheduledTime
+                let doseLogId = doseLog.id
+                Task {
+                    await NotificationService.shared.scheduleCaregiverMissedDoseAlert(
+                        profileName: profileName,
+                        medicineName: medicineName,
+                        dosage: dosage,
+                        scheduledTime: scheduledTime,
+                        doseLogId: doseLogId
+                    )
+                }
+            }
+
+            // Check achievements when a dose is taken
+            if status == .taken {
+                checkAchievementsAfterDose(for: profile)
+            }
+        }
     }
 
     // MARK: - Overdose Prevention
@@ -681,6 +740,169 @@ final class DataService {
         doc.episode = episode
         episode.images.append(doc)
         modelContext.insert(doc)
+    }
+
+    // MARK: - Auto-Extend Dose Logs for Chronic Medicines
+
+    /// Extends dose logs for chronic medicines (duration == nil) when the latest
+    /// log is within 3 days of today, creating 7 more days of future logs.
+    func extendDoseLogsIfNeeded(for profile: UserProfile) {
+        let calendar = Calendar.current
+        let now = Date()
+        let threeDaysFromNow = calendar.date(byAdding: .day, value: 3, to: now)!
+
+        let chronicMedicines = profile.episodes
+            .flatMap { $0.medicines }
+            .filter { $0.isActive && $0.duration == nil }
+
+        for medicine in chronicMedicines {
+            // Find the latest existing dose log date
+            let latestLog = medicine.doseLogs
+                .max(by: { $0.scheduledTime < $1.scheduledTime })
+
+            guard let lastDate = latestLog?.scheduledTime else {
+                // No logs at all — create from today
+                createDoseLogs(for: medicine, days: 7)
+                continue
+            }
+
+            // If latest log is within 3 days from now, extend
+            if lastDate < threeDaysFromNow {
+                let dayAfterLast = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: lastDate))!
+
+                for dayOffset in 0..<7 {
+                    guard let date = calendar.date(byAdding: .day, value: dayOffset, to: dayAfterLast) else { continue }
+
+                    for time in medicine.timing {
+                        var components = calendar.dateComponents([.year, .month, .day], from: date)
+                        components.hour = time.hour
+                        components.minute = time.minute
+
+                        guard let scheduledTime = calendar.date(from: components) else { continue }
+
+                        // Avoid duplicates: check if a log already exists at this time
+                        let exists = medicine.doseLogs.contains { existingLog in
+                            abs(existingLog.scheduledTime.timeIntervalSince(scheduledTime)) < 60
+                        }
+                        guard !exists else { continue }
+
+                        let log = DoseLog(scheduledTime: scheduledTime)
+                        log.medicine = medicine
+                        medicine.doseLogs.append(log)
+                        modelContext.insert(log)
+
+                        if scheduledTime > now {
+                            let medicineId = medicine.id
+                            let medicineName = medicine.brandName
+                            let dosage = medicine.dosage
+                            let doseLogId = log.id
+                            Task {
+                                await NotificationService.shared.scheduleDoseReminder(
+                                    medicineId: medicineId,
+                                    medicineName: medicineName,
+                                    dosage: dosage,
+                                    scheduledTime: scheduledTime,
+                                    doseLogId: doseLogId
+                                )
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        save()
+    }
+
+    // MARK: - Achievement Checking After Dose
+
+    /// Builds achievement input from the active profile and checks for newly unlocked achievements.
+    func checkAchievementsAfterDose(for profile: UserProfile) {
+        let calendar = Calendar.current
+        let now = Date()
+
+        let allMedicines = profile.episodes.flatMap { $0.medicines }.filter { $0.isActive }
+        let allLogs = allMedicines.flatMap { $0.doseLogs }
+
+        let takenLogs = allLogs.filter { $0.status == .taken }
+        let totalDosesTaken = takenLogs.count
+        let totalDosesScheduled = allLogs.count
+
+        // Perfect days: days where all scheduled doses were taken
+        let logsByDay = Dictionary(grouping: allLogs) { calendar.startOfDay(for: $0.scheduledTime) }
+        let perfectDays = logsByDay.values.filter { dayLogs in
+            !dayLogs.isEmpty && dayLogs.allSatisfy { $0.status == .taken }
+        }.count
+
+        // Perfect weeks
+        let perfectWeeks = perfectDays / 7
+
+        // Current streak: consecutive days from today going backward with all doses taken
+        var currentStreak = 0
+        var dayOffset = 0
+        while true {
+            guard let checkDate = calendar.date(byAdding: .day, value: -dayOffset, to: calendar.startOfDay(for: now)) else { break }
+            let dayLogs = logsByDay[checkDate] ?? []
+            if dayLogs.isEmpty { break }
+            if dayLogs.allSatisfy({ $0.status == .taken }) {
+                currentStreak += 1
+                dayOffset += 1
+            } else {
+                break
+            }
+        }
+
+        // Symptom log days
+        let symptomLogDays = Set(profile.episodes.flatMap { $0.symptomLogs }.map { calendar.startOfDay(for: $0.date) }).count
+
+        // Documents
+        let documentsUploaded = profile.episodes.flatMap { $0.images }.count
+
+        // Episodes completed
+        let episodesCompleted = profile.episodes.filter { $0.status == .completed }.count
+
+        // Profiles managed
+        let profilesManaged = profile.user?.profiles.count ?? 1
+
+        // Morning and evening on-time counts
+        let morningOnTime = takenLogs.filter { log in
+            let hour = calendar.component(.hour, from: log.scheduledTime)
+            return hour < 12 && log.actualTime != nil
+        }.count
+        let eveningOnTime = takenLogs.filter { log in
+            let hour = calendar.component(.hour, from: log.scheduledTime)
+            return hour >= 18 && log.actualTime != nil
+        }.count
+
+        // Missed days this week
+        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
+        let weekLogs = logsByDay.filter { $0.key >= startOfWeek && $0.key <= now }
+        let missedDaysThisWeek = weekLogs.values.filter { dayLogs in
+            dayLogs.contains { $0.status == .missed || $0.status == .skipped }
+        }.count
+
+        let totalDaysTracked = logsByDay.count
+
+        let input = AchievementService.AchievementInput(
+            currentStreak: currentStreak,
+            longestStreak: currentStreak,
+            totalDosesTaken: totalDosesTaken,
+            totalDosesScheduled: totalDosesScheduled,
+            perfectDays: perfectDays,
+            perfectWeeks: perfectWeeks,
+            daysWithSymptomLogs: symptomLogDays,
+            documentsUploaded: documentsUploaded,
+            episodesCompleted: episodesCompleted,
+            episodesWithAllFields: 0,
+            profilesManaged: profilesManaged,
+            morningDosesOnTimeCount: morningOnTime,
+            eveningDosesOnTimeCount: eveningOnTime,
+            hadGapOfThreePlusDays: false,
+            resumedAfterGap: false,
+            missedDaysThisWeek: missedDaysThisWeek,
+            totalDaysTracked: totalDaysTracked
+        )
+
+        AchievementService.shared.checkAchievements(input: input)
     }
 
     // MARK: - Persistence

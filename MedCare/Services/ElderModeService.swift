@@ -54,6 +54,16 @@ final class ElderModeService {
         didSet { UserDefaults.standard.set(hapticFeedbackEnabled, forKey: Keys.hapticFeedback) }
     }
 
+    var showHindiInstructions: Bool {
+        didSet { UserDefaults.standard.set(showHindiInstructions, forKey: Keys.showHindi) }
+    }
+
+    /// Regional language for dosage instructions (e.g. "hi", "ta", "te", "mr", "bn").
+    /// Empty string or "en" means no regional translation.
+    var dosageLanguage: AppLanguage {
+        didSet { UserDefaults.standard.set(dosageLanguage.rawValue, forKey: Keys.dosageLanguage) }
+    }
+
     // MARK: - Init
 
     init() {
@@ -68,6 +78,26 @@ final class ElderModeService {
             defaults.set(true, forKey: Keys.hapticFeedback)
         } else {
             self.hapticFeedbackEnabled = defaults.bool(forKey: Keys.hapticFeedback)
+        }
+
+        // Default showHindi to true for first launch
+        let hindiEnabled: Bool
+        if defaults.object(forKey: Keys.showHindi) == nil {
+            hindiEnabled = true
+            defaults.set(true, forKey: Keys.showHindi)
+        } else {
+            hindiEnabled = defaults.bool(forKey: Keys.showHindi)
+        }
+        self.showHindiInstructions = hindiEnabled
+
+        // Dosage language — default to Hindi for backward compatibility with showHindi
+        if let raw = defaults.string(forKey: Keys.dosageLanguage),
+           let lang = AppLanguage(rawValue: raw) {
+            self.dosageLanguage = lang
+        } else if hindiEnabled {
+            self.dosageLanguage = .hindi
+        } else {
+            self.dosageLanguage = .english
         }
 
         if let raw = defaults.string(forKey: Keys.fontSize),
@@ -131,6 +161,8 @@ final class ElderModeService {
         static let highContrast = "elderMode.highContrast"
         static let simplifiedNav = "elderMode.simplifiedNav"
         static let hapticFeedback = "elderMode.hapticFeedback"
+        static let showHindi = "mc_show_hindi"
+        static let dosageLanguage = "mc_dosage_language"
     }
 }
 

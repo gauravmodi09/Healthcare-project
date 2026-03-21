@@ -8,9 +8,12 @@ struct MoodCheckInCard: View {
     @State private var animatePulse = false
 
     var medicines: [String] = []
+    var profileId: String? = nil
     var onLog: ((Int, Int) -> Void)?
 
-    private let moodTracker = MoodTrackingService()
+    private var moodTracker: MoodTrackingService {
+        MoodTrackingService(profileId: profileId)
+    }
     private let moods: [(emoji: String, label: String)] = [
         ("\u{1F62B}", "Terrible"),
         ("\u{1F61E}", "Bad"),

@@ -78,13 +78,25 @@ struct WeeklySummary: Identifiable {
 @Observable
 final class HealthJournalService {
 
-    private let storageKey = "mc_health_journal_entries"
+    private static let storageKeyPrefix = "mc_health_journal_entries"
+
+    /// The profile ID this service instance is scoped to.
+    /// When nil, falls back to a shared key (backward-compatible).
+    private let profileId: String?
+
+    private var storageKey: String {
+        if let profileId {
+            return "\(Self.storageKeyPrefix)_\(profileId)"
+        }
+        return Self.storageKeyPrefix
+    }
 
     // MARK: - Stored Entries
 
     var entries: [JournalEntry] = []
 
-    init() {
+    init(profileId: String? = nil) {
+        self.profileId = profileId
         loadEntries()
     }
 

@@ -5,9 +5,11 @@ struct RemindersView: View {
     @Environment(DataService.self) private var dataService
     @Environment(LiveActivityService.self) private var liveActivityService
     @Query private var users: [User]
+    @Query(sort: \CustomReminder.reminderTime) private var customReminders: [CustomReminder]
     @State private var selectedDate = Date()
     @State private var showDatePicker = false
     @State private var confirmedMedicineName: String?
+    @State private var showAddReminder = false
 
     private var activeProfile: UserProfile? { users.first?.activeProfile }
 
@@ -18,12 +20,17 @@ struct RemindersView: View {
                 dateSelector
 
                 ScrollView {
+                    // MARK: - My Reminders Section
+                    if !activeCustomReminders.isEmpty {
+                        customRemindersSection
+                    }
+
                     if let profile = activeProfile {
                         let doses = dosesForDate(profile: profile)
 
-                        if doses.isEmpty {
+                        if doses.isEmpty && activeCustomReminders.isEmpty {
                             emptyState
-                        } else {
+                        } else if !doses.isEmpty {
                             VStack(spacing: MCSpacing.md) {
                                 // Summary stats
                                 summaryBar(doses: doses)
@@ -40,34 +47,45 @@ struct RemindersView: View {
                                         }
                                         .padding(.horizontal, MCSpacing.screenPadding)
 
-                                        ForEach(group.doses) { dose in
+                                        // Pending doses: swipeable cards in a List for gesture support
+                                        let pendingDoses = group.doses.filter { $0.status == .pending }
+                                        let actionedDoses = group.doses.filter { $0.status != .pending }
+
+                                        if !pendingDoses.isEmpty {
+                                            List {
+                                                ForEach(pendingDoses) { dose in
+                                                    SwipeableMedicationCard(
+                                                        medicineName: dose.medicine?.brandName ?? "Medicine",
+                                                        dosage: dose.medicine?.dosage ?? "",
+                                                        scheduledTime: dose.scheduledTime,
+                                                        doseFormIcon: dose.medicine?.doseForm.icon ?? "pills",
+                                                        mealTiming: dose.medicine.flatMap { $0.mealTiming != .noPreference ? $0.mealTiming.shortLabel : nil },
+                                                        status: dose.status.rawValue,
+                                                        statusColor: Color(hex: dose.status.color),
+                                                        onTake: {
+                                                            handleDoseAction(dose, status: .taken)
+                                                        },
+                                                        onSkip: {
+                                                            handleDoseAction(dose, status: .skipped)
+                                                        },
+                                                        onSnooze: {
+                                                            handleDoseAction(dose, status: .snoozed)
+                                                        }
+                                                    )
+                                                    .listRowInsets(EdgeInsets(top: 4, leading: MCSpacing.screenPadding, bottom: 4, trailing: MCSpacing.screenPadding))
+                                                    .listRowSeparator(.hidden)
+                                                    .listRowBackground(Color.clear)
+                                                }
+                                            }
+                                            .listStyle(.plain)
+                                            .scrollDisabled(true)
+                                            .frame(height: CGFloat(pendingDoses.count) * 88)
+                                        }
+
+                                        // Already actioned doses: standard card
+                                        ForEach(actionedDoses) { dose in
                                             DoseActionCard(doseLog: dose) { status in
-                                                withAnimation {
-                                                    dataService.logDose(dose, status: status)
-                                                }
-                                                if status == .taken {
-                                                    confirmedMedicineName = dose.medicine?.brandName ?? "Medicine"
-                                                }
-                                                // Update Live Activity based on action
-                                                Task {
-                                                    if status == .taken || status == .skipped {
-                                                        await liveActivityService.endActivity(doseLogId: dose.id)
-                                                    } else if status == .snoozed, let med = dose.medicine {
-                                                        await NotificationService.shared.scheduleSnooze(
-                                                            medicineId: med.id,
-                                                            medicineName: med.brandName,
-                                                            dosage: med.dosage,
-                                                            doseLogId: dose.id
-                                                        )
-                                                        let snoozedUntil = Date().addingTimeInterval(15 * 60)
-                                                        await liveActivityService.updateActivity(
-                                                            doseLogId: dose.id,
-                                                            status: .snoozed,
-                                                            minutesRemaining: 15,
-                                                            snoozedUntil: snoozedUntil
-                                                        )
-                                                    }
-                                                }
+                                                handleDoseAction(dose, status: status)
                                             }
                                             .padding(.horizontal, MCSpacing.screenPadding)
                                         }
@@ -80,7 +98,23 @@ struct RemindersView: View {
                 }
             }
             .background(MCColors.backgroundLight)
+            .dynamicTypeSize(.xSmall ... .accessibility3)
             .navigationTitle("Reminders")
+            .toolbar {
+                ToolbarItem(placement: .topBarTrailing) {
+                    Button {
+                        showAddReminder = true
+                    } label: {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.title3)
+                            .foregroundStyle(MCColors.primaryTeal)
+                    }
+                    .accessibilityLabel("Add custom reminder")
+                }
+            }
+            .sheet(isPresented: $showAddReminder) {
+                AddReminderView()
+            }
             .overlay {
                 if let name = confirmedMedicineName {
                     DoseConfirmationOverlay(medicineName: name) {
@@ -148,13 +182,15 @@ struct RemindersView: View {
         .background(MCColors.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
         .padding(.horizontal, MCSpacing.screenPadding)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Today's summary: \(taken) taken, \(skipped) skipped, \(pending) pending")
     }
 
     private func summaryItem(count: Int, label: String, color: Color, icon: String) -> some View {
         VStack(spacing: MCSpacing.xxs) {
             HStack(spacing: 4) {
                 Image(systemName: icon)
-                    .font(.system(size: 14))
+                    .font(.footnote)
                 Text("\(count)")
                     .font(MCTypography.title2)
             }
@@ -173,7 +209,7 @@ struct RemindersView: View {
         VStack(spacing: MCSpacing.md) {
             Spacer()
             Image(systemName: "bell.badge")
-                .font(.system(size: 48))
+                .font(.system(size: 48).weight(.light))
                 .foregroundStyle(MCColors.textTertiary)
             Text("No reminders for this day")
                 .font(MCTypography.headline)
@@ -185,6 +221,49 @@ struct RemindersView: View {
         }
         .frame(maxWidth: .infinity)
         .padding(.top, MCSpacing.xxl)
+    }
+
+    // MARK: - Dose Action Handler
+
+    private func handleDoseAction(_ dose: DoseLog, status: DoseStatus) {
+        // Haptic feedback per action type
+        switch status {
+        case .taken:
+            UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        case .skipped:
+            UIImpactFeedbackGenerator(style: .light).impactOccurred()
+        case .snoozed:
+            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+        default:
+            break
+        }
+
+        withAnimation {
+            dataService.logDose(dose, status: status)
+        }
+        if status == .taken {
+            confirmedMedicineName = dose.medicine?.brandName ?? "Medicine"
+        }
+        // Update Live Activity based on action
+        Task {
+            if status == .taken || status == .skipped {
+                await liveActivityService.endActivity(doseLogId: dose.id)
+            } else if status == .snoozed, let med = dose.medicine {
+                await NotificationService.shared.scheduleSnooze(
+                    medicineId: med.id,
+                    medicineName: med.brandName,
+                    dosage: med.dosage,
+                    doseLogId: dose.id
+                )
+                let snoozedUntil = Date().addingTimeInterval(15 * 60)
+                await liveActivityService.updateActivity(
+                    doseLogId: dose.id,
+                    status: .snoozed,
+                    minutesRemaining: 15,
+                    snoozedUntil: snoozedUntil
+                )
+            }
+        }
     }
 
     // MARK: - Helpers
@@ -245,5 +324,97 @@ struct RemindersView: View {
 
     private func isSelected(_ date: Date) -> Bool {
         Calendar.current.isDate(date, inSameDayAs: selectedDate)
+    }
+
+    // MARK: - Custom Reminders
+
+    private var activeCustomReminders: [CustomReminder] {
+        customReminders.filter { !$0.isCompleted }
+    }
+
+    private var customRemindersSection: some View {
+        VStack(alignment: .leading, spacing: MCSpacing.xs) {
+            HStack {
+                Image(systemName: "bell.badge.fill")
+                    .foregroundStyle(MCColors.accentCoral)
+                Text("My Reminders")
+                    .font(MCTypography.headline)
+                    .foregroundStyle(MCColors.textPrimary)
+
+                Spacer()
+
+                Text("\(activeCustomReminders.count)")
+                    .font(MCTypography.captionBold)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, MCSpacing.xs)
+                    .padding(.vertical, MCSpacing.xxs)
+                    .background(MCColors.accentCoral)
+                    .clipShape(Capsule())
+            }
+            .padding(.horizontal, MCSpacing.screenPadding)
+
+            ForEach(activeCustomReminders) { reminder in
+                customReminderCard(reminder)
+                    .padding(.horizontal, MCSpacing.screenPadding)
+            }
+        }
+        .padding(.vertical, MCSpacing.md)
+    }
+
+    private func customReminderCard(_ reminder: CustomReminder) -> some View {
+        MCAccentCard(accent: MCColors.accentCoral) {
+            HStack(spacing: MCSpacing.sm) {
+                VStack(alignment: .leading, spacing: MCSpacing.xxs) {
+                    Text(reminder.title)
+                        .font(MCTypography.headline)
+                        .foregroundStyle(MCColors.textPrimary)
+                        .lineLimit(1)
+
+                    HStack(spacing: MCSpacing.xs) {
+                        Image(systemName: "clock")
+                            .font(.caption2)
+                        Text(reminder.reminderTime, style: .relative)
+                            .font(MCTypography.caption)
+
+                        if reminder.repeatOption != .never {
+                            Text("·")
+                            Image(systemName: reminder.repeatOption.icon)
+                                .font(.caption2)
+                            Text(reminder.repeatOption.rawValue)
+                                .font(MCTypography.captionBold)
+                        }
+                    }
+                    .foregroundStyle(MCColors.textSecondary)
+
+                    if let notes = reminder.notes, !notes.isEmpty {
+                        Text(notes)
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textTertiary)
+                            .lineLimit(1)
+                    }
+                }
+
+                Spacer()
+
+                Button {
+                    UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+                    withAnimation {
+                        completeReminder(reminder)
+                    }
+                } label: {
+                    Image(systemName: "checkmark.circle.fill")
+                        .font(.title2)
+                        .foregroundStyle(MCColors.success)
+                }
+                .accessibilityLabel("Mark \(reminder.title) as done")
+            }
+        }
+    }
+
+    @MainActor
+    private func completeReminder(_ reminder: CustomReminder) {
+        reminder.isCompleted = true
+        try? dataService.modelContainer.mainContext.save()
+        NotificationService.shared.cancelCustomReminder(id: reminder.id)
     }
 }

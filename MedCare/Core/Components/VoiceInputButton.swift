@@ -14,7 +14,7 @@ struct VoiceInputButton: View {
 
     // MARK: - State
 
-    @StateObject private var speechService = SpeechService()
+    @State private var speechService = SpeechService()
     @State private var voiceActionService = VoiceActionService()
 
     @State private var showTranscription = false

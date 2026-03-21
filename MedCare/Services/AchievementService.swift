@@ -4,6 +4,8 @@ import Foundation
 @Observable
 final class AchievementService {
 
+    static let shared = AchievementService()
+
     @ObservationIgnored private(set) var unlockedAchievements: [Achievement] = []
     @ObservationIgnored private(set) var availableAchievements: [Achievement] = []
     @ObservationIgnored private(set) var allAchievements: [Achievement] = []

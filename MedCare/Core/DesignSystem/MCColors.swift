@@ -2,14 +2,8 @@ import SwiftUI
 
 /// MedCare Design System — Colors (adaptive light/dark mode)
 enum MCColors {
-    // MARK: - Primary (Teal)
-    static let primaryTeal = Color(
-        uiColor: UIColor { traits in
-            traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "2DD4BF"))
-                : UIColor(Color(hex: "0D9488"))
-        }
-    )
+    // MARK: - Primary (Teal) — same in both modes
+    static let primaryTeal = Color(hex: "0D9488")
     static let primaryTealLight = Color(hex: "2DD4BF")
     static let primaryTealDark = Color(hex: "0D9488")
 
@@ -26,7 +20,7 @@ enum MCColors {
     static let surface = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "1E293B"))
+                ? UIColor(Color(hex: "2C2C2C"))
                 : UIColor(Color(hex: "F0FDFA"))
         }
     )
@@ -35,41 +29,41 @@ enum MCColors {
     static let backgroundLight = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "0F172A"))
+                ? UIColor(Color(hex: "121212"))
                 : UIColor(Color(hex: "FAFAFA"))
         }
     )
-    static let backgroundDark = Color(hex: "0F172A")
+    static let backgroundDark = Color(hex: "121212")
 
     static let cardBackground = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "1E293B"))
+                ? UIColor(Color(hex: "1E1E1E"))
                 : .white
         }
     )
-    static let cardBackgroundDark = Color(hex: "1E293B")
+    static let cardBackgroundDark = Color(hex: "1E1E1E")
 
     // MARK: - Text (adaptive)
     static let textPrimary = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "F1F5F9"))
-                : UIColor(Color(hex: "0F172A"))
+                ? UIColor(Color(hex: "F5F5F5"))
+                : UIColor(Color(hex: "1A1A1A"))
         }
     )
     static let textSecondary = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "94A3B8"))
-                : UIColor(Color(hex: "64748B"))
+                ? UIColor(Color(hex: "A0A0A0"))
+                : UIColor(Color(hex: "6B7280"))
         }
     )
     static let textTertiary = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(Color(hex: "64748B"))
-                : UIColor(Color(hex: "94A3B8"))
+                ? UIColor(Color(hex: "707070"))
+                : UIColor(Color(hex: "9CA3AF"))
         }
     )
     static let textOnPrimary = Color.white
@@ -78,8 +72,8 @@ enum MCColors {
     static let divider = Color(
         uiColor: UIColor { traits in
             traits.userInterfaceStyle == .dark
-                ? UIColor(white: 1, alpha: 0.08)
-                : UIColor(white: 0, alpha: 0.06)
+                ? UIColor(Color(hex: "3A3A3A"))
+                : UIColor(Color(hex: "E5E7EB"))
         }
     )
 

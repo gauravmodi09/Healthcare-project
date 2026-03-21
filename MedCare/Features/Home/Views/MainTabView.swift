@@ -5,10 +5,28 @@ struct MainTabView: View {
     @Environment(AppRouter.self) private var router
     @Environment(DataService.self) private var dataService
     @Environment(SmartNudgeService.self) private var nudgeService
-    @State private var hasSeededData = false
+    @AppStorage("mc_has_seeded_demo") private var hasSeededData = false
+
+    private var networkMonitor = NetworkMonitor.shared
 
     var body: some View {
         @Bindable var router = router
+
+        VStack(spacing: 0) {
+            // Offline banner
+            if !networkMonitor.isConnected {
+                HStack(spacing: 8) {
+                    Image(systemName: "wifi.slash")
+                        .font(.system(size: 13, weight: .semibold))
+                    Text("You're offline — core features still work")
+                        .font(.system(size: 13, weight: .medium))
+                }
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity)
+                .padding(.vertical, 8)
+                .background(Color(hex: "D97706")) // warm amber
+                .transition(.move(edge: .top).combined(with: .opacity))
+            }
 
         TabView(selection: $router.selectedTab) {
             HomeView()
@@ -42,10 +60,45 @@ struct MainTabView: View {
                 .tag(AppTab.profile)
         }
         .tint(MCColors.primaryTeal)
+        } // end VStack
+        .animation(.easeInOut(duration: 0.3), value: networkMonitor.isConnected)
         .onAppear {
             if !hasSeededData {
                 let _ = dataService.seedDemoData()
                 hasSeededData = true
+            }
+
+            // Evaluate smart nudges for the active profile
+            let descriptor = FetchDescriptor<UserProfile>(
+                predicate: #Predicate<UserProfile> { $0.isActive }
+            )
+            if let activeProfile = try? dataService.modelContext.fetch(descriptor).first {
+                nudgeService.evaluateNudges(profile: activeProfile, modelContext: dataService.modelContext)
+
+                // Auto-extend dose logs for chronic medicines
+                dataService.extendDoseLogsIfNeeded(for: activeProfile)
+
+                // Check refill stock levels and schedule reminders
+                let activeMedicines = activeProfile.episodes
+                    .flatMap { $0.medicines }
+                    .filter { $0.isActive }
+                let stockInfos: [MedicineStockInfo] = activeMedicines.compactMap { med in
+                    guard let totalPills = med.totalPillCount, totalPills > 0 else { return nil }
+                    let dosesTaken = med.doseLogs.filter { $0.status == .taken }.count
+                    return MedicineStockInfo(
+                        id: med.id,
+                        brandName: med.brandName,
+                        totalPillCount: totalPills,
+                        dosesPerDay: med.frequency.timesPerDay,
+                        dosesTaken: dosesTaken,
+                        startDate: med.startDate
+                    )
+                }
+                if !stockInfos.isEmpty {
+                    Task {
+                        await RefillReminderService.shared.checkAllAndScheduleReminders(medicines: stockInfos)
+                    }
+                }
             }
         }
     }

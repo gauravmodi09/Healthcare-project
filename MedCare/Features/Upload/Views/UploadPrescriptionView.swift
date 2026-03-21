@@ -14,6 +14,8 @@ struct UploadPrescriptionView: View {
     @State private var showExtraction = false
     @State private var episodeTitle = ""
     @State private var extractionResult: AIExtractionService.ExtractionResult?
+    @State private var errorMessage: String?
+    @State private var showManualEntry = false
 
     enum UploadStep: Int, CaseIterable {
         case prescription = 0
@@ -54,6 +56,26 @@ struct UploadPrescriptionView: View {
                 if let result = extractionResult {
                     ConfirmationView(extractionResult: result, episodeTitle: episodeTitle)
                 }
+            }
+            .fullScreenCover(isPresented: $showCamera) {
+                CameraPicker { image in
+                    prescriptionImage = image
+                }
+            }
+            .sheet(isPresented: $showManualEntry) {
+                ManualMedicineEntryView(episodeTitle: episodeTitle.isEmpty ? "New Episode" : episodeTitle)
+            }
+            .alert("Extraction Error", isPresented: .init(
+                get: { errorMessage != nil },
+                set: { if !$0 { errorMessage = nil } }
+            )) {
+                Button("Try Again") { errorMessage = nil }
+                Button("Enter Manually") {
+                    errorMessage = nil
+                    showManualEntry = true
+                }
+            } message: {
+                Text(errorMessage ?? "Something went wrong while reading your prescription.")
             }
         }
     }
@@ -148,9 +170,21 @@ struct UploadPrescriptionView: View {
                 )
             }
 
-            // Photo picker
+            // Photo picker — gallery
             PhotosPicker(selection: $selectedPhotoItem, matching: .images) {
-                MCSecondaryButton("Choose from Gallery", icon: "photo.on.rectangle") {}
+                HStack(spacing: MCSpacing.xs) {
+                    Image(systemName: "photo.on.rectangle")
+                        .font(.system(size: 18, weight: .semibold))
+                    Text("Choose from Gallery")
+                        .font(MCTypography.headline)
+                }
+                .foregroundStyle(MCColors.primaryTeal)
+                .frame(maxWidth: .infinity)
+                .frame(height: MCSpacing.buttonHeight)
+                .background(
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                        .stroke(MCColors.primaryTeal, lineWidth: 2)
+                )
             }
             .onChange(of: selectedPhotoItem) { _, newItem in
                 Task {
@@ -159,6 +193,25 @@ struct UploadPrescriptionView: View {
                         prescriptionImage = image
                     }
                 }
+            }
+
+            // Camera button
+            Button {
+                showCamera = true
+            } label: {
+                HStack(spacing: MCSpacing.xs) {
+                    Image(systemName: "camera.fill")
+                        .font(.system(size: 18, weight: .semibold))
+                    Text("Take Photo")
+                        .font(MCTypography.headline)
+                }
+                .foregroundStyle(MCColors.accentCoral)
+                .frame(maxWidth: .infinity)
+                .frame(height: MCSpacing.buttonHeight)
+                .background(
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                        .stroke(MCColors.accentCoral, lineWidth: 2)
+                )
             }
 
             // Next button
@@ -259,8 +312,7 @@ struct UploadPrescriptionView: View {
             }
 
             Button("Enter manually instead") {
-                // Future: manual entry flow
-                dismiss()
+                showManualEntry = true
             }
             .font(MCTypography.footnote)
             .foregroundStyle(MCColors.textTertiary)
@@ -379,11 +431,52 @@ struct UploadPrescriptionView: View {
                 extractionResult = result
                 showExtraction = true
             } catch {
-                // Handle error
+                errorMessage = error.localizedDescription
                 withAnimation {
                     currentStep = .medicine
                 }
             }
+        }
+    }
+}
+
+// MARK: - Camera Picker (UIImagePickerController wrapper)
+
+struct CameraPicker: UIViewControllerRepresentable {
+    let onImagePicked: (UIImage) -> Void
+    @Environment(\.dismiss) private var dismiss
+
+    func makeUIViewController(context: Context) -> UIImagePickerController {
+        let picker = UIImagePickerController()
+        picker.sourceType = .camera
+        picker.delegate = context.coordinator
+        return picker
+    }
+
+    func updateUIViewController(_ uiViewController: UIImagePickerController, context: Context) {}
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(onImagePicked: onImagePicked, dismiss: dismiss)
+    }
+
+    class Coordinator: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+        let onImagePicked: (UIImage) -> Void
+        let dismiss: DismissAction
+
+        init(onImagePicked: @escaping (UIImage) -> Void, dismiss: DismissAction) {
+            self.onImagePicked = onImagePicked
+            self.dismiss = dismiss
+        }
+
+        func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey: Any]) {
+            if let image = info[.originalImage] as? UIImage {
+                onImagePicked(image)
+            }
+            dismiss()
+        }
+
+        func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
+            dismiss()
         }
     }
 }

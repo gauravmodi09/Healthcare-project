@@ -13,9 +13,16 @@ struct QuickAddMedicineView: View {
     @State private var selectedFrequency: MedicineFrequency = .onceDaily
     @State private var selectedMealTiming: MealTiming = .afterMeal
     @State private var isAdding = false
+    @State private var interactionAlerts: [DrugInteractionService.InteractionAlert] = []
+    @State private var showInteractionAlert = false
+
+    private let interactionService = DrugInteractionService()
 
     /// Subset of dose forms for quick-add (most common)
     private let quickDoseForms: [DoseForm] = [.tablet, .capsule, .syrup, .injection]
+
+    /// AYUSH / traditional medicine dose forms
+    private let ayushDoseForms: [DoseForm] = [.churna, .kadha, .vati, .ark]
 
     /// Subset of frequencies for quick-add
     private let quickFrequencies: [MedicineFrequency] = [.onceDaily, .twiceDaily, .thriceDaily]
@@ -79,6 +86,19 @@ struct QuickAddMedicineView: View {
                         }
                     }
 
+                    // AYUSH / Traditional medicine dose forms
+                    VStack(alignment: .leading, spacing: MCSpacing.xs) {
+                        Text("AYUSH / Traditional")
+                            .font(MCTypography.subheadline)
+                            .foregroundStyle(MCColors.textSecondary)
+
+                        HStack(spacing: MCSpacing.xs) {
+                            ForEach(ayushDoseForms, id: \.self) { form in
+                                doseFormChip(form)
+                            }
+                        }
+                    }
+
                     // Frequency picker
                     VStack(alignment: .leading, spacing: MCSpacing.xs) {
                         Text("Frequency")
@@ -131,6 +151,19 @@ struct QuickAddMedicineView: View {
         }
         .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
+        .alert("Drug Interaction Warning", isPresented: $showInteractionAlert) {
+            Button("OK", role: .cancel) {
+                dismiss()
+            }
+        } message: {
+            Text(interactionAlertMessage)
+        }
+    }
+
+    private var interactionAlertMessage: String {
+        interactionAlerts.map { alert in
+            "[\(alert.severity.rawValue)] \(alert.medicine1) + \(alert.medicine2): \(alert.description)\n\(alert.recommendation)"
+        }.joined(separator: "\n\n")
     }
 
     // MARK: - Chip Views
@@ -241,8 +274,21 @@ struct QuickAddMedicineView: View {
             dataService.activateEpisode(episode)
         }
 
+        // Check for drug interactions with existing medicines
+        let existingMedicines = episode.medicines.filter { $0.id != medicine.id }
+        let alerts = interactionService.checkNewMedicine(
+            medicine.brandName,
+            against: existingMedicines
+        )
+
         isAdding = false
-        dismiss()
+
+        if alerts.isEmpty {
+            dismiss()
+        } else {
+            interactionAlerts = alerts
+            showInteractionAlert = true
+        }
     }
 
     /// Map frequency to default timing slots

@@ -3,6 +3,9 @@ import SwiftData
 
 struct HealthJournalView: View {
     @Environment(\.modelContext) private var modelContext
+
+    var profileId: String? = nil
+
     @State private var journalService = HealthJournalService()
 
     // Check-in state
@@ -29,6 +32,9 @@ struct HealthJournalView: View {
         .background(MCColors.backgroundLight.ignoresSafeArea())
         .navigationTitle("Health Journal")
         .navigationBarTitleDisplayMode(.large)
+        .onAppear {
+            journalService = HealthJournalService(profileId: profileId)
+        }
     }
 
     // MARK: - Daily Check-In Card

@@ -180,6 +180,16 @@
 		DOC001000000000006 /* DoctorCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000016 /* DoctorCalendarView.swift */; };
 		DOC001000000000007 /* VideoCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000017 /* VideoCallView.swift */; };
 		DOC001000000000008 /* ConsultationNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000018 /* ConsultationNotesView.swift */; };
+		ROLE01000000000001 /* RoleSelectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000011 /* RoleSelectionView.swift */; };
+		ROLE01000000000002 /* DoctorSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000012 /* DoctorSetupView.swift */; };
+		ROLE01000000000003 /* HospitalSetupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000013 /* HospitalSetupView.swift */; };
+		ROLE01000000000004 /* HospitalDirectory.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000014 /* HospitalDirectory.swift */; };
+		ROLE01000000000005 /* DoctorPatientsListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000015 /* DoctorPatientsListView.swift */; };
+		ROLE01000000000006 /* DoctorAppointmentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000016 /* DoctorAppointmentsView.swift */; };
+		ROLE01000000000007 /* AdminDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000017 /* AdminDashboardView.swift */; };
+		ROLE01000000000008 /* AdminDoctorsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000018 /* AdminDoctorsView.swift */; };
+		ROLE01000000000009 /* AdminPatientsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE01000000000019 /* AdminPatientsView.swift */; };
+		ROLE0100000000000A /* AdminAnalyticsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ROLE0100000000001A /* AdminAnalyticsView.swift */; };
 		APPT01000000000001 /* QueueStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = APPT01000000000011 /* QueueStatusView.swift */; };
 		ABDM001000000000001 /* ABDMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDM001000000000011 /* ABDMService.swift */; };
 		ABDM001000000000002 /* ABHALinkingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDM001000000000012 /* ABHALinkingView.swift */; };
@@ -398,6 +408,16 @@
 		DOC001000000000016 /* DoctorCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorCalendarView.swift; sourceTree = "<group>"; };
 		DOC001000000000017 /* VideoCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallView.swift; sourceTree = "<group>"; };
 		DOC001000000000018 /* ConsultationNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsultationNotesView.swift; sourceTree = "<group>"; };
+		ROLE01000000000011 /* RoleSelectionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RoleSelectionView.swift; sourceTree = "<group>"; };
+		ROLE01000000000012 /* DoctorSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorSetupView.swift; sourceTree = "<group>"; };
+		ROLE01000000000013 /* HospitalSetupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalSetupView.swift; sourceTree = "<group>"; };
+		ROLE01000000000014 /* HospitalDirectory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HospitalDirectory.swift; sourceTree = "<group>"; };
+		ROLE01000000000015 /* DoctorPatientsListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientsListView.swift; sourceTree = "<group>"; };
+		ROLE01000000000016 /* DoctorAppointmentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorAppointmentsView.swift; sourceTree = "<group>"; };
+		ROLE01000000000017 /* AdminDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDashboardView.swift; sourceTree = "<group>"; };
+		ROLE01000000000018 /* AdminDoctorsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminDoctorsView.swift; sourceTree = "<group>"; };
+		ROLE01000000000019 /* AdminPatientsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminPatientsView.swift; sourceTree = "<group>"; };
+		ROLE0100000000001A /* AdminAnalyticsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AdminAnalyticsView.swift; sourceTree = "<group>"; };
 		APPT01000000000011 /* QueueStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueStatusView.swift; sourceTree = "<group>"; };
 		ABDM001000000000011 /* ABDMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABDMService.swift; sourceTree = "<group>"; };
 		ABDM001000000000012 /* ABHALinkingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABHALinkingView.swift; sourceTree = "<group>"; };
@@ -459,6 +479,9 @@
 				3265BC1F24127DAF25A3CCE2 /* ProfileSetupView.swift */,
 				860F8B6B6DBD9A25E6086A5B /* SplashScreen.swift */,
 				2536DC08D5CF4FB8A071446C /* OnboardingView.swift */,
+				ROLE01000000000011 /* RoleSelectionView.swift */,
+				ROLE01000000000012 /* DoctorSetupView.swift */,
+				ROLE01000000000013 /* HospitalSetupView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -587,6 +610,7 @@
 				E71B1D931596710E77FA6FC1 /* SymptomLog.swift */,
 				25C65F1BC213B42F1529A1BB /* User.swift */,
 				79556B905F65E2B695E8851D /* UserProfile.swift */,
+				ROLE01000000000014 /* HospitalDirectory.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -663,9 +687,29 @@
 			path = DesignSystem;
 			sourceTree = "<group>";
 		};
+		ROLE01000000000030 /* Admin */ = {
+			isa = PBXGroup;
+			children = (
+				ROLE01000000000031 /* Views */,
+			);
+			path = Admin;
+			sourceTree = "<group>";
+		};
+		ROLE01000000000031 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				ROLE01000000000017 /* AdminDashboardView.swift */,
+				ROLE01000000000018 /* AdminDoctorsView.swift */,
+				ROLE01000000000019 /* AdminPatientsView.swift */,
+				ROLE0100000000001A /* AdminAnalyticsView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		8719803171D20480AE49F5F2 /* Features */ = {
 			isa = PBXGroup;
 			children = (
+				ROLE01000000000030 /* Admin */,
 				BBCD2DE4DFC50E31B34BD071 /* AIChat */,
 				APPT01000000000020 /* Appointments */,
 				CBFF045E223B38644300558D /* Auth */,
@@ -1029,6 +1073,8 @@
 				DOC001000000000016 /* DoctorCalendarView.swift */,
 				DOC001000000000017 /* VideoCallView.swift */,
 				DOC001000000000018 /* ConsultationNotesView.swift */,
+				ROLE01000000000015 /* DoctorPatientsListView.swift */,
+				ROLE01000000000016 /* DoctorAppointmentsView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1358,6 +1404,16 @@
 				WTR001WATER00000001 /* WaterTrackingService.swift in Sources */,
 				LEGAL01000000000001 /* LegalView.swift in Sources */,
 				WHNEW01000000000001 /* WhatsNewView.swift in Sources */,
+				ROLE01000000000001 /* RoleSelectionView.swift in Sources */,
+				ROLE01000000000002 /* DoctorSetupView.swift in Sources */,
+				ROLE01000000000003 /* HospitalSetupView.swift in Sources */,
+				ROLE01000000000004 /* HospitalDirectory.swift in Sources */,
+				ROLE01000000000005 /* DoctorPatientsListView.swift in Sources */,
+				ROLE01000000000006 /* DoctorAppointmentsView.swift in Sources */,
+				ROLE01000000000007 /* AdminDashboardView.swift in Sources */,
+				ROLE01000000000008 /* AdminDoctorsView.swift in Sources */,
+				ROLE01000000000009 /* AdminPatientsView.swift in Sources */,
+				ROLE0100000000000A /* AdminAnalyticsView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

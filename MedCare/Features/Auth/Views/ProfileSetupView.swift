@@ -178,6 +178,8 @@ struct ProfileSetupView: View {
         }
     }
 
+    @AppStorage("mc_role_setup_complete") private var roleSetupComplete = false
+
     private func completeSetup() {
         let user = dataService.getOrCreateUser(phoneNumber: phoneNumber)
         let profile = dataService.createProfile(
@@ -189,6 +191,7 @@ struct ProfileSetupView: View {
         )
         profile.knownConditions = knownConditions
         dataService.save()
+        roleSetupComplete = true
         dismiss()
     }
 }

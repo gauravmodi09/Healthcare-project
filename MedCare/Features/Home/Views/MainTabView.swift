@@ -6,6 +6,7 @@ struct MainTabView: View {
     @Environment(DataService.self) private var dataService
     @Environment(SmartNudgeService.self) private var nudgeService
     @AppStorage("mc_has_seeded_demo") private var hasSeededData = false
+    @AppStorage("mc_user_role") private var storedRole = ""
     @Query private var users: [User]
     @State private var showProfileSetup = false
 
@@ -14,6 +15,10 @@ struct MainTabView: View {
     private var needsProfileSetup: Bool {
         guard let user = currentUser else { return false }
         return user.profiles.isEmpty
+    }
+
+    private var currentRole: UserRole {
+        UserRole(rawValue: storedRole) ?? .patient
     }
 
     var body: some View {
@@ -35,38 +40,14 @@ struct MainTabView: View {
                 .transition(.move(edge: .top).combined(with: .opacity))
             }
 
-        TabView(selection: $router.selectedTab) {
-            HomeView()
-                .tabItem {
-                    Label("Home", systemImage: "house.fill")
-                }
-                .tag(AppTab.home)
-
-            RemindersView()
-                .tabItem {
-                    Label("Medications", systemImage: "pills.fill")
-                }
-                .tag(AppTab.meds)
-
-            HistoryView()
-                .tabItem {
-                    Label("Health", systemImage: "heart.text.square.fill")
-                }
-                .tag(AppTab.health)
-
-            aiChatTab
-                .tabItem {
-                    Label("AI", systemImage: "sparkles")
-                }
-                .tag(AppTab.ai)
-
-            ProfileManagementView()
-                .tabItem {
-                    Label("Profile", systemImage: "person.fill")
-                }
-                .tag(AppTab.profile)
-        }
-        .tint(MCColors.primaryTeal)
+            switch currentRole {
+            case .patient:
+                patientTabs(router: router)
+            case .individualDoctor, .hospitalDoctor:
+                doctorTabs(router: router)
+            case .hospitalAdmin:
+                adminTabs(router: router)
+            }
         } // end VStack
         .animation(.easeInOut(duration: 0.3), value: networkMonitor.isConnected)
         .sheet(isPresented: $showProfileSetup) {
@@ -82,8 +63,8 @@ struct MainTabView: View {
                 hasSeededData = true
             }
 
-            // Auto-show profile setup for new users with no profiles
-            if needsProfileSetup {
+            // Auto-show profile setup for new patient users with no profiles
+            if currentRole == .patient && needsProfileSetup {
                 showProfileSetup = true
             }
 
@@ -120,6 +101,123 @@ struct MainTabView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Patient Tabs (Default)
+
+    @ViewBuilder
+    private func patientTabs(router: AppRouter) -> some View {
+        @Bindable var router = router
+        TabView(selection: $router.selectedTab) {
+            HomeView()
+                .tabItem {
+                    Label("Home", systemImage: "house.fill")
+                }
+                .tag(AppTab.home)
+
+            RemindersView()
+                .tabItem {
+                    Label("Medications", systemImage: "pills.fill")
+                }
+                .tag(AppTab.meds)
+
+            HistoryView()
+                .tabItem {
+                    Label("Health", systemImage: "heart.text.square.fill")
+                }
+                .tag(AppTab.health)
+
+            aiChatTab
+                .tabItem {
+                    Label("AI", systemImage: "sparkles")
+                }
+                .tag(AppTab.ai)
+
+            ProfileManagementView()
+                .tabItem {
+                    Label("Profile", systemImage: "person.fill")
+                }
+                .tag(AppTab.profile)
+        }
+        .tint(MCColors.primaryTeal)
+    }
+
+    // MARK: - Doctor Tabs
+
+    @ViewBuilder
+    private func doctorTabs(router: AppRouter) -> some View {
+        @Bindable var router = router
+        TabView(selection: $router.selectedTab) {
+            DoctorDashboardView()
+                .tabItem {
+                    Label("Dashboard", systemImage: "stethoscope")
+                }
+                .tag(AppTab.home)
+
+            DoctorPatientsListView()
+                .tabItem {
+                    Label("My Patients", systemImage: "person.2.fill")
+                }
+                .tag(AppTab.meds)
+
+            DoctorAppointmentsView()
+                .tabItem {
+                    Label("Appointments", systemImage: "calendar")
+                }
+                .tag(AppTab.health)
+
+            aiChatTab
+                .tabItem {
+                    Label("AI", systemImage: "sparkles")
+                }
+                .tag(AppTab.ai)
+
+            ProfileManagementView()
+                .tabItem {
+                    Label("Profile", systemImage: "person.fill")
+                }
+                .tag(AppTab.profile)
+        }
+        .tint(Color(hex: "3B82F6"))
+    }
+
+    // MARK: - Hospital Admin Tabs
+
+    @ViewBuilder
+    private func adminTabs(router: AppRouter) -> some View {
+        @Bindable var router = router
+        TabView(selection: $router.selectedTab) {
+            AdminDashboardView()
+                .tabItem {
+                    Label("Dashboard", systemImage: "chart.bar.fill")
+                }
+                .tag(AppTab.home)
+
+            AdminDoctorsView()
+                .tabItem {
+                    Label("Doctors", systemImage: "stethoscope")
+                }
+                .tag(AppTab.meds)
+
+            AdminPatientsView()
+                .tabItem {
+                    Label("Patients", systemImage: "person.2.fill")
+                }
+                .tag(AppTab.health)
+
+            AdminAnalyticsView()
+                .tabItem {
+                    Label("Analytics", systemImage: "chart.line.uptrend.xyaxis")
+                }
+                .tag(AppTab.ai)
+
+            ProfileManagementView()
+                .tabItem {
+                    Label("Settings", systemImage: "gearshape.fill")
+                }
+                .tag(AppTab.profile)
+        }
+        .tint(Color(hex: "D97706"))
     }
 
     // MARK: - Seed Sample Doctors

@@ -6,11 +6,18 @@ struct RootView: View {
     @AppStorage("hasCompletedOnboarding") private var hasCompletedOnboarding = false
     @AppStorage("mc_has_shown_notification_primer") private var hasShownNotificationPrimer = false
     @AppStorage("mc_last_seen_version") private var lastSeenVersion = ""
+    @AppStorage("mc_user_role") private var storedRole = ""
+    @AppStorage("mc_role_setup_complete") private var roleSetupComplete = false
     @State private var showNotificationPrimer = false
     @State private var showWhatsNew = false
 
     private var currentVersion: String {
         Bundle.main.infoDictionary?["CFBundleShortVersionString"] as? String ?? "1.0"
+    }
+
+    /// User needs role selection if authenticated but no role is set
+    private var needsRoleSelection: Bool {
+        storedRole.isEmpty && !roleSetupComplete
     }
 
     var body: some View {
@@ -26,8 +33,15 @@ struct RootView: View {
                 }
                 .transition(.opacity)
             } else if authService.isAuthenticated {
-                MainTabView()
+                if needsRoleSelection {
+                    NavigationStack {
+                        RoleSelectionView(phoneNumber: authService.authenticatedPhone ?? "")
+                    }
                     .transition(.opacity)
+                } else {
+                    MainTabView()
+                        .transition(.opacity)
+                }
             } else {
                 PhoneLoginView()
                     .transition(.opacity)
@@ -36,6 +50,8 @@ struct RootView: View {
         .animation(.easeInOut(duration: 0.5), value: showSplash)
         .animation(.easeInOut(duration: 0.3), value: hasCompletedOnboarding)
         .animation(.easeInOut(duration: 0.3), value: authService.isAuthenticated)
+        .animation(.easeInOut(duration: 0.3), value: storedRole)
+        .animation(.easeInOut(duration: 0.3), value: roleSetupComplete)
         .onAppear {
             DispatchQueue.main.asyncAfter(deadline: .now() + 2.0) {
                 withAnimation {

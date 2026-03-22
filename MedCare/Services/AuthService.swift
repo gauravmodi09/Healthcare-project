@@ -8,6 +8,7 @@ final class AuthService {
     var isLoading = false
     var currentUser: User?
     var errorMessage: String?
+    var authenticatedPhone: String?
 
     private let keychainKey = "com.medcare.authToken"
 
@@ -17,8 +18,15 @@ final class AuthService {
 
     private func checkExistingAuth() {
         // Check for stored token
-        if let _ = KeychainHelper.read(key: keychainKey) {
+        if let token = KeychainHelper.read(key: keychainKey) {
             isAuthenticated = true
+            // Extract phone from JWT payload
+            let parts = token.split(separator: ".")
+            if parts.count >= 2, let data = Data(base64Encoded: String(parts[1]) + "=="),
+               let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
+               let sub = json["sub"] as? String {
+                authenticatedPhone = sub
+            }
         }
     }
 
@@ -79,6 +87,7 @@ final class AuthService {
         let token = "\(header).\(payload).\(signature)"
 
         KeychainHelper.save(key: keychainKey, value: token)
+        authenticatedPhone = phoneNumber
         isAuthenticated = true
         return true
     }
@@ -87,6 +96,10 @@ final class AuthService {
         KeychainHelper.delete(key: keychainKey)
         isAuthenticated = false
         currentUser = nil
+        authenticatedPhone = nil
+        // Clear role-related storage so role selection shows on next login
+        UserDefaults.standard.removeObject(forKey: "mc_user_role")
+        UserDefaults.standard.removeObject(forKey: "mc_role_setup_complete")
     }
 }
 

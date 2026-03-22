@@ -3952,5 +3952,95 @@
     "phase": "Phase 22: Production Ready",
     "status": "todo",
     "created": "2026-03-22"
+  },
+  {
+    "id": "reg_001",
+    "title": "Persona-based registration flow",
+    "desc": "After OTP: choose Patient / Individual Doctor / Hospital Doctor / Hospital Admin with role-adapted setup",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_002",
+    "title": "Role Selection View (4 persona cards)",
+    "desc": "Beautiful glass card selection: Patient, Independent Doctor, Hospital Doctor, Hospital Admin",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_003",
+    "title": "Doctor Setup View (3-step registration)",
+    "desc": "Profile + specialty + registration number, hospital association with searchable list, confirmation",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_004",
+    "title": "Hospital Admin Setup View",
+    "desc": "Hospital name/city/address, type picker, specialty multi-select, admin profile creation",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_005",
+    "title": "Hospital Directory (20 major Indian hospitals)",
+    "desc": "Apollo, Fortis, Max, Medanta, AIIMS, Kokilaben, Narayana, Manipal, CMC Vellore etc with city/state",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_006",
+    "title": "Role-adapted MainTabView",
+    "desc": "Patient: Home/Meds/Health/AI/Profile. Doctor: Dashboard/Patients/Appointments/AI/Profile. Admin: Dashboard/Doctors/Patients/Analytics/Settings",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_007",
+    "title": "Doctor Patients List View",
+    "desc": "My Patients tab for doctor mode with searchable list, adherence %, conditions",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_008",
+    "title": "Doctor Appointments View",
+    "desc": "Calendar-based appointments tab with daily schedule, patient names, visit types",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "reg_009",
+    "title": "Admin Dashboard + Doctors + Patients + Analytics Views",
+    "desc": "Full admin interface: stats, recent activity, searchable doctor/patient lists, department analytics",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 23: Registration Flow",
+    "status": "done",
+    "created": "2026-03-22"
   }
 ]

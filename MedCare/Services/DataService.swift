@@ -21,7 +21,8 @@ final class DataService {
             ChatMessage.self,
             ChatSession.self,
             Nudge.self,
-            CustomReminder.self
+            CustomReminder.self,
+            Message.self
         ])
         let config = ModelConfiguration(isStoredInMemoryOnly: false)
         do {
@@ -903,6 +904,105 @@ final class DataService {
         )
 
         AchievementService.shared.checkAchievements(input: input)
+    }
+
+    // MARK: - CSV Data Export
+
+    /// Generates CSV content for all health data belonging to a profile.
+    /// Includes: Medications, Dose Logs, Symptom Logs, Care Tasks.
+    func generateCSVExport(for profile: UserProfile) -> URL? {
+        var csv = ""
+
+        // Section 1: Medications
+        csv += "=== MEDICATIONS ===\n"
+        csv += "Episode,Medicine,Generic Name,Dosage,Form,Frequency,Meal Timing,Duration (days),Status,Instructions\n"
+        for episode in profile.episodes {
+            for med in episode.medicines {
+                let row = [
+                    escapeCsvField(episode.title),
+                    escapeCsvField(med.brandName),
+                    escapeCsvField(med.genericName ?? ""),
+                    escapeCsvField(med.dosage),
+                    escapeCsvField(med.doseForm.rawValue),
+                    escapeCsvField(med.frequency.rawValue),
+                    escapeCsvField(med.mealTiming.rawValue),
+                    med.duration != nil ? "\(med.duration!)" : "Ongoing",
+                    med.isActive ? "Active" : "Inactive",
+                    escapeCsvField(med.instructions ?? "")
+                ].joined(separator: ",")
+                csv += row + "\n"
+            }
+        }
+
+        // Section 2: Dose Logs
+        csv += "\n=== DOSE LOGS ===\n"
+        csv += "Medicine,Scheduled Time,Status,Actual Time,Notes\n"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd HH:mm"
+        for episode in profile.episodes {
+            for med in episode.medicines {
+                for log in med.doseLogs.sorted(by: { $0.scheduledTime < $1.scheduledTime }) {
+                    let row = [
+                        escapeCsvField(med.brandName),
+                        dateFormatter.string(from: log.scheduledTime),
+                        log.status.rawValue,
+                        log.actualTime != nil ? dateFormatter.string(from: log.actualTime!) : "",
+                        escapeCsvField(log.skipReason ?? "")
+                    ].joined(separator: ",")
+                    csv += row + "\n"
+                }
+            }
+        }
+
+        // Section 3: Symptom Logs
+        csv += "\n=== SYMPTOM LOGS ===\n"
+        csv += "Date,Overall Feeling,Symptoms,Notes\n"
+        for episode in profile.episodes {
+            for log in episode.symptomLogs.sorted(by: { $0.date < $1.date }) {
+                let symptoms = log.symptoms.map { "\($0.name) (\($0.severity.rawValue))" }.joined(separator: "; ")
+                let row = [
+                    dateFormatter.string(from: log.date),
+                    log.overallFeeling.label,
+                    escapeCsvField(symptoms),
+                    escapeCsvField(log.notes ?? "")
+                ].joined(separator: ",")
+                csv += row + "\n"
+            }
+        }
+
+        // Section 4: Care Tasks
+        csv += "\n=== CARE TASKS ===\n"
+        csv += "Episode,Task,Type,Due Date,Completed\n"
+        for episode in profile.episodes {
+            for task in episode.tasks {
+                let row = [
+                    escapeCsvField(episode.title),
+                    escapeCsvField(task.title),
+                    task.taskType.rawValue,
+                    task.dueDate != nil ? dateFormatter.string(from: task.dueDate!) : "",
+                    task.isCompleted ? "Yes" : "No"
+                ].joined(separator: ",")
+                csv += row + "\n"
+            }
+        }
+
+        // Write to temp file
+        let fileName = "MedCare_Export_\(profile.name)_\(DateFormatter.localizedString(from: Date(), dateStyle: .short, timeStyle: .none).replacingOccurrences(of: "/", with: "-")).csv"
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        do {
+            try csv.write(to: tempURL, atomically: true, encoding: .utf8)
+            return tempURL
+        } catch {
+            print("Failed to write CSV: \(error)")
+            return nil
+        }
+    }
+
+    private func escapeCsvField(_ field: String) -> String {
+        if field.contains(",") || field.contains("\"") || field.contains("\n") {
+            return "\"" + field.replacingOccurrences(of: "\"", with: "\"\"") + "\""
+        }
+        return field
     }
 
     // MARK: - Persistence

@@ -15,8 +15,11 @@ struct QuickAddMedicineView: View {
     @State private var isAdding = false
     @State private var interactionAlerts: [DrugInteractionService.InteractionAlert] = []
     @State private var showInteractionAlert = false
+    @State private var scheduleWarning: DrugScheduleService.ScheduleWarning?
+    @State private var showScheduleWarning = false
 
     private let interactionService = DrugInteractionService()
+    private let drugScheduleService = DrugScheduleService.shared
 
     /// Subset of dose forms for quick-add (most common)
     private let quickDoseForms: [DoseForm] = [.tablet, .capsule, .syrup, .injection]
@@ -158,6 +161,13 @@ struct QuickAddMedicineView: View {
         } message: {
             Text(interactionAlertMessage)
         }
+        .alert("Teleconsultation Drug Restriction", isPresented: $showScheduleWarning) {
+            Button("I Understand", role: .cancel) { }
+        } message: {
+            if let warning = scheduleWarning {
+                Text("[\(warning.schedule.rawValue)] \(warning.drugName)\n\n\(warning.warning)\n\nReason: \(warning.reason)")
+            }
+        }
     }
 
     private var interactionAlertMessage: String {
@@ -274,6 +284,11 @@ struct QuickAddMedicineView: View {
             dataService.activateEpisode(episode)
         }
 
+        // Check drug schedule classification (teleconsult restriction)
+        let warning = drugScheduleService.getScheduleWarning(
+            genericName: medicine.genericName ?? medicine.brandName
+        )
+
         // Check for drug interactions with existing medicines
         let existingMedicines = episode.medicines.filter { $0.id != medicine.id }
         let alerts = interactionService.checkNewMedicine(
@@ -283,8 +298,21 @@ struct QuickAddMedicineView: View {
 
         isAdding = false
 
+        // Show schedule warning first if drug is List C (blocked)
+        if let warning, warning.schedule == .listC {
+            scheduleWarning = warning
+            showScheduleWarning = true
+            return
+        }
+
         if alerts.isEmpty {
-            dismiss()
+            // Show List B caution warning if applicable
+            if let warning {
+                scheduleWarning = warning
+                showScheduleWarning = true
+            } else {
+                dismiss()
+            }
         } else {
             interactionAlerts = alerts
             showInteractionAlert = true

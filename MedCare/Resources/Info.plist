@@ -53,7 +53,9 @@
     <key>NSPhotoLibraryUsageDescription</key>
     <string>MedCare needs photo library access to select prescription and medicine photos.</string>
     <key>NSHealthShareUsageDescription</key>
-    <string>MedCare reads your health data (steps, heart rate, sleep, blood pressure, blood glucose) to provide a complete picture of your health alongside your medication tracking.</string>
+    <string>MedCare reads your health data (steps, heart rate, sleep, blood pressure, blood glucose, SpO2, temperature, respiratory rate, ECG, workouts) to provide a complete picture of your health alongside your medication tracking.</string>
+    <key>NSHealthUpdateUsageDescription</key>
+    <string>MedCare writes manually entered vitals (heart rate, blood pressure, weight, blood glucose, temperature, SpO2) to Apple Health so all your health data stays in one place.</string>
     <key>UIUserInterfaceStyle</key>
     <string>Light</string>
     <key>NSSupportsLiveActivities</key>

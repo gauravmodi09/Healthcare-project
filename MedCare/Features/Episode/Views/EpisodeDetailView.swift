@@ -309,6 +309,7 @@ struct EpisodeDetailView: View {
 
 struct MedicineCard: View {
     let medicine: Medicine
+    @State private var showEducation = false
 
     var body: some View {
         MCCard {
@@ -384,22 +385,244 @@ struct MedicineCard: View {
                     .foregroundStyle(MCColors.info)
                 }
 
-                // Reorder on 1mg
-                Button {
-                    let query = medicine.brandName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? medicine.brandName
-                    if let url = URL(string: "https://www.1mg.com/search/all?name=\(query)") {
-                        UIApplication.shared.open(url)
+                // Action buttons row
+                HStack(spacing: MCSpacing.sm) {
+                    // Learn More
+                    Button {
+                        showEducation = true
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "book")
+                                .font(.system(size: 11))
+                            Text("Learn More")
+                                .font(.system(size: 12, weight: .medium))
+                        }
+                        .foregroundStyle(MCColors.info)
                     }
-                } label: {
-                    HStack(spacing: 4) {
-                        Image(systemName: "cart")
-                            .font(.system(size: 11))
-                        Text("Buy Again on 1mg")
-                            .font(.system(size: 12, weight: .medium))
+
+                    Spacer()
+
+                    // Reorder on 1mg
+                    Button {
+                        let query = medicine.brandName.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? medicine.brandName
+                        if let url = URL(string: "https://www.1mg.com/search/all?name=\(query)") {
+                            UIApplication.shared.open(url)
+                        }
+                    } label: {
+                        HStack(spacing: 4) {
+                            Image(systemName: "cart")
+                                .font(.system(size: 11))
+                            Text("Buy Again on 1mg")
+                                .font(.system(size: 12, weight: .medium))
+                        }
+                        .foregroundStyle(MCColors.primaryTeal)
                     }
-                    .foregroundStyle(MCColors.primaryTeal)
                 }
             }
+        }
+        .sheet(isPresented: $showEducation) {
+            MedicineEducationSheet(medicineName: medicine.brandName)
+                .presentationDetents([.large])
+                .presentationDragIndicator(.visible)
+        }
+    }
+}
+
+// MARK: - Medicine Education Sheet
+
+struct MedicineEducationSheet: View {
+    let medicineName: String
+    @Environment(\.dismiss) private var dismiss
+
+    private let drugQA = DrugQAService()
+    private let drugDB = IndianDrugDatabase.shared
+
+    private var drugEntry: DrugEntry? {
+        drugDB.searchMedicines(query: medicineName).first
+    }
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: MCSpacing.lg) {
+                    if let entry = drugEntry {
+                        // Header
+                        VStack(alignment: .leading, spacing: MCSpacing.xs) {
+                            Text(entry.brandName)
+                                .font(MCTypography.title)
+                                .foregroundStyle(MCColors.textPrimary)
+                            Text(entry.genericName)
+                                .font(MCTypography.subheadline)
+                                .foregroundStyle(MCColors.primaryTeal)
+                            Text(entry.saltComposition)
+                                .font(MCTypography.caption)
+                                .foregroundStyle(MCColors.textSecondary)
+                        }
+
+                        // What it does
+                        educationSection(
+                            icon: "pills.circle.fill",
+                            title: "What This Medicine Does",
+                            color: MCColors.primaryTeal
+                        ) {
+                            Text(entry.description.isEmpty ? "Used for treatment as prescribed by your doctor." : entry.description)
+                                .font(MCTypography.body)
+                                .foregroundStyle(MCColors.textSecondary)
+
+                            if !entry.commonDosages.isEmpty {
+                                VStack(alignment: .leading, spacing: MCSpacing.xxs) {
+                                    Text("Common dosages:")
+                                        .font(MCTypography.captionBold)
+                                        .foregroundStyle(MCColors.textPrimary)
+                                    ForEach(entry.commonDosages, id: \.self) { dosage in
+                                        HStack(spacing: MCSpacing.xs) {
+                                            Circle()
+                                                .fill(MCColors.primaryTeal)
+                                                .frame(width: 4, height: 4)
+                                            Text(dosage)
+                                                .font(MCTypography.caption)
+                                                .foregroundStyle(MCColors.textSecondary)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // Side effects
+                        educationSection(
+                            icon: "exclamationmark.triangle.fill",
+                            title: "Common Side Effects",
+                            color: MCColors.warning
+                        ) {
+                            if entry.commonSideEffects.isEmpty {
+                                Text("No common side effects listed. Consult your doctor if you notice anything unusual.")
+                                    .font(MCTypography.body)
+                                    .foregroundStyle(MCColors.textSecondary)
+                            } else {
+                                ForEach(entry.commonSideEffects, id: \.self) { effect in
+                                    HStack(spacing: MCSpacing.xs) {
+                                        Circle()
+                                            .fill(MCColors.warning)
+                                            .frame(width: 4, height: 4)
+                                        Text(effect)
+                                            .font(MCTypography.body)
+                                            .foregroundStyle(MCColors.textSecondary)
+                                    }
+                                }
+                            }
+                        }
+
+                        // How to take
+                        educationSection(
+                            icon: "clock.fill",
+                            title: "How to Take It Properly",
+                            color: MCColors.success
+                        ) {
+                            VStack(alignment: .leading, spacing: MCSpacing.xs) {
+                                infoRow(label: "Form", value: entry.typicalDoseForm)
+
+                                if !entry.storageInstructions.isEmpty {
+                                    infoRow(label: "Storage", value: entry.storageInstructions)
+                                }
+
+                                if entry.isScheduleH {
+                                    HStack(spacing: MCSpacing.xs) {
+                                        Image(systemName: "lock.fill")
+                                            .foregroundStyle(MCColors.error)
+                                            .font(.system(size: 12))
+                                        Text("Schedule H drug -- prescription required")
+                                            .font(MCTypography.caption)
+                                            .foregroundStyle(MCColors.error)
+                                    }
+                                    .padding(MCSpacing.xs)
+                                    .background(MCColors.error.opacity(0.08))
+                                    .clipShape(RoundedRectangle(cornerRadius: 6))
+                                }
+                            }
+                        }
+
+                        // Food interactions
+                        educationSection(
+                            icon: "fork.knife",
+                            title: "Interactions to Watch For",
+                            color: MCColors.accentCoral
+                        ) {
+                            if entry.foodInteractions.isEmpty {
+                                Text("No specific food or drug interactions listed. Always inform your doctor about all medicines you take.")
+                                    .font(MCTypography.body)
+                                    .foregroundStyle(MCColors.textSecondary)
+                            } else {
+                                ForEach(entry.foodInteractions, id: \.self) { interaction in
+                                    HStack(alignment: .top, spacing: MCSpacing.xs) {
+                                        Image(systemName: "exclamationmark.circle")
+                                            .foregroundStyle(MCColors.accentCoral)
+                                            .font(.system(size: 12))
+                                            .padding(.top, 2)
+                                        Text(interaction)
+                                            .font(MCTypography.body)
+                                            .foregroundStyle(MCColors.textSecondary)
+                                    }
+                                }
+                            }
+                        }
+
+                        // Disclaimer
+                        Text("This information is for educational purposes only. Always follow your doctor's instructions and consult a healthcare professional for medical advice.")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textTertiary)
+                            .padding(MCSpacing.sm)
+                            .background(MCColors.backgroundLight)
+                            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+
+                    } else {
+                        MCEmptyState(
+                            icon: "book.closed",
+                            title: "Info Not Available",
+                            message: "Education details for \(medicineName) are not available in the database yet."
+                        )
+                    }
+                }
+                .padding(.horizontal, MCSpacing.screenPadding)
+                .padding(.vertical, MCSpacing.md)
+            }
+            .background(MCColors.backgroundLight)
+            .navigationTitle("About This Medicine")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Done") { dismiss() }
+                        .foregroundStyle(MCColors.primaryTeal)
+                }
+            }
+        }
+    }
+
+    private func educationSection(icon: String, title: String, color: Color, @ViewBuilder content: () -> some View) -> some View {
+        MCCard {
+            VStack(alignment: .leading, spacing: MCSpacing.sm) {
+                HStack(spacing: MCSpacing.xs) {
+                    Image(systemName: icon)
+                        .foregroundStyle(color)
+                        .font(.system(size: 16))
+                    Text(title)
+                        .font(MCTypography.headline)
+                        .foregroundStyle(MCColors.textPrimary)
+                }
+
+                content()
+            }
+        }
+    }
+
+    private func infoRow(label: String, value: String) -> some View {
+        HStack(alignment: .top, spacing: MCSpacing.xs) {
+            Text(label + ":")
+                .font(MCTypography.captionBold)
+                .foregroundStyle(MCColors.textPrimary)
+                .frame(width: 70, alignment: .leading)
+            Text(value)
+                .font(MCTypography.body)
+                .foregroundStyle(MCColors.textSecondary)
         }
     }
 }

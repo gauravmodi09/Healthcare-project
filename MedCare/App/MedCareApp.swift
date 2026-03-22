@@ -12,6 +12,7 @@ struct MedCareApp: App {
     @State private var nudgeService = SmartNudgeService()
     @State private var liveActivityService = LiveActivityService()
     @State private var elderModeService = ElderModeService()
+    @State private var consentService = ConsentService()
     @Environment(\.scenePhase) private var scenePhase
     @State private var liveActivityTimer: Timer?
 
@@ -42,6 +43,7 @@ struct MedCareApp: App {
                 .environment(chatService)
                 .environment(nudgeService)
                 .environment(liveActivityService)
+                .environment(consentService)
                 .environment(\.elderModeService, elderModeService)
                 .modelContainer(dataService.modelContainer)
                 .onOpenURL { url in

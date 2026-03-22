@@ -29,6 +29,7 @@ struct HistoryView: View {
         case calendar = "Calendar"
         case insights = "Insights"
         case journal = "Journal"
+        case vitals = "Vitals"
     }
 
     var body: some View {
@@ -59,6 +60,8 @@ struct HistoryView: View {
                         case .journal:
                             HealthJournalView(profileId: profile.id.uuidString)
                                 .padding(.horizontal, MCSpacing.screenPadding)
+                        case .vitals:
+                            VitalsTrackingView()
                         }
                     }
                     .padding(.vertical, MCSpacing.md)

@@ -458,6 +458,63 @@ final class NotificationService: Sendable {
         try? await UNUserNotificationCenter.current().add(request)
     }
 
+    // MARK: - Grouped Dose Reminders
+
+    /// Schedules a single grouped notification when multiple medicines are due at the same time.
+    /// Instead of firing N separate notifications, this combines them into one.
+    func scheduleGroupedDoseReminder(
+        medicines: [(medicineId: UUID, medicineName: String, dosage: String, doseLogId: UUID)],
+        scheduledTime: Date
+    ) async {
+        guard !medicines.isEmpty else { return }
+
+        // If only one medicine, fall through to the standard single notification
+        if medicines.count == 1 {
+            let m = medicines[0]
+            await scheduleDoseReminder(
+                medicineId: m.medicineId,
+                medicineName: m.medicineName,
+                dosage: m.dosage,
+                scheduledTime: scheduledTime,
+                doseLogId: m.doseLogId
+            )
+            return
+        }
+
+        let content = UNMutableNotificationContent()
+        content.title = "Time for your medicines"
+        let names = medicines.map { "\($0.medicineName) \($0.dosage)" }.joined(separator: ", ")
+        content.body = names
+        content.sound = .default
+        content.categoryIdentifier = "DOSE_REMINDER"
+        content.interruptionLevel = .timeSensitive
+        content.relevanceScore = 1.0
+        // Store all medicine IDs and dose log IDs for batch handling
+        content.userInfo = [
+            "isGrouped": true,
+            "medicineIds": medicines.map { $0.medicineId.uuidString },
+            "doseLogIds": medicines.map { $0.doseLogId.uuidString }
+        ]
+        // Use thread identifier so grouped notifications stack in Notification Center
+        content.threadIdentifier = "dose_group_\(Int(scheduledTime.timeIntervalSince1970))"
+
+        let components = Calendar.current.dateComponents(
+            [.year, .month, .day, .hour, .minute],
+            from: scheduledTime
+        )
+        let trigger = UNCalendarNotificationTrigger(dateMatching: components, repeats: false)
+
+        // Use a composite identifier so it can be cancelled
+        let groupId = medicines.map { $0.doseLogId.uuidString }.sorted().joined(separator: "_")
+        let request = UNNotificationRequest(
+            identifier: "grouped_\(groupId)",
+            content: content,
+            trigger: trigger
+        )
+
+        try? await UNUserNotificationCenter.current().add(request)
+    }
+
     /// Cancels a custom reminder notification
     func cancelCustomReminder(id: UUID) {
         UNUserNotificationCenter.current()

@@ -8,6 +8,7 @@ struct HomeView: View {
     @Environment(LiveActivityService.self) private var liveActivityService
     @Query private var users: [User]
     @State private var showUpload = false
+    @State private var showMessages = false
     @State private var showStreakCelebration = false
     @State private var previousStreak: Int?
 
@@ -91,6 +92,9 @@ struct HomeView: View {
             }
             .sheet(isPresented: $showUpload) {
                 UploadPrescriptionView()
+            }
+            .sheet(isPresented: $showMessages) {
+                DoctorListView()
             }
             .overlay {
                 if showStreakCelebration {
@@ -595,9 +599,46 @@ struct HomeView: View {
                         .stroke(MCColors.primaryTeal.opacity(0.2), lineWidth: 1)
                 )
             }
-        }
             .accessibilityLabel("AI Health Chat")
             .accessibilityHint("Double tap to open the AI health assistant")
+
+            // Doctor Messages
+            Button {
+                showMessages = true
+            } label: {
+                HStack(spacing: MCSpacing.xs) {
+                    ZStack {
+                        Circle()
+                            .fill(MCColors.info.opacity(0.1))
+                            .frame(width: 36, height: 36)
+                        Image(systemName: "bubble.left.and.bubble.right.fill")
+                            .font(.system(size: 16))
+                            .foregroundStyle(MCColors.info)
+                    }
+
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Doctor")
+                            .font(MCTypography.bodyMedium)
+                            .foregroundStyle(MCColors.textPrimary)
+                        Text("Messages")
+                            .font(MCTypography.caption)
+                            .foregroundStyle(MCColors.textSecondary)
+                    }
+
+                    Spacer()
+                }
+                .padding(MCSpacing.cardPadding)
+                .background(MCColors.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
+                .overlay(
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                        .stroke(MCColors.info.opacity(0.2), lineWidth: 1)
+                )
+            }
+            .accessibilityLabel("Doctor Messages")
+            .accessibilityHint("Double tap to message your doctors")
+        }
     }
 
     // MARK: - Active Episodes

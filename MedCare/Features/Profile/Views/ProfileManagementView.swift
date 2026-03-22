@@ -4,6 +4,7 @@ import SwiftData
 struct ProfileManagementView: View {
     @Environment(DataService.self) private var dataService
     @Environment(AuthService.self) private var authService
+    @Environment(ConsentService.self) private var consentService
     @Query private var users: [User]
     @State private var showAddProfile = false
     @State private var showSubscription = false
@@ -15,6 +16,15 @@ struct ProfileManagementView: View {
     @State private var showElderMode = false
     @State private var showAbout = false
     @State private var showAchievements = false
+    @State private var showExportShare = false
+    @State private var exportFileURL: URL?
+    @State private var showConsentManagement = false
+    @State private var showDataDeletion = false
+    @State private var showABHALinking = false
+    @State private var showPayment = false
+    @State private var showDoctorDashboard = false
+    @AppStorage("mc_doctor_mode_enabled") private var doctorModeEnabled = false
+    private let exportService = ExportService()
 
     private var currentUser: User? { users.first }
 
@@ -22,15 +32,10 @@ struct ProfileManagementView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: MCSpacing.sectionSpacing) {
-                    // 1. User Header Card
                     if let profile = currentUser?.activeProfile {
                         userHeaderCard(profile)
                     }
-
-                    // 2. Family Profiles
                     familyProfilesSection
-
-                    // 3. Quick Stats
                     if let profile = currentUser?.activeProfile {
                         if profile.episodes.isEmpty {
                             MCEmptyState.episodes()
@@ -38,14 +43,9 @@ struct ProfileManagementView: View {
                             quickStatsRow(profile)
                         }
                     }
-
-                    // 4. Settings List
                     settingsSection
-
-                    // 5. Danger Zone
+                    privacyDataSection
                     dangerZoneSection
-
-                    // Version
                     versionFooter
                 }
                 .padding(.vertical, MCSpacing.md)
@@ -102,44 +102,73 @@ struct ProfileManagementView: View {
             .sheet(isPresented: $showAchievements) {
                 AchievementsView()
             }
+            .sheet(isPresented: $showABHALinking) {
+                ABHALinkingView()
+            }
+            .sheet(isPresented: $showPayment) {
+                PaymentView()
+            }
+            .sheet(isPresented: $showExportShare) {
+                if let url = exportFileURL {
+                    ShareSheetView(items: [url])
+                }
+            }
+            .sheet(isPresented: $showConsentManagement) {
+                NavigationStack {
+                    ConsentManagementView()
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Done") { showConsentManagement = false }
+                            }
+                        }
+                }
+            }
+            .sheet(isPresented: $showDataDeletion) {
+                if let profile = currentUser?.activeProfile {
+                    NavigationStack {
+                        DataDeletionView(profile: profile, exportService: exportService)
+                            .toolbar {
+                                ToolbarItem(placement: .cancellationAction) {
+                                    Button("Cancel") { showDataDeletion = false }
+                                }
+                            }
+                    }
+                }
+            }
+            .fullScreenCover(isPresented: $showDoctorDashboard) {
+                DoctorDashboardView()
+            }
         }
     }
 
-    // MARK: - 1. User Header Card
+    // MARK: - User Header Card
 
     private func userHeaderCard(_ profile: UserProfile) -> some View {
         MCCard {
             VStack(spacing: MCSpacing.md) {
-                // Avatar with teal gradient circle
                 ZStack {
                     Circle()
                         .fill(MCColors.primaryGradient)
                         .frame(width: MCSpacing.avatarSizeLarge + 8, height: MCSpacing.avatarSizeLarge + 8)
-
                     Circle()
                         .fill(MCColors.cardBackground)
                         .frame(width: MCSpacing.avatarSizeLarge, height: MCSpacing.avatarSizeLarge)
-
                     Text(profile.avatarEmoji)
                         .font(.system(size: 40))
                 }
-
-                // Name, age, gender
                 VStack(spacing: MCSpacing.xxs) {
                     Text(profile.name)
                         .font(MCTypography.title)
                         .foregroundStyle(MCColors.textPrimary)
-
                     HStack(spacing: MCSpacing.xs) {
                         if let age = profile.age {
                             Text("\(age) yrs")
                                 .font(MCTypography.subheadline)
                                 .foregroundStyle(MCColors.textSecondary)
                         }
-
                         if let gender = profile.gender {
                             if profile.age != nil {
-                                Text("·")
+                                Text("\u{00B7}")
                                     .foregroundStyle(MCColors.textTertiary)
                             }
                             Text(gender.rawValue)
@@ -148,11 +177,7 @@ struct ProfileManagementView: View {
                         }
                     }
                 }
-
-                // Subscription tier badge
                 subscriptionBadge
-
-                // Edit Profile button
                 Button {
                     showEditProfile = true
                 } label: {
@@ -190,7 +215,6 @@ struct ProfileManagementView: View {
             case .premium: return "crown.fill"
             }
         }()
-
         return HStack(spacing: MCSpacing.xxs) {
             Image(systemName: badgeIcon)
                 .font(.system(size: 11, weight: .semibold))
@@ -204,7 +228,7 @@ struct ProfileManagementView: View {
         .clipShape(Capsule())
     }
 
-    // MARK: - 2. Family Profiles
+    // MARK: - Family Profiles
 
     private var familyProfilesSection: some View {
         VStack(alignment: .leading, spacing: MCSpacing.sm) {
@@ -212,7 +236,6 @@ struct ProfileManagementView: View {
                 .font(MCTypography.headline)
                 .foregroundStyle(MCColors.textPrimary)
                 .padding(.horizontal, MCSpacing.screenPadding)
-
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: MCSpacing.sm) {
                     if let profiles = currentUser?.profiles {
@@ -226,8 +249,6 @@ struct ProfileManagementView: View {
                             }
                         }
                     }
-
-                    // Add Family Member card
                     addFamilyMemberCard
                 }
                 .padding(.horizontal, MCSpacing.screenPadding)
@@ -247,7 +268,6 @@ struct ProfileManagementView: View {
                             : MCColors.backgroundLight
                     )
                     .clipShape(Circle())
-
                 if profile.isActive {
                     Circle()
                         .fill(MCColors.success)
@@ -258,14 +278,12 @@ struct ProfileManagementView: View {
                         .offset(x: 2, y: 2)
                 }
             }
-
             Text(profile.name)
                 .font(MCTypography.captionBold)
                 .foregroundStyle(
                     profile.isActive ? MCColors.primaryTeal : MCColors.textPrimary
                 )
                 .lineLimit(1)
-
             Text(profile.relation.rawValue)
                 .font(.system(size: 10))
                 .foregroundStyle(MCColors.textTertiary)
@@ -294,11 +312,9 @@ struct ProfileManagementView: View {
                     .frame(width: 52, height: 52)
                     .background(MCColors.primaryTeal.opacity(0.05))
                     .clipShape(Circle())
-
                 Text("Add")
                     .font(MCTypography.captionBold)
                     .foregroundStyle(MCColors.primaryTeal)
-
                 Text("Member")
                     .font(.system(size: 10))
                     .foregroundStyle(MCColors.textTertiary)
@@ -317,30 +333,13 @@ struct ProfileManagementView: View {
         }
     }
 
-    // MARK: - 3. Quick Stats Row
+    // MARK: - Quick Stats Row
 
     private func quickStatsRow(_ profile: UserProfile) -> some View {
         HStack(spacing: MCSpacing.sm) {
-            quickStatCard(
-                icon: "pills.fill",
-                value: "\(profile.episodes.flatMap { $0.medicines }.count)",
-                label: "Medicines",
-                color: MCColors.primaryTeal
-            )
-
-            quickStatCard(
-                icon: "heart.text.clipboard.fill",
-                value: "\(profile.episodes.count)",
-                label: "Episodes",
-                color: MCColors.accentCoral
-            )
-
-            quickStatCard(
-                icon: "doc.text.fill",
-                value: "\(profile.episodes.flatMap { $0.images }.count)",
-                label: "Documents",
-                color: MCColors.info
-            )
+            quickStatCard(icon: "pills.fill", value: "\(profile.episodes.flatMap { $0.medicines }.count)", label: "Medicines", color: MCColors.primaryTeal)
+            quickStatCard(icon: "heart.text.clipboard.fill", value: "\(profile.episodes.count)", label: "Episodes", color: MCColors.accentCoral)
+            quickStatCard(icon: "doc.text.fill", value: "\(profile.episodes.flatMap { $0.images }.count)", label: "Documents", color: MCColors.info)
         }
         .padding(.horizontal, MCSpacing.screenPadding)
     }
@@ -353,11 +352,9 @@ struct ProfileManagementView: View {
                 .frame(width: 36, height: 36)
                 .background(color.opacity(0.1))
                 .clipShape(Circle())
-
             Text(value)
                 .font(MCTypography.headline)
                 .foregroundStyle(MCColors.textPrimary)
-
             Text(label)
                 .font(MCTypography.caption)
                 .foregroundStyle(MCColors.textSecondary)
@@ -369,91 +366,31 @@ struct ProfileManagementView: View {
         .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 
-    // MARK: - 4. Settings List
+    // MARK: - Settings List
 
     private var settingsSection: some View {
         VStack(spacing: 0) {
-            settingsRow(
-                icon: "bell.fill",
-                title: "Notifications",
-                color: MCColors.primaryTeal
-            ) {
-                showNotifications = true
-            }
-
+            settingsRow(icon: "bell.fill", title: "Notifications", color: MCColors.primaryTeal) { showNotifications = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "crown.fill",
-                title: "Subscription",
-                color: MCColors.warning
-            ) {
-                showSubscription = true
-            }
-
+            settingsRow(icon: "crown.fill", title: "Subscription", color: MCColors.warning) { showSubscription = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "trophy.fill",
-                title: "Achievements",
-                color: MCColors.warning
-            ) {
-                showAchievements = true
-            }
-
+            settingsRow(icon: "indianrupeesign.circle.fill", title: "Payment & UPI", color: MCColors.success) { showPayment = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "stethoscope",
-                title: "Doctor Visit Prep",
-                color: MCColors.accentCoral
-            ) {
-                showDoctorVisitPrep = true
-            }
-
+            settingsRow(icon: "checkmark.shield.fill", title: "ABHA Linking", color: MCColors.primaryTeal) { showABHALinking = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "figure.walk",
-                title: "Elder Mode",
-                color: MCColors.success
-            ) {
-                showElderMode = true
-            }
-
+            settingsRow(icon: "trophy.fill", title: "Achievements", color: MCColors.warning) { showAchievements = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "lock.fill",
-                title: "Data & Privacy",
-                color: MCColors.success
-            ) {
-                if let url = URL(string: UIApplication.openSettingsURLString) {
-                    UIApplication.shared.open(url)
-                }
-            }
-
+            settingsRow(icon: "stethoscope", title: "Doctor Visit Prep", color: MCColors.accentCoral) { showDoctorVisitPrep = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "questionmark.circle.fill",
-                title: "Help & Support",
-                color: MCColors.info
-            ) {
-                if let url = URL(string: "mailto:support@medcare.app") {
-                    UIApplication.shared.open(url)
-                }
-            }
-
+            settingsRow(icon: "figure.walk", title: "Elder Mode", color: MCColors.success) { showElderMode = true }
             Divider().padding(.leading, 60)
-
-            settingsRow(
-                icon: "info.circle.fill",
-                title: "About MedCare",
-                color: MCColors.textSecondary
-            ) {
-                showAbout = true
+            doctorModeRow
+            Divider().padding(.leading, 60)
+            settingsRow(icon: "questionmark.circle.fill", title: "Help & Support", color: MCColors.info) {
+                if let url = URL(string: "mailto:support@medcare.app") { UIApplication.shared.open(url) }
             }
+            Divider().padding(.leading, 60)
+            settingsRow(icon: "info.circle.fill", title: "About MedCare", color: MCColors.textSecondary) { showAbout = true }
         }
         .background(MCColors.cardBackground)
         .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
@@ -470,13 +407,10 @@ struct ProfileManagementView: View {
                     .frame(width: 32, height: 32)
                     .background(color.opacity(0.1))
                     .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
-
                 Text(title)
                     .font(MCTypography.body)
                     .foregroundStyle(MCColors.textPrimary)
-
                 Spacer()
-
                 Image(systemName: "chevron.right")
                     .font(.system(size: 12, weight: .semibold))
                     .foregroundStyle(MCColors.textTertiary)
@@ -486,12 +420,78 @@ struct ProfileManagementView: View {
         }
     }
 
-    // MARK: - 5. Danger Zone
+    // MARK: - Privacy & Data
+
+    private var privacyDataSection: some View {
+        VStack(alignment: .leading, spacing: MCSpacing.sm) {
+            Text("Privacy & Data")
+                .font(MCTypography.headline)
+                .foregroundStyle(MCColors.textPrimary)
+                .padding(.horizontal, MCSpacing.screenPadding)
+            VStack(spacing: 0) {
+                settingsRow(icon: "hand.raised.fill", title: "Manage Consents", color: MCColors.primaryTeal) {
+                    showConsentManagement = true
+                }
+                Divider().padding(.leading, 60)
+                settingsRow(icon: "square.and.arrow.up", title: "Export My Data", color: MCColors.info) {
+                    if let profile = currentUser?.activeProfile {
+                        exportFileURL = exportService.exportAllData(for: profile)
+                        if exportFileURL != nil { showExportShare = true }
+                    }
+                }
+                Divider().padding(.leading, 60)
+                settingsRow(icon: "lock.fill", title: "Privacy Settings", color: MCColors.success) {
+                    if let url = URL(string: UIApplication.openSettingsURLString) { UIApplication.shared.open(url) }
+                }
+            }
+            .background(MCColors.cardBackground)
+            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+            .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+            .padding(.horizontal, MCSpacing.screenPadding)
+        }
+    }
+
+    // MARK: - Doctor Mode
+
+    private var doctorModeRow: some View {
+        HStack(spacing: MCSpacing.sm) {
+            Image(systemName: "stethoscope")
+                .foregroundStyle(MCColors.primaryTeal)
+                .font(.system(size: 15))
+                .frame(width: 32, height: 32)
+                .background(MCColors.primaryTeal.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+            Text("Doctor Mode")
+                .font(MCTypography.body)
+                .foregroundStyle(MCColors.textPrimary)
+            Spacer()
+            if doctorModeEnabled {
+                Button {
+                    showDoctorDashboard = true
+                } label: {
+                    Text("Open")
+                        .font(MCTypography.captionBold)
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, MCSpacing.sm)
+                        .padding(.vertical, MCSpacing.xxs + 1)
+                        .background(MCColors.primaryTeal)
+                        .clipShape(Capsule())
+                }
+            }
+            Toggle("", isOn: $doctorModeEnabled)
+                .labelsHidden()
+                .tint(MCColors.primaryTeal)
+        }
+        .padding(.horizontal, MCSpacing.cardPadding)
+        .padding(.vertical, MCSpacing.sm)
+    }
+
+    // MARK: - Danger Zone
 
     private var dangerZoneSection: some View {
         VStack(spacing: 0) {
             Button {
-                showDeleteConfirmation = true
+                showDataDeletion = true
             } label: {
                 HStack(spacing: MCSpacing.sm) {
                     Image(systemName: "trash.fill")
@@ -500,13 +500,10 @@ struct ProfileManagementView: View {
                         .frame(width: 32, height: 32)
                         .background(MCColors.error.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
-
-                    Text("Delete Account")
+                    Text("Delete My Data")
                         .font(MCTypography.body)
                         .foregroundStyle(MCColors.error)
-
                     Spacer()
-
                     Image(systemName: "chevron.right")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(MCColors.textTertiary)
@@ -514,9 +511,7 @@ struct ProfileManagementView: View {
                 .padding(.horizontal, MCSpacing.cardPadding)
                 .padding(.vertical, MCSpacing.sm)
             }
-
             Divider().padding(.leading, 60)
-
             Button {
                 showSignOutConfirmation = true
             } label: {
@@ -527,13 +522,10 @@ struct ProfileManagementView: View {
                         .frame(width: 32, height: 32)
                         .background(MCColors.textSecondary.opacity(0.1))
                         .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
-
                     Text("Sign Out")
                         .font(MCTypography.body)
                         .foregroundStyle(MCColors.textPrimary)
-
                     Spacer()
-
                     Image(systemName: "chevron.right")
                         .font(.system(size: 12, weight: .semibold))
                         .foregroundStyle(MCColors.textTertiary)
@@ -552,8 +544,6 @@ struct ProfileManagementView: View {
 
     private func deleteAccount() {
         let context = dataService.modelContext
-
-        // Delete all model objects
         try? context.delete(model: Nudge.self)
         try? context.delete(model: ChatMessage.self)
         try? context.delete(model: ChatSession.self)
@@ -566,12 +556,8 @@ struct ProfileManagementView: View {
         try? context.delete(model: UserProfile.self)
         try? context.delete(model: User.self)
         dataService.save()
-
-        // Clear UserDefaults
         UserDefaults.standard.removeObject(forKey: "mc_has_seeded_demo")
         UserDefaults.standard.removeObject(forKey: "hasCompletedOnboarding")
-
-        // Logout
         authService.logout()
     }
 
@@ -601,21 +587,16 @@ struct AddFamilyProfileView: View {
         NavigationStack {
             ScrollView {
                 VStack(spacing: MCSpacing.lg) {
-                    // Avatar preview
                     Text(relation.emoji)
                         .font(.system(size: 56))
                         .frame(width: 100, height: 100)
                         .background(MCColors.primaryTeal.opacity(0.1))
                         .clipShape(Circle())
-
                     MCTextField(label: "Name", icon: "person", text: $name)
-
-                    // Relation picker
                     VStack(alignment: .leading, spacing: MCSpacing.xs) {
                         Text("Relation")
                             .font(MCTypography.subheadline)
                             .foregroundStyle(MCColors.textSecondary)
-
                         LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible()), GridItem(.flexible())], spacing: MCSpacing.xs) {
                             ForEach(ProfileRelation.allCases.filter { $0 != .myself }, id: \.self) { rel in
                                 Button {
@@ -642,8 +623,6 @@ struct AddFamilyProfileView: View {
                             }
                         }
                     }
-
-                    // Gender
                     VStack(alignment: .leading, spacing: MCSpacing.xs) {
                         Text("Gender")
                             .font(MCTypography.subheadline)
@@ -664,10 +643,8 @@ struct AddFamilyProfileView: View {
                             }
                         }
                     }
-
                     DatePicker("Date of Birth", selection: $dateOfBirth, displayedComponents: .date)
                         .datePickerStyle(.compact)
-
                     MCPrimaryButton("Add Profile", icon: "person.badge.plus") {
                         addProfile()
                     }

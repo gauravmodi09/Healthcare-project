@@ -226,7 +226,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 3: Polish",
-    "status": "in-progress",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -236,7 +236,7 @@
     "category": "bug",
     "priority": "critical",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -256,7 +256,7 @@
     "category": "bug",
     "priority": "critical",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -292,7 +292,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -334,7 +334,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -344,7 +344,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -400,7 +400,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -440,7 +440,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -510,7 +510,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -520,7 +520,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -530,7 +530,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -540,7 +540,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -550,7 +550,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -560,7 +560,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -570,7 +570,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -580,7 +580,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -660,7 +660,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -680,7 +680,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -690,7 +690,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -720,7 +720,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -740,7 +740,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -770,7 +770,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -790,7 +790,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -800,7 +800,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -1150,7 +1150,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1166,7 +1166,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1301,7 +1301,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1349,7 +1349,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1381,7 +1381,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1397,7 +1397,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1477,7 +1477,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1493,7 +1493,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": []
   },
@@ -1572,5 +1572,2155 @@
         "date": "2026-03-16"
       }
     ]
+  },
+  {
+    "id": "p9_001",
+    "title": "ABDM sandbox registration + client credentials",
+    "desc": "Register on sandbox.abdm.gov.in, obtain client ID + secret, configure gateway callback URLs",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_002",
+    "title": "Register as Health Information Provider (HIP)",
+    "desc": "Register HIP ID in sandbox, link to client credentials, test HIP callback endpoints",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_003",
+    "title": "Register as Health Information User (HIU)",
+    "desc": "Register HIU ID in sandbox, configure consent request endpoints",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_004",
+    "title": "ABHA ID creation via Aadhaar OTP",
+    "desc": "API flow: generateOtp \u2192 verifyOtp \u2192 createHealthIdByAadhaar \u2192 createPhrAddress. Handle @sbx suffix in sandbox",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_005",
+    "title": "ABHA ID creation via mobile number",
+    "desc": "Alternative flow for users without Aadhaar. Mobile OTP verification \u2192 ABHA number generation",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_006",
+    "title": "ABHA address creation + profile linking",
+    "desc": "Create user@abdm address, link ABHA number to MedCare patient profile, store encrypted",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_007",
+    "title": "Patient UI \u2014 Link ABHA ID flow",
+    "desc": "Profile settings screen with \"Link ABHA ID\" button, Aadhaar/mobile OTP entry, verification status badge",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_008",
+    "title": "Care context creation",
+    "desc": "Link MedCare episodes/consultations as ABDM care contexts for health record sharing",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_009",
+    "title": "FHIR bundle \u2014 Prescription records",
+    "desc": "Generate FHIR R4 Bundle with Composition, MedicationRequest, Patient, Practitioner, Organization per NRCES IG v6.5",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_010",
+    "title": "FHIR bundle \u2014 Diagnostic Reports",
+    "desc": "Generate FHIR DiagnosticReport + Observation bundles for lab results",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_011",
+    "title": "FHIR bundle \u2014 Wellness Records",
+    "desc": "Generate FHIR Observation bundles for vitals, body measurements, lifestyle data",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_012",
+    "title": "FHIR bundle \u2014 Health Documents",
+    "desc": "Generate FHIR DocumentReference bundles for uploaded PDFs, images, scans",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_013",
+    "title": "Share records to ABHA PHR app",
+    "desc": "HIP callback APIs to push FHIR bundles to ABDM gateway when patient shares from MedCare",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_014",
+    "title": "Consent request initiation (HIU)",
+    "desc": "Request patient health records from other providers \u2014 specify purpose, data types, date range, expiry",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_015",
+    "title": "Consent artifact management",
+    "desc": "Track granted/denied/expired consents, consent artifact storage with digital signatures",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_016",
+    "title": "Health data fetch + decrypt + display",
+    "desc": "Receive encrypted FHIR bundles from other HIPs, decrypt using key exchange, parse and display in records vault",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_017",
+    "title": "Import Health Records UI",
+    "desc": "\"Import Health Records\" screen showing available records from other hospitals/providers via ABDM",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_018",
+    "title": "WASA security audit",
+    "desc": "Engage CERT-IN empaneled auditor for Web Application Security Assessment, fix findings",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p9_019",
+    "title": "NHA production approval",
+    "desc": "Submit WASA report + functional test results to NHA, obtain production credentials",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 9: India \u2014 ABDM",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_001",
+    "title": "Granular consent collection UI",
+    "desc": "Purpose-specific consent at registration \u2014 health tracking, doctor sharing, analytics, notifications as separate toggles",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_002",
+    "title": "Consent withdrawal flow",
+    "desc": "One-tap consent withdrawal, as easy as giving consent. Immediately stop processing withdrawn data types",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_003",
+    "title": "Consent audit trail",
+    "desc": "Log all consent events (granted, withdrawn, modified) with timestamps, user ID, IP. 7-year retention",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_004",
+    "title": "Data localization \u2014 AWS Mumbai",
+    "desc": "Host ALL health + payment data on AWS ap-south-1 (Mumbai). No cross-border data transfer for health records",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_005",
+    "title": "AES-256 encryption at rest",
+    "desc": "Encrypt all health data in PostgreSQL (column-level or TDE) + S3 objects with AES-256",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_006",
+    "title": "TLS 1.3 encryption in transit",
+    "desc": "All API calls over TLS 1.3, certificate pinning in iOS app",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_007",
+    "title": "Access logging + audit trail",
+    "desc": "Log all health data access \u2014 who accessed what, when, from where. Tamper-proof audit log",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_008",
+    "title": "Right to erasure \u2014 Delete My Data",
+    "desc": "Cascading deletion across DB, backups, S3, third-party integrations. Retain only legally required records (3yr telemedicine)",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_009",
+    "title": "Data portability \u2014 export all health data",
+    "desc": "Export complete health record as JSON + CSV on user request. Include medications, vitals, symptoms, lab results",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_010",
+    "title": "Breach notification system",
+    "desc": "Alert Data Protection Board within 72 hours of breach detection. Notify affected users immediately. No materiality threshold",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_011",
+    "title": "Children data \u2014 age gate + parental consent",
+    "desc": "Age verification at registration. For under-18 profiles, require verifiable parental consent. No behavioral tracking of children",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_012",
+    "title": "Privacy grievance redressal",
+    "desc": "In-app support channel for data privacy complaints. Response SLA tracking",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_013",
+    "title": "Data minimization review",
+    "desc": "Audit all data collection points \u2014 ensure no over-collection beyond stated purposes",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_014",
+    "title": "Re-consent flow",
+    "desc": "Prompt users when processing purposes change. Version consent policies",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p10_015",
+    "title": "Data Protection Impact Assessment",
+    "desc": "Conduct DPIA for health data processing. Document risks and mitigations",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 10: India \u2014 DPDPA",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_001",
+    "title": "Razorpay account + business verification",
+    "desc": "Register Razorpay account, complete business KYC, obtain live API keys",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_002",
+    "title": "Razorpay iOS SDK integration",
+    "desc": "Add Razorpay via SPM, implement RazorpayPaymentCompletionProtocol, handle success/failure callbacks",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_003",
+    "title": "Payment backend \u2014 orders + webhooks",
+    "desc": "Create orders via Razorpay API, verify payment signatures server-side, handle webhook events",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_004",
+    "title": "UPI Intent flow \u2014 show installed apps",
+    "desc": "Display installed UPI apps (PhonePe, GPay, Paytm, CRED) for user selection. Handle deep link callbacks",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_005",
+    "title": "Subscription plans \u2014 Patient tiers",
+    "desc": "Create Razorpay plans: Free, Pro (\u20b9599/yr), Premium (\u20b9999/yr) with feature gating",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_006",
+    "title": "Subscription plans \u2014 Doctor tiers",
+    "desc": "Create plans: Free (20 patients), Solo (\u20b92K/mo), Clinic (\u20b98K/mo), Hospital (\u20b930K/mo)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_007",
+    "title": "UPI Autopay mandate setup",
+    "desc": "INR 1 mandate authorization flow for recurring subscription billing",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_008",
+    "title": "Recurring billing + smart retries",
+    "desc": "Auto-debit on billing cycle with retry logic for failed payments",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_009",
+    "title": "Subscription management UI",
+    "desc": "Upgrade/downgrade/cancel subscription screen. Show current plan, usage, billing history",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_010",
+    "title": "Dynamic QR for in-clinic payments",
+    "desc": "Generate UPI QR codes for doctor consultation fees. Scannable by any UPI app",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_011",
+    "title": "Payment receipt + GST invoice",
+    "desc": "Generate PDF receipt with GST details after payment. Email/share option",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p11_012",
+    "title": "Refund handling",
+    "desc": "Full/partial refunds via Razorpay Refund API. Track refund status, notify user",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 11: India \u2014 UPI",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_001",
+    "title": "NMC registration number verification",
+    "desc": "Verify doctor registration with State Medical Council / NMC. API integration or manual verification flow",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_002",
+    "title": "Doctor credential display",
+    "desc": "Show registration number, qualification, council name on doctor profile and during teleconsultation",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_003",
+    "title": "Drug scheduling engine (List A/B/C)",
+    "desc": "Classify all medicines as List A (OTC), List B (Schedule H/H1), List C (Schedule X/NDPS) per telemedicine guidelines",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_004",
+    "title": "Schedule X/NDPS prescribing block",
+    "desc": "Prevent doctors from prescribing benzodiazepines, opioids, and other NDPS substances via teleconsultation",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_005",
+    "title": "Patient consent capture + logging",
+    "desc": "Implied consent for patient-initiated, explicit consent for doctor-initiated. Log with timestamp, method, parties",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_006",
+    "title": "Video recording consent (separate)",
+    "desc": "If recording teleconsultation, capture separate explicit informed consent before recording starts",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_007",
+    "title": "NMC-compliant e-prescription format",
+    "desc": "Digital Rx with doctor registration number, qualification, digital signature, drug schedule validation",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_008",
+    "title": "3-year consultation record retention",
+    "desc": "Store all teleconsultation records (notes, prescriptions, images shared) for minimum 3 years with audit trail",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_009",
+    "title": "Emergency referral mechanism",
+    "desc": "\"Refer to in-person care\" button during teleconsult. Generate referral letter with nearby hospital suggestions",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p12_010",
+    "title": "Cross-state practice support",
+    "desc": "Allow teleconsultation across all Indian states per NMC guidelines. No cross-border (India only)",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 12: India \u2014 Telemedicine",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_001",
+    "title": "HealthKit authorization flow",
+    "desc": "Request read access for HR, SpO2, steps, sleep, workouts, ECG, temperature, respiratory rate",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_002",
+    "title": "HealthKit background delivery",
+    "desc": "Auto-import new health samples in background when app is not running",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_003",
+    "title": "Apple Watch data sync",
+    "desc": "ECG readings, wrist temperature, respiratory rate from Apple Watch via HealthKit",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_004",
+    "title": "Vitals dashboard \u2014 HealthKit data display",
+    "desc": "Show HealthKit-sourced vitals in dashboard with source attribution (Apple Watch, Noise, etc.)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_005",
+    "title": "Write to HealthKit",
+    "desc": "Push medication logs, symptom entries from MedCare back into HealthKit",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_006",
+    "title": "Terra API integration",
+    "desc": "Connect to Terra API for 400+ wearable support. OAuth flow, webhook data delivery",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_007",
+    "title": "Noise Health API direct integration",
+    "desc": "Direct API for Noise wearables \u2014 HR, sleep, steps, SpO2, stress data",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_008",
+    "title": "Health Connect bridge for Android wearables",
+    "desc": "Read data written by boAt, Fire-Boltt, Amazfit companion apps via Health Connect (future Android app)",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_009",
+    "title": "Data normalization layer",
+    "desc": "Standardize HR/SpO2/sleep/steps data across all wearable sources into unified format",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_010",
+    "title": "Connected Devices management UI",
+    "desc": "\"Connected Devices\" screen showing all linked wearables, sync status, last data timestamp",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_011",
+    "title": "FreeStyle Libre CGM integration",
+    "desc": "Read glucose data via LibreView API or Terra API. Real-time readings, daily patterns",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_012",
+    "title": "Glucose data display + time-in-range",
+    "desc": "24-hour glucose chart, daily pattern, time-in-range percentage, AGP-style report",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_013",
+    "title": "Glucose trend charts (7d/30d/90d)",
+    "desc": "Historical glucose trends with meal markers and medication overlay",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_014",
+    "title": "Glucose alerts \u2014 hypo/hyper thresholds",
+    "desc": "Push notifications when glucose drops below 70 or exceeds 180 mg/dL. Customizable thresholds",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_015",
+    "title": "Glucose-medication correlation",
+    "desc": "AI analysis: \"Your glucose drops 15% within 2 hours of taking Glycomet\"",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_016",
+    "title": "Omron BP monitor integration",
+    "desc": "Read BP data via HealthKit (Omron Connect writes to HealthKit). Auto-import readings",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_017",
+    "title": "Manual BP entry with clinical formatting",
+    "desc": "Systolic/diastolic/pulse entry. Hypertension staging: Normal/Elevated/Stage 1/Stage 2/Crisis",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p13_018",
+    "title": "BP trend charts with staging",
+    "desc": "BP trend over time with color-coded zones for hypertension stages. Share with doctor",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 13: India \u2014 Wearables",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_001",
+    "title": "Async message threads by patient/topic",
+    "desc": "Structured messaging organized by patient and topic/episode. Not free-form chat",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_002",
+    "title": "Message types \u2014 text, photo, document, voice",
+    "desc": "Support text, photo attachments, document sharing, voice notes in messages",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_003",
+    "title": "Response SLA indicator",
+    "desc": "Show \"Doctor typically responds within 4 hours\" based on historical response times",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_004",
+    "title": "Doctor boundary settings",
+    "desc": "Available hours config, auto-reply for off-hours: \"Dr. Mehta will respond during clinic hours (9AM-6PM)\"",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_005",
+    "title": "Quick reply templates for doctors",
+    "desc": "Pre-built replies: \"Continue current medication\", \"Please come for checkup\", \"Lab results look normal\"",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_006",
+    "title": "Read receipts + delivery status",
+    "desc": "Sent/delivered/read indicators on messages",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_007",
+    "title": "Patient rate limiting (5 msgs/day)",
+    "desc": "Prevent message spam \u2014 max 5 messages per day per patient to a doctor",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_008",
+    "title": "Emergency escalation flag",
+    "desc": "\"Mark as Urgent\" button that bypasses off-hours and sends push notification to doctor",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_009",
+    "title": "Walk-in registration by receptionist",
+    "desc": "Receptionist adds patient to today queue with name, phone, reason for visit",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_010",
+    "title": "Queue position + estimated wait time",
+    "desc": "Patient sees their position in queue and estimated wait (avg 8 min/patient \u00d7 position)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_011",
+    "title": "Real-time queue updates",
+    "desc": "Position updates live as patients are seen. WebSocket or polling",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_012",
+    "title": "Your Turn push notification",
+    "desc": "Alert patient when 2 patients ahead in queue",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_013",
+    "title": "Queue analytics for doctors",
+    "desc": "Average wait time, peak hours, no-show rates. Help optimize scheduling",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p14_014",
+    "title": "Mixed appointment + walk-in mode",
+    "desc": "Support both scheduled appointments and walk-ins in the same day. Interleave fairly",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 14: India \u2014 Communication",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_001",
+    "title": "Ayushman Bharat eligibility check",
+    "desc": "Verify if patient is covered under PMJAY via API. Show eligibility status in profile",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_002",
+    "title": "PMJAY pre-authorization submission",
+    "desc": "Submit treatment pre-authorization request to TPA with required documents",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_003",
+    "title": "PMJAY claim submission + tracking",
+    "desc": "Post-treatment claim with documents. Real-time claim status tracking",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_004",
+    "title": "Patient PMJAY eligibility check UI",
+    "desc": "\"Check Ayushman Bharat Eligibility\" button in Profile with result display",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_005",
+    "title": "Expand drug database to 500+ medicines",
+    "desc": "Add 500+ common Indian medicines with brand, generic, dosage, manufacturer, MRP, category",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_006",
+    "title": "Complete Jan Aushadhi price catalog",
+    "desc": "Full catalog from janaushadhi.gov.in \u2014 all generic medicines with prices",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_007",
+    "title": "Generic equivalent mapping engine",
+    "desc": "Brand \u2192 molecule \u2192 all equivalent brands. \"Augmentin = Amoxicillin+Clavulanic Acid = Moxikind-CV = Clavam\"",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_008",
+    "title": "Drug schedule classification database",
+    "desc": "Classify all drugs as List A (OTC), B (Schedule H/H1), C (Schedule X/NDPS) per NMC guidelines",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_009",
+    "title": "Indian food-drug interaction database",
+    "desc": "Interactions with common Indian foods: dahi (calcium + antibiotics), amla (vitamin C + blood thinners), haldi (turmeric + anticoagulants), methi (fenugreek + diabetes meds)",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_010",
+    "title": "Ayurvedic medicine database (200+ preparations)",
+    "desc": "Common Ayurvedic meds: Triphala, Ashwagandha, Brahmi, Chyawanprash, Arjuna. Dose forms, timing, interactions",
+    "category": "infra",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_011",
+    "title": "Drug price comparison engine",
+    "desc": "Compare MRP vs online pharmacy vs Jan Aushadhi price for any medicine. Show savings potential",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_012",
+    "title": "String externalization framework",
+    "desc": "Extract all hardcoded strings into Localizable.strings files for i18n support",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_013",
+    "title": "Hindi full UI translation",
+    "desc": "Translate all UI labels, buttons, messages, error states to Hindi",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_014",
+    "title": "Tamil UI translation",
+    "desc": "Full Tamil localization of the app UI",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_015",
+    "title": "Telugu UI translation",
+    "desc": "Full Telugu localization of the app UI",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_016",
+    "title": "Marathi UI translation",
+    "desc": "Full Marathi localization of the app UI",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_017",
+    "title": "Bengali UI translation",
+    "desc": "Full Bengali localization of the app UI",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_018",
+    "title": "Kannada + Malayalam + Gujarati translations",
+    "desc": "UI translation for South and West Indian languages",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_019",
+    "title": "RTL/script-specific layout testing",
+    "desc": "Ensure no text truncation, proper rendering for all Indic scripts. Test with longest strings",
+    "category": "bug",
+    "priority": "medium",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p15_020",
+    "title": "Language picker in settings",
+    "desc": "In-app language selector. Persist preference. Instant switch without app restart",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 15: India \u2014 Ecosystem",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_001",
+    "title": "API project setup \u2014 Node.js/Express + TypeScript",
+    "desc": "Project scaffold, folder structure, TypeScript config, ESLint, Prettier, environment config",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_002",
+    "title": "PostgreSQL schema design",
+    "desc": "Tables: users, profiles, doctors, hospitals, appointments, messages, vitals, prescriptions, dose_logs, symptoms, lab_results, documents",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_003",
+    "title": "JWT authentication + refresh tokens",
+    "desc": "Login/register endpoints, access token (15min) + refresh token (30d), token rotation",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_004",
+    "title": "OTP verification for patients (+91)",
+    "desc": "SMS OTP via MSG91/Twilio, rate limiting (3 attempts/10min), OTP expiry (5 min)",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_005",
+    "title": "Email + password auth for doctors",
+    "desc": "Doctor registration with email verification, bcrypt password hashing, forgot password flow",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_006",
+    "title": "Role-based access control (RBAC)",
+    "desc": "Roles: Patient, Doctor, Nurse, Receptionist, Admin, SuperAdmin. Permission middleware",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_007",
+    "title": "API documentation \u2014 OpenAPI/Swagger",
+    "desc": "Auto-generated API docs with Swagger UI. Request/response schemas for all endpoints",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_008",
+    "title": "Error handling + logging middleware",
+    "desc": "Structured error responses, Winston/Pino logging, request ID tracking, correlation IDs",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_009",
+    "title": "Rate limiting + API security",
+    "desc": "Rate limiter per endpoint, CORS, helmet, input validation (Zod/Joi), SQL injection prevention",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_010",
+    "title": "File upload service \u2014 S3/R2",
+    "desc": "Upload documents, images, prescriptions to S3. Pre-signed URLs, file type validation, size limits",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_011",
+    "title": "Patient-doctor linking API",
+    "desc": "Invite via code/QR/link, accept/reject linking, unlink. Manage linked relationships",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_012",
+    "title": "Family profile management API",
+    "desc": "CRUD for family profiles (up to 6 members per account). Switch active profile",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_013",
+    "title": "Medications CRUD API",
+    "desc": "Create/read/update/delete medications with brand, generic, dosage, frequency, timing, refill tracking",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_014",
+    "title": "Dose logs API",
+    "desc": "Log dose events (taken/missed/snoozed), query by date range, adherence calculation endpoints",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_015",
+    "title": "Vitals API",
+    "desc": "Store/retrieve BP, HR, SpO2, weight, temperature, glucose readings with timestamps and source",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_016",
+    "title": "Symptoms API",
+    "desc": "Log symptoms with body location, severity, duration, triggers. Query by date range",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_017",
+    "title": "Lab results / biomarkers API",
+    "desc": "Store lab values with normal ranges, body system panels. Trend calculation endpoints",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_018",
+    "title": "Medical records API",
+    "desc": "Upload/categorize documents across 11 categories. Timeline query with filtering",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_019",
+    "title": "Appointments API",
+    "desc": "CRUD for appointments, calendar queries, status management, reminders scheduling",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_020",
+    "title": "Messaging API",
+    "desc": "Async message threads, send/receive, attachments, read receipts, thread management",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_021",
+    "title": "Prescriptions API",
+    "desc": "Digital Rx creation, drug search, interaction check, NMC-compliant format generation",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_022",
+    "title": "Push notification service \u2014 APNs + FCM",
+    "desc": "Send push notifications for dose reminders, messages, appointments, alerts. Priority levels",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_023",
+    "title": "Real-time WebSocket server",
+    "desc": "WebSocket for live messaging, queue updates, vital alerts. Socket.IO or native WS",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_024",
+    "title": "Background job queue",
+    "desc": "Bull/BullMQ for async tasks: report generation, AI processing, notification batching, data sync",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_025",
+    "title": "Profile sharing API",
+    "desc": "Generate shareable links with permission levels (viewer/manager), expiry (1hr/24hr/7d/never), security codes",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_026",
+    "title": "Achievements/streaks API",
+    "desc": "Track streaks, check achievement criteria, unlock badges. Leaderboard queries",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p16_027",
+    "title": "Custom reminders API",
+    "desc": "CRUD for custom reminders with repeat options, profile linking, notification scheduling",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 16: Platform \u2014 Backend",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_001",
+    "title": "Doctor app \u2014 Xcode project setup",
+    "desc": "New iOS app target or separate project for Doctor app. Shared design system, separate navigation",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_002",
+    "title": "Doctor registration + license verification UI",
+    "desc": "Name, specialty, medical council registration, certificate upload for admin review",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_003",
+    "title": "Doctor profile setup",
+    "desc": "Photo, qualifications, consultation fees, availability hours, specialties",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_004",
+    "title": "Clinic/hospital linking",
+    "desc": "Join existing clinic or create new one. Admin invitation flow",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_005",
+    "title": "Patient list with search/filter",
+    "desc": "All linked patients with search by name/condition, filter by alert status/last visit",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_006",
+    "title": "Patient traffic-light status",
+    "desc": "Green (stable), yellow (needs attention), red (urgent) based on vitals, adherence, alerts",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_007",
+    "title": "Patient detail view \u2014 vitals at a glance",
+    "desc": "Vitals, medications, symptoms, adherence percentage in a single scrollable view per patient",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_008",
+    "title": "Patient vital trend charts",
+    "desc": "BP, glucose, weight, HR trends over 7d/30d/90d per patient. Interactive charts",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_009",
+    "title": "Medication adherence view per patient",
+    "desc": "Show adherence % per medicine, dose-by-dose timeline, missed dose patterns",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_010",
+    "title": "Alert panel \u2014 concerning patients",
+    "desc": "List of patients with breached vital thresholds, declining adherence, or severe symptoms",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_011",
+    "title": "Set vital thresholds per patient",
+    "desc": "Configure alert thresholds: \"Alert me if BP > 160/100\" or \"Glucose > 200\" per patient",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_012",
+    "title": "Automated threshold alerts",
+    "desc": "Push notification to doctor when patient vital breaches threshold. Include patient name + value",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_013",
+    "title": "RPM dashboard \u2014 real-time vital feeds",
+    "desc": "Live dashboard showing recent vital readings from all monitored patients",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_014",
+    "title": "Weekly patient panel summary (AI)",
+    "desc": "AI-generated summary of all patients: who improved, who declined, who needs attention",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_015",
+    "title": "Doctor message inbox",
+    "desc": "Messages organized by patient with unread badges, search, priority sorting",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_016",
+    "title": "Quick reply templates",
+    "desc": "Pre-built replies: \"Continue meds\", \"Come for checkup\", \"Labs normal\", \"Increase dosage\"",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_017",
+    "title": "Video/audio call \u2014 initiate/accept",
+    "desc": "WebRTC or Agora SDK for video calls. Call screen with patient name, duration timer",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_018",
+    "title": "Post-consultation notes",
+    "desc": "After call, add notes to patient record. Attach to specific episode/encounter",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_019",
+    "title": "Doctor boundary settings",
+    "desc": "Available hours, auto-reply messages, notification preferences",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_020",
+    "title": "E-prescription builder",
+    "desc": "Drug search with autocomplete, dosage picker, frequency, duration, meal timing, special instructions",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_021",
+    "title": "Indian drug database in Rx builder",
+    "desc": "Search 500+ Indian medicines by brand or generic name. Show MRP, manufacturer",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_022",
+    "title": "Drug interaction check in Rx builder",
+    "desc": "Real-time interaction check as medicines are added. Warning if conflict detected",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_023",
+    "title": "NMC-compliant Rx format",
+    "desc": "Generate PDF with registration number, qualification, digital signature. Share to patient",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_024",
+    "title": "Send Rx to patient \u2014 auto-add medicines",
+    "desc": "When doctor sends prescription, auto-add medicines to patient medication list + schedule reminders",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_025",
+    "title": "Prescription history per patient",
+    "desc": "View all past prescriptions for a patient, sorted by date",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_026",
+    "title": "Calendar view \u2014 daily/weekly schedule",
+    "desc": "Appointments calendar with day/week views, color-coded by type (in-person/video/walk-in)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_027",
+    "title": "Appointment slot configuration",
+    "desc": "Set working hours, slot duration (15/20/30 min), breaks, holidays",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_028",
+    "title": "Walk-in queue management (doctor view)",
+    "desc": "See current queue, call next patient, mark as seen/no-show",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_029",
+    "title": "Pre-visit AI patient summary",
+    "desc": "Auto-generated report: vitals since last visit, adherence, symptoms, concerns, suggested discussion points",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_030",
+    "title": "Post-visit documentation",
+    "desc": "Diagnosis, treatment plan, follow-up date, notes. Saves to patient record",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_031",
+    "title": "View patient lab results",
+    "desc": "See all lab results for a patient with trends and abnormal flags",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_032",
+    "title": "Add doctor notes to lab results",
+    "desc": "Annotate lab results with clinical interpretation",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_033",
+    "title": "AI treatment effectiveness analysis",
+    "desc": "Correlate adherence + symptom improvement. \"Patient X's symptoms improved 40% since starting Metformin\"",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p17_034",
+    "title": "Predictive adherence alerts",
+    "desc": "\"Patient X likely to miss doses next week based on pattern.\" ML-based prediction",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 17: Platform \u2014 Doctor App",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_001",
+    "title": "Hospital dashboard \u2014 Next.js project setup",
+    "desc": "Next.js 14+ with App Router, Tailwind CSS, shadcn/ui, TypeScript. Indian hosting (Vercel Edge/AWS)",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_002",
+    "title": "Hospital/clinic registration flow",
+    "desc": "Name, address, type (hospital/clinic/polyclinic), specialties, facility photos",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_003",
+    "title": "Department management",
+    "desc": "Create departments (Cardiology, Endocrinology, etc.), assign doctors to departments",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_004",
+    "title": "Role management \u2014 RBAC dashboard",
+    "desc": "Admin/Doctor/Nurse/Receptionist/Billing roles. Create custom roles with granular permissions",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_005",
+    "title": "Doctor invitation + onboarding",
+    "desc": "Invite doctors via email/phone, assign department, set permissions, onboarding wizard",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_006",
+    "title": "Staff management",
+    "desc": "Add/remove/edit staff members, set roles and permissions, activity logs",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_007",
+    "title": "Central patient registry",
+    "desc": "All patients across all doctors. Search by name, phone, ABHA ID, condition",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_008",
+    "title": "Patient assignment to doctors",
+    "desc": "Assign/reassign patients to doctors. Transfer with full history preserved",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_009",
+    "title": "Revenue analytics dashboard",
+    "desc": "Daily/weekly/monthly revenue by doctor, department, payment mode. Charts + export",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_010",
+    "title": "Patient analytics",
+    "desc": "New vs returning, condition distribution, age/gender demographics, geographic distribution",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_011",
+    "title": "Doctor utilization analytics",
+    "desc": "Appointments per doctor, avg consultation time, patient satisfaction, no-show rates",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_012",
+    "title": "Aggregate adherence analytics",
+    "desc": "Overall patient adherence rates, by condition, by medication. Identify at-risk cohorts",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_013",
+    "title": "UPI QR payment for consultations",
+    "desc": "Generate UPI QR at reception, track payments, reconcile with appointments",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_014",
+    "title": "Insurance TPA integration",
+    "desc": "Star Health, ICICI Lombard, HDFC Ergo TPA submission. Cashless authorization flow",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_015",
+    "title": "Ayushman Bharat claim submission",
+    "desc": "PMJAY empaneled hospital claim flow. Package rates, pre-auth, claim settlement tracking",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_016",
+    "title": "GST-compliant invoice generation",
+    "desc": "Auto-generate invoices with GSTIN, HSN codes, tax breakup. PDF download + email",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_017",
+    "title": "Revenue reports + reconciliation",
+    "desc": "Daily reconciliation of payments vs appointments. Export to Tally/accounting software",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_018",
+    "title": "ABDM Health Facility Registry",
+    "desc": "Register facility in HFR, obtain HFR ID, link to ABDM HIP/HIU",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_019",
+    "title": "ABHA ID patient verification",
+    "desc": "Verify patient ABHA ID at registration, pull demographics from ABDM",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_020",
+    "title": "DPDPA consent management dashboard",
+    "desc": "View/manage patient consents, audit trail, data retention policies per consent purpose",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_021",
+    "title": "Audit logs \u2014 all data access",
+    "desc": "Tamper-proof log of who accessed what patient data, when, from where. Admin viewable",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p18_022",
+    "title": "Data backup + disaster recovery",
+    "desc": "Automated daily backups, point-in-time recovery, cross-region replication. RTO < 4 hours",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 18: Platform \u2014 Hospital",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_001",
+    "title": "AWS Mumbai (ap-south-1) setup",
+    "desc": "VPC, subnets, security groups, IAM roles. DPDPA-compliant Indian region hosting",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_002",
+    "title": "PostgreSQL RDS with read replicas",
+    "desc": "RDS PostgreSQL 16, Multi-AZ, encrypted storage, read replica for analytics queries",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_003",
+    "title": "Redis for sessions + caching",
+    "desc": "ElastiCache Redis for JWT sessions, API caching, real-time features, rate limiting",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_004",
+    "title": "SQS/Bull message queue",
+    "desc": "Async task processing: notifications, report generation, AI processing, data sync",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_005",
+    "title": "S3 + CloudFront for documents",
+    "desc": "S3 bucket for medical documents/images, CloudFront CDN, pre-signed URLs, encryption",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_006",
+    "title": "CI/CD \u2014 GitHub Actions + Xcode Cloud",
+    "desc": "Backend: GitHub Actions \u2192 ECR \u2192 ECS. iOS: Xcode Cloud \u2192 TestFlight. Staging + production",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_007",
+    "title": "Monitoring \u2014 Datadog/Grafana",
+    "desc": "API health, error rates, latency P99, database performance, alert rules",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_008",
+    "title": "APNs push notification setup",
+    "desc": "Apple Push Notification service certificates, device token management, payload formatting",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_009",
+    "title": "FCM setup for Android (future)",
+    "desc": "Firebase Cloud Messaging for future Android app. Server-side integration",
+    "category": "infra",
+    "priority": "low",
+    "phase": "Phase 19: Infrastructure",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_010",
+    "title": "WebRTC / Agora video infrastructure",
+    "desc": "Video calling service for teleconsultation. TURN/STUN servers or Agora SDK integration",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_011",
+    "title": "SSL/TLS certificate management",
+    "desc": "Let's Encrypt / ACM certificates, auto-renewal, HSTS headers",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_012",
+    "title": "WAF + DDoS protection",
+    "desc": "AWS WAF rules for API protection, rate limiting, bot detection, DDoS mitigation",
+    "category": "infra",
+    "priority": "high",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_013",
+    "title": "Data encryption at rest \u2014 AES-256",
+    "desc": "RDS encryption, S3 encryption, application-level encryption for PII/PHI fields",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 19: Infrastructure",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p19_014",
+    "title": "Security assessment \u2014 HIPAA/DPDPA",
+    "desc": "Penetration testing, vulnerability assessment, compliance gap analysis. Engage security firm",
+    "category": "infra",
+    "priority": "critical",
+    "phase": "Phase 19: Infrastructure",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_001",
+    "title": "Patient subscription tiers \u2014 StoreKit 2",
+    "desc": "Free / Pro (\u20b9599/yr) / Premium (\u20b9999/yr) with feature gating in iOS app",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_002",
+    "title": "Doctor SaaS subscription tiers",
+    "desc": "Free (20 patients) / Solo (\u20b92K/mo) / Clinic (\u20b98K/mo) / Hospital (\u20b930K/mo)",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_003",
+    "title": "In-app purchase integration (StoreKit 2)",
+    "desc": "Product configuration, purchase flow, receipt validation, subscription management",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_004",
+    "title": "Lab test booking \u2014 Healthians/Thyrocare affiliate",
+    "desc": "In-app lab test booking via affiliate API. 15-25% commission per booking",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 20: Growth",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_005",
+    "title": "Pharmacy referrals \u2014 1mg/PharmEasy",
+    "desc": "Deep links to pharmacy apps for medicine reorder. Track referral conversions",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_006",
+    "title": "Insurance partnership program",
+    "desc": "Partner with Star Health, ICICI Lombard for chronic disease management programs. PEMPM revenue",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 20: Growth",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_007",
+    "title": "Referral program \u2014 patient + doctor",
+    "desc": "Patient invites patient (get 1 month Pro free), patient invites doctor (both get rewards)",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_008",
+    "title": "Corporate wellness program",
+    "desc": "B2B packaging: employee + family medication management. Per-employee-per-month pricing",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 20: Growth",
+    "status": "backlog",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_009",
+    "title": "App Store optimization",
+    "desc": "Screenshots (6.7\" + 6.1\"), description, keywords, What's New. A/B test app icon",
+    "category": "design",
+    "priority": "high",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
+  },
+  {
+    "id": "p20_010",
+    "title": "Landing page update \u2014 platform positioning",
+    "desc": "Update medcare.app landing page for doctor-patient-hospital platform positioning",
+    "category": "design",
+    "priority": "medium",
+    "phase": "Phase 20: Growth",
+    "status": "todo",
+    "created": "2026-03-21"
   }
 ]

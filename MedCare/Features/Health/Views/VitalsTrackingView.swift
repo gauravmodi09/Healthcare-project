@@ -11,6 +11,9 @@ struct VitalsTrackingView: View {
     @State private var expandedCard: VitalType?
     @State private var historyData: [VitalDataPoint] = []
     @State private var bpHistory: [BloodPressureReading] = []
+    @State private var showGlucoseTracking = false
+    @State private var showBPTrend = false
+    @State private var showConnectedDevices = false
 
     // Sparkline data (last 7 points per vital)
     @State private var hrSparkline: [VitalDataPoint] = []
@@ -52,6 +55,21 @@ struct VitalsTrackingView: View {
                 healthService: healthService
             )
             .presentationDetents([.large])
+        }
+        .sheet(isPresented: $showGlucoseTracking) {
+            GlucoseTrackingView(
+                healthService: healthService,
+                latestReading: vitals.bloodGlucose?.value
+            )
+        }
+        .sheet(isPresented: $showBPTrend) {
+            BPTrendView(
+                healthService: healthService,
+                latestBP: vitals.bloodPressure
+            )
+        }
+        .sheet(isPresented: $showConnectedDevices) {
+            ConnectedDevicesView()
         }
         .task {
             await authorizeAndFetch()
@@ -170,7 +188,7 @@ struct VitalsTrackingView: View {
                     sparklineColor: bpColor(vitals.bloodPressure),
                     badge: bpBadge(vitals.bloodPressure)
                 ) {
-                    loadHistoryAndExpand(.bloodPressure)
+                    showBPTrend = true
                 }
 
                 // Weight
@@ -200,7 +218,7 @@ struct VitalsTrackingView: View {
                     sparklineColor: glucoseColor(vitals.bloodGlucose?.value),
                     badge: glucoseBadge(vitals.bloodGlucose?.value)
                 ) {
-                    loadHistoryAndExpand(.bloodGlucose)
+                    showGlucoseTracking = true
                 }
 
                 // Steps
@@ -229,7 +247,9 @@ struct VitalsTrackingView: View {
         do {
             try await healthService.requestAuthorization()
         } catch {
+            #if DEBUG
             print("HealthKit auth error: \(error.localizedDescription)")
+            #endif
         }
         await refreshData()
         isLoading = false
@@ -304,8 +324,9 @@ struct VitalsTrackingView: View {
     private func weightTrendBadge() -> VitalBadge? {
         guard weightSparkline.count >= 2 else { return nil }
         let sorted = weightSparkline.sorted { $0.date < $1.date }
-        let first = sorted.first!.value
-        let last = sorted.last!.value
+        guard let firstEntry = sorted.first, let lastEntry = sorted.last else { return nil }
+        let first = firstEntry.value
+        let last = lastEntry.value
         let diff = last - first
         if abs(diff) < 0.3 { return VitalBadge(text: "Stable \u{2192}", color: MCColors.info) }
         if diff > 0 { return VitalBadge(text: "Gaining \u{2191}", color: MCColors.warning) }

@@ -1,0 +1,81 @@
+<h2>Task Detail: How should notes/comments work?</h2>
+<p class="subtitle">When you click a task card, how should the detail view appear?</p>
+
+<div class="cards">
+  <div class="card" data-choice="a" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;background:#f8fafb;min-height:220px;">
+      <!-- Slide-over panel mockup -->
+      <div style="display:flex;height:200px;">
+        <div style="flex:1;background:#f1f5f9;border-radius:8px 0 0 8px;padding:12px;opacity:0.4;">
+          <div style="font-size:10px;color:#94a3b8;margin-bottom:8px;">KANBAN BOARD (dimmed)</div>
+          <div style="background:white;border-radius:6px;padding:8px;margin-bottom:4px;font-size:10px;opacity:0.5;">Task card...</div>
+          <div style="background:white;border-radius:6px;padding:8px;font-size:10px;opacity:0.5;">Task card...</div>
+        </div>
+        <div style="width:55%;background:white;border-radius:0 8px 8px 0;padding:14px;box-shadow:-4px 0 20px rgba(0,0,0,0.08);border-left:3px solid #0A7E8C;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+            <span style="font-size:12px;font-weight:700;color:#1a2332;">AI Chat — Core engine</span>
+            <span style="font-size:10px;color:#94a3b8;">✕</span>
+          </div>
+          <div style="display:flex;gap:4px;margin-bottom:10px;">
+            <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+            <span style="font-size:9px;background:#fef2f2;color:#dc2626;padding:1px 6px;border-radius:6px;">critical</span>
+            <span style="font-size:9px;background:#e8f5f6;color:#0A7E8C;padding:1px 6px;border-radius:6px;">Phase 2.5</span>
+          </div>
+          <div style="font-size:10px;color:#64748b;margin-bottom:10px;line-height:1.4;">In-app AI chat with case-aware context. Safety guardrails, emergency detection.</div>
+          <div style="border-top:1px solid #e2e8f0;padding-top:8px;">
+            <div style="font-size:10px;font-weight:600;color:#64748b;margin-bottom:6px;">Notes</div>
+            <div style="background:#f8fafc;border-radius:6px;padding:8px;margin-bottom:4px;font-size:10px;color:#475569;">
+              <span style="color:#0A7E8C;font-weight:600;">Mar 15:</span> Should use GPT-4V for context assembly
+            </div>
+            <div style="background:#f8fafc;border-radius:6px;padding:8px;margin-bottom:6px;font-size:10px;color:#475569;">
+              <span style="color:#0A7E8C;font-weight:600;">Mar 16:</span> Need to add DPDP Act compliance check
+            </div>
+            <div style="background:#f1f5f9;border-radius:6px;padding:6px 8px;font-size:10px;color:#94a3b8;">Add a note...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>A. Slide-over Panel</h3>
+      <p>Panel slides in from the right over the board. Board stays visible but dimmed. Quick to open/close. Notes listed chronologically below description.</p>
+    </div>
+  </div>
+
+  <div class="card" data-choice="b" onclick="toggleSelect(this)">
+    <div class="card-image" style="padding:20px;background:#f8fafb;min-height:220px;">
+      <!-- Expand in-place mockup -->
+      <div style="display:flex;gap:8px;height:200px;">
+        <div style="flex:1;background:#f1f5f9;border-radius:8px;padding:10px;">
+          <div style="font-size:10px;color:#94a3b8;margin-bottom:6px;">TO DO</div>
+          <!-- Expanded card -->
+          <div style="background:white;border-radius:8px;padding:12px;box-shadow:0 2px 8px rgba(0,0,0,0.08);border-left:3px solid #ef4444;">
+            <div style="font-size:11px;font-weight:700;color:#1a2332;margin-bottom:4px;">AI Chat — Core engine</div>
+            <div style="display:flex;gap:4px;margin-bottom:8px;">
+              <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+              <span style="font-size:9px;background:#fef2f2;color:#dc2626;padding:1px 6px;border-radius:6px;">critical</span>
+            </div>
+            <div style="font-size:10px;color:#64748b;margin-bottom:8px;line-height:1.3;">In-app AI chat with case-aware context. Safety guardrails.</div>
+            <div style="border-top:1px solid #e8ecf0;padding-top:6px;">
+              <div style="background:#f8fafc;border-radius:4px;padding:6px;margin-bottom:3px;font-size:9px;color:#475569;">
+                <strong style="color:#0A7E8C;">Mar 15:</strong> Use GPT-4V for context
+              </div>
+              <div style="background:#f1f5f9;border-radius:4px;padding:5px 6px;font-size:9px;color:#94a3b8;">Add note...</div>
+            </div>
+          </div>
+          <!-- Collapsed card below -->
+          <div style="background:white;border-radius:8px;padding:8px;margin-top:6px;box-shadow:0 1px 2px rgba(0,0,0,0.04);border-left:3px solid #0A7E8C;opacity:0.6;">
+            <div style="font-size:10px;font-weight:600;color:#1a2332;">Context assembly</div>
+          </div>
+        </div>
+        <div style="flex:1;background:#f1f5f9;border-radius:8px;padding:10px;opacity:0.5;">
+          <div style="font-size:10px;color:#94a3b8;margin-bottom:6px;">IN PROGRESS</div>
+          <div style="background:white;border-radius:6px;padding:8px;font-size:10px;">Smart nudges</div>
+        </div>
+      </div>
+    </div>
+    <div class="card-body">
+      <h3>B. Expand In-Place</h3>
+      <p>Card expands within the column to show description + notes. No overlay, no context switch. More compact, stays in flow. Click again to collapse.</p>
+    </div>
+  </div>
+</div>

@@ -6,7 +6,7 @@ struct LLMService {
 
     /// Whether a valid API key is available for any provider
     var isConfigured: Bool {
-        LLMConfig.groqAPIKey != nil || LLMConfig.geminiAPIKey != nil
+        (LLMConfig.groqAPIKey != nil && !LLMConfig.groqAPIKey!.isEmpty) || LLMConfig.geminiAPIKey != nil
     }
 
     /// Streams a response from the best available LLM provider

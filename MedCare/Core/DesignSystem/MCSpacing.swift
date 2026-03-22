@@ -10,12 +10,13 @@ enum MCSpacing {
     static let xl: CGFloat = 32
     static let xxl: CGFloat = 48
 
-    static let screenPadding: CGFloat = 20
+    static let screenPadding: CGFloat = 22
     static let cardPadding: CGFloat = 16
     static let sectionSpacing: CGFloat = 24
 
-    static let cornerRadius: CGFloat = 12
-    static let cornerRadiusLarge: CGFloat = 20
+    static let cornerRadius: CGFloat = 16
+    static let cornerRadiusLarge: CGFloat = 24
+    static let cornerRadiusHero: CGFloat = 28
     static let cornerRadiusSmall: CGFloat = 8
 
     static let buttonHeight: CGFloat = 52

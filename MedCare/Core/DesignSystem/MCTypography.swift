@@ -31,6 +31,15 @@ enum MCTypography {
     /// 28pt bold monospaced digits for adherence percentages
     static let metric = Font.system(size: 28, weight: .bold, design: .monospaced).monospacedDigit()
 
+    /// 48pt bold rounded monospacedDigit — for big dashboard numbers
+    static let heroMetric = Font.system(size: 48, weight: .bold, design: .rounded).monospacedDigit()
+
+    /// 13pt medium rounded — for labels under hero metrics
+    static let metricLabel = Font.system(size: 13, weight: .medium, design: .rounded)
+
+    /// 15pt regular serif — for AI-generated content (visual distinction)
+    static let insightBody = Font.system(size: 15, weight: .regular, design: .serif)
+
     // MARK: - OTP / Phone
     static let otpDigit = Font.system(size: 32, weight: .bold, design: .monospaced)
     static let phoneNumber = Font.system(size: 24, weight: .semibold, design: .monospaced)

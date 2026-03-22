@@ -238,7 +238,7 @@ final class DrugQAService {
                     let candidate = String(lower[captureRange])
                     let results = drugDB.searchMedicines(query: candidate)
                     if !results.isEmpty {
-                        secondMedicine = results.first!.brandName
+                        secondMedicine = results.first?.brandName ?? candidate
                     } else {
                         secondMedicine = candidate
                     }

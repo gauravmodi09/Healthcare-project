@@ -144,6 +144,80 @@ final class LocalizationService {
         "profile.add_profile":      "Add Profile",
         "profile.switch_profile":   "Switch Profile",
         "profile.subscription":     "Subscription",
+        "profile.sign_out":         "Sign Out",
+        "profile.about":            "About",
+        "profile.achievements":     "Achievements",
+        "profile.doctor_visit":     "Doctor Visit Prep",
+        "profile.elder_mode":       "Elder Mode",
+
+        // Settings
+        "settings.import_records":  "Import Health Records",
+        "settings.abha_linking":    "ABHA Linking",
+        "settings.payment_upi":    "Payment & UPI",
+        "settings.help_support":   "Help & Support",
+        "settings.about_app":      "About MedCare",
+        "settings.privacy":         "Privacy Settings",
+        "settings.manage_consents": "Manage Consents",
+        "settings.export_data":     "Export My Data",
+        "settings.delete_account":  "Delete Account",
+
+        // Messages
+        "messages.doctor":          "Doctor",
+        "messages.patient":         "Patient",
+        "messages.send":            "Send",
+        "messages.type_message":    "Type a message...",
+
+        // Dose Status
+        "dose.taken":               "Taken",
+        "dose.missed":              "Missed",
+        "dose.pending":             "Pending",
+        "dose.snoozed":             "Snoozed",
+        "dose.skipped":             "Skipped",
+
+        // Actions
+        "action.take_now":          "Take Now",
+        "action.skip":              "Skip",
+        "action.snooze":            "Snooze",
+        "action.share":             "Share",
+        "action.retry":             "Retry",
+        "action.confirm":           "Confirm",
+        "action.search":            "Search",
+        "action.filter":            "Filter",
+        "action.add":               "Add",
+        "action.remove":            "Remove",
+        "action.refresh":           "Refresh",
+        "action.view_all":          "View All",
+        "action.learn_more":        "Learn More",
+
+        // Ayurvedic
+        "ayurvedic.title":          "Ayurvedic Medicines",
+        "ayurvedic.uses":           "Common Uses",
+        "ayurvedic.dosage":         "Dosage",
+        "ayurvedic.timing":         "When to Take",
+        "ayurvedic.caution":        "Contraindications",
+        "ayurvedic.form":           "Form",
+
+        // ABDM / Health Records
+        "abdm.import_title":        "Import Health Records",
+        "abdm.search_providers":    "Search hospitals, clinics, labs...",
+        "abdm.data_types":          "Data Types",
+        "abdm.date_range":          "Date Range",
+        "abdm.request_records":     "Request Records",
+        "abdm.pending_requests":    "Pending Requests",
+        "abdm.imported_records":    "Imported Records",
+        "abdm.prescriptions":       "Prescriptions",
+        "abdm.lab_reports":         "Lab Reports",
+        "abdm.discharge_summaries": "Discharge Summaries",
+        "abdm.vitals":              "Vitals",
+        "abdm.status_requested":    "Requested",
+        "abdm.status_approved":     "Approved",
+        "abdm.status_denied":       "Denied",
+        "abdm.status_expired":      "Expired",
+
+        // Errors
+        "error.generic":            "Something went wrong",
+        "error.network":            "No internet connection",
+        "error.try_again":          "Please try again",
     ]
 
     // MARK: - Hindi Strings
@@ -225,6 +299,80 @@ final class LocalizationService {
         "profile.add_profile":      "प्रोफ़ाइल जोड़ें",
         "profile.switch_profile":   "प्रोफ़ाइल बदलें",
         "profile.subscription":     "सदस्यता",
+        "profile.sign_out":         "साइन आउट",
+        "profile.about":            "के बारे में",
+        "profile.achievements":     "उपलब्धियाँ",
+        "profile.doctor_visit":     "डॉक्टर मिलने की तैयारी",
+        "profile.elder_mode":       "बड़ों का मोड",
+
+        // Settings
+        "settings.import_records":  "स्वास्थ्य रिकॉर्ड आयात करें",
+        "settings.abha_linking":    "ABHA लिंकिंग",
+        "settings.payment_upi":    "भुगतान और UPI",
+        "settings.help_support":   "सहायता",
+        "settings.about_app":      "MedCare के बारे में",
+        "settings.privacy":         "गोपनीयता सेटिंग्स",
+        "settings.manage_consents": "सहमतियाँ प्रबंधित करें",
+        "settings.export_data":     "डेटा निर्यात करें",
+        "settings.delete_account":  "खाता हटाएँ",
+
+        // Messages
+        "messages.doctor":          "डॉक्टर",
+        "messages.patient":         "मरीज़",
+        "messages.send":            "भेजें",
+        "messages.type_message":    "संदेश लिखें...",
+
+        // Dose Status
+        "dose.taken":               "ली गई",
+        "dose.missed":              "छूट गई",
+        "dose.pending":             "बाकी",
+        "dose.snoozed":             "स्नूज़ किया",
+        "dose.skipped":             "छोड़ी गई",
+
+        // Actions
+        "action.take_now":          "अभी लें",
+        "action.skip":              "छोड़ें",
+        "action.snooze":            "स्नूज़",
+        "action.share":             "साझा करें",
+        "action.retry":             "पुनः प्रयास",
+        "action.confirm":           "पुष्टि करें",
+        "action.search":            "खोजें",
+        "action.filter":            "फ़िल्टर",
+        "action.add":               "जोड़ें",
+        "action.remove":            "हटाएँ",
+        "action.refresh":           "ताज़ा करें",
+        "action.view_all":          "सभी देखें",
+        "action.learn_more":        "और जानें",
+
+        // Ayurvedic
+        "ayurvedic.title":          "आयुर्वेदिक दवाइयाँ",
+        "ayurvedic.uses":           "सामान्य उपयोग",
+        "ayurvedic.dosage":         "खुराक",
+        "ayurvedic.timing":         "कब लें",
+        "ayurvedic.caution":        "सावधानियाँ",
+        "ayurvedic.form":           "रूप",
+
+        // ABDM / Health Records
+        "abdm.import_title":        "स्वास्थ्य रिकॉर्ड आयात करें",
+        "abdm.search_providers":    "अस्पताल, क्लिनिक, लैब खोजें...",
+        "abdm.data_types":          "डेटा प्रकार",
+        "abdm.date_range":          "तारीख सीमा",
+        "abdm.request_records":     "रिकॉर्ड का अनुरोध करें",
+        "abdm.pending_requests":    "लंबित अनुरोध",
+        "abdm.imported_records":    "आयातित रिकॉर्ड",
+        "abdm.prescriptions":       "पर्चे",
+        "abdm.lab_reports":         "लैब रिपोर्ट",
+        "abdm.discharge_summaries": "डिस्चार्ज सारांश",
+        "abdm.vitals":              "वाइटल्स",
+        "abdm.status_requested":    "अनुरोधित",
+        "abdm.status_approved":     "स्वीकृत",
+        "abdm.status_denied":       "अस्वीकृत",
+        "abdm.status_expired":      "समाप्त",
+
+        // Errors
+        "error.generic":            "कुछ गलत हो गया",
+        "error.network":            "इंटरनेट कनेक्शन नहीं है",
+        "error.try_again":          "कृपया पुनः प्रयास करें",
     ]
 
     // MARK: - Hindi Dosage Instructions

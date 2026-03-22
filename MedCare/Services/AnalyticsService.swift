@@ -98,7 +98,7 @@ final class AnalyticsService {
         for episode in profile.episodes where episode.status == .active {
             for medicine in episode.activeMedicines {
                 let medDoses = medicine.doseLogs.filter {
-                    $0.scheduledTime > Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+                    $0.scheduledTime > (Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date())
                 }
                 let taken = medDoses.filter { $0.status == .taken }.count
                 let total = medDoses.count
@@ -174,7 +174,7 @@ final class AnalyticsService {
     }
 
     private func calculateWeeklyAdherence(doses: [DoseLog]) -> Double {
-        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date())!
+        let weekAgo = Calendar.current.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentDoses = doses.filter { $0.scheduledTime > weekAgo }
         guard !recentDoses.isEmpty else { return 0 }
         let taken = recentDoses.filter { $0.status == .taken }.count

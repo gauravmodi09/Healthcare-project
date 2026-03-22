@@ -1,9 +1,11 @@
 import SwiftUI
 
 struct DoctorPatientDetailView: View {
-    let patient: DoctorMockPatient
+    let patient: DoctorPatientData
     @Environment(\.dismiss) private var dismiss
     @State private var showPrescription = false
+    @State private var showVideoCall = false
+    @State private var showConsultationNotes = false
     @State private var selectedAdherenceRange = 0 // 0 = 7 days, 1 = 30 days
 
     var body: some View {
@@ -11,6 +13,7 @@ struct DoctorPatientDetailView: View {
             ScrollView {
                 VStack(spacing: MCSpacing.sectionSpacing) {
                     patientHeader
+                    aiPreVisitSummary
                     vitalsSummary
                     adherenceChart
                     currentMedications
@@ -29,6 +32,16 @@ struct DoctorPatientDetailView: View {
             }
             .sheet(isPresented: $showPrescription) {
                 EPrescriptionView(patient: patient)
+            }
+            .sheet(isPresented: $showVideoCall) {
+                VideoCallView(
+                    patientName: patient.name,
+                    doctorName: "Dr. Anil Mehta",
+                    patientSummary: "\(patient.primaryCondition), \(patient.age)y, \(patient.lastVitalLabel): \(patient.lastVitalValue)"
+                )
+            }
+            .sheet(isPresented: $showConsultationNotes) {
+                ConsultationNotesView(patient: patient)
             }
         }
     }
@@ -71,6 +84,160 @@ struct DoctorPatientDetailView: View {
             }
         }
         .padding(.horizontal, MCSpacing.screenPadding)
+    }
+
+    // MARK: - AI Pre-Visit Summary
+
+    private var aiPreVisitSummary: some View {
+        VStack(alignment: .leading, spacing: MCSpacing.sm) {
+            HStack(spacing: MCSpacing.xs) {
+                Image(systemName: "sparkles")
+                    .foregroundStyle(Color(hex: "A78BFA"))
+                    .font(.system(size: 14))
+                Text("AI SUMMARY")
+                    .font(MCTypography.sectionHeader)
+                    .foregroundStyle(MCColors.textSecondary)
+                    .kerning(1.2)
+            }
+            .padding(.horizontal, MCSpacing.screenPadding)
+
+            MCAccentCard(accent: Color(hex: "A78BFA")) {
+                VStack(alignment: .leading, spacing: MCSpacing.sm) {
+                    // Vitals since last visit
+                    VStack(alignment: .leading, spacing: MCSpacing.xs) {
+                        Text("Vitals Since Last Visit")
+                            .font(MCTypography.captionBold)
+                            .foregroundStyle(MCColors.textSecondary)
+
+                        HStack(spacing: MCSpacing.md) {
+                            aiVitalChange(label: "BP", value: "\(patient.bpSystolic)/\(patient.bpDiastolic)",
+                                          trend: patient.bpTrend, isAlarming: patient.bpSystolic > 140)
+                            aiVitalChange(label: "HR", value: "\(patient.heartRate) bpm",
+                                          trend: patient.hrTrend, isAlarming: patient.heartRate > 100)
+                            aiVitalChange(label: "SpO2", value: "\(patient.spO2)%",
+                                          trend: patient.spO2Trend, isAlarming: patient.spO2 < 95)
+                        }
+                    }
+
+                    Divider()
+
+                    // Adherence
+                    HStack(spacing: MCSpacing.sm) {
+                        Text("Adherence:")
+                            .font(MCTypography.captionBold)
+                            .foregroundStyle(MCColors.textSecondary)
+                        Text("\(patient.adherencePercent)%")
+                            .font(MCTypography.headline)
+                            .foregroundStyle(adherenceColor(patient.adherencePercent))
+                        Text(patient.adherencePercent >= 75 ? "Improved" : "Declined")
+                            .font(MCTypography.captionBold)
+                            .foregroundStyle(patient.adherencePercent >= 75 ? MCColors.success : MCColors.error)
+                            .padding(.horizontal, MCSpacing.xs)
+                            .padding(.vertical, 2)
+                            .background((patient.adherencePercent >= 75 ? MCColors.success : MCColors.error).opacity(0.1))
+                            .clipShape(Capsule())
+                    }
+
+                    // Symptoms
+                    if !patient.recentSymptoms.isEmpty {
+                        Divider()
+                        VStack(alignment: .leading, spacing: MCSpacing.xxs) {
+                            Text("Recent Symptoms")
+                                .font(MCTypography.captionBold)
+                                .foregroundStyle(MCColors.textSecondary)
+                            Text(patient.recentSymptoms.map(\.name).joined(separator: ", "))
+                                .font(MCTypography.insightBody)
+                                .foregroundStyle(MCColors.textPrimary)
+                        }
+                    }
+
+                    Divider()
+
+                    // Suggested discussion points
+                    VStack(alignment: .leading, spacing: MCSpacing.xs) {
+                        HStack(spacing: MCSpacing.xxs) {
+                            Image(systemName: "lightbulb.fill")
+                                .font(.system(size: 11))
+                                .foregroundStyle(Color(hex: "A78BFA"))
+                            Text("Suggested Discussion Points")
+                                .font(MCTypography.captionBold)
+                                .foregroundStyle(MCColors.textSecondary)
+                        }
+
+                        VStack(alignment: .leading, spacing: MCSpacing.xxs) {
+                            ForEach(suggestedDiscussionPoints, id: \.self) { point in
+                                HStack(alignment: .top, spacing: MCSpacing.xs) {
+                                    Circle()
+                                        .fill(Color(hex: "A78BFA"))
+                                        .frame(width: 5, height: 5)
+                                        .padding(.top, 5)
+                                    Text(point)
+                                        .font(MCTypography.insightBody)
+                                        .foregroundStyle(MCColors.textPrimary)
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .padding(.horizontal, MCSpacing.screenPadding)
+        }
+    }
+
+    private func aiVitalChange(label: String, value: String, trend: VitalTrend, isAlarming: Bool) -> some View {
+        VStack(spacing: MCSpacing.xxs) {
+            Text(label)
+                .font(MCTypography.caption)
+                .foregroundStyle(MCColors.textTertiary)
+            Text(value)
+                .font(MCTypography.captionBold)
+                .foregroundStyle(isAlarming ? MCColors.error : MCColors.textPrimary)
+            HStack(spacing: 2) {
+                Image(systemName: trend.rawValue)
+                    .font(.system(size: 9, weight: .bold))
+                    .foregroundStyle(isAlarming ? MCColors.error : MCColors.success)
+            }
+        }
+        .padding(.horizontal, MCSpacing.xs)
+        .padding(.vertical, MCSpacing.xxs)
+        .background(isAlarming ? MCColors.error.opacity(0.08) : MCColors.success.opacity(0.08))
+        .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+    }
+
+    private var suggestedDiscussionPoints: [String] {
+        var points: [String] = []
+
+        if patient.adherencePercent < 75 {
+            let lowMeds = patient.medications.filter { $0.adherencePercent < 60 }.map(\.name)
+            if !lowMeds.isEmpty {
+                points.append("Low adherence for \(lowMeds.joined(separator: ", ")) -- discuss barriers")
+            }
+        }
+
+        if patient.bpSystolic > 140 {
+            points.append("BP elevated at \(patient.bpSystolic)/\(patient.bpDiastolic) -- consider medication adjustment")
+        }
+
+        if patient.glucose > 200 {
+            points.append("Glucose at \(patient.glucose) mg/dL -- review insulin dosage and diet")
+        }
+
+        if patient.spO2 < 95 {
+            points.append("SpO2 at \(patient.spO2)% -- assess respiratory function")
+        }
+
+        if !patient.recentSymptoms.isEmpty {
+            let severe = patient.recentSymptoms.filter { $0.severity == "Severe" || $0.severity == "Moderate" }
+            if !severe.isEmpty {
+                points.append("Address \(severe.map(\.name).joined(separator: ", ")) symptoms")
+            }
+        }
+
+        if points.isEmpty {
+            points.append("Patient appears stable -- routine check-up")
+        }
+
+        return points
     }
 
     // MARK: - Vitals Summary
@@ -339,16 +506,16 @@ struct DoctorPatientDetailView: View {
 
             VStack(spacing: MCSpacing.xs) {
                 HStack(spacing: MCSpacing.xs) {
-                    quickActionButton(icon: "bubble.left.fill", title: "Send Message", color: MCColors.primaryTeal) {
-                        // placeholder action
+                    quickActionButton(icon: "phone.circle.fill", title: "Contact Options", color: MCColors.primaryTeal) {
+                        showVideoCall = true
                     }
                     quickActionButton(icon: "doc.text.fill", title: "Write Prescription", color: MCColors.accentCoral) {
                         showPrescription = true
                     }
                 }
                 HStack(spacing: MCSpacing.xs) {
-                    quickActionButton(icon: "calendar.badge.plus", title: "Schedule Follow-up", color: MCColors.info) {
-                        // placeholder action
+                    quickActionButton(icon: "note.text", title: "Consultation Notes", color: MCColors.info) {
+                        showConsultationNotes = true
                     }
                     quickActionButton(icon: "phone.fill", title: "Call Patient", color: MCColors.success) {
                         // placeholder action
@@ -405,5 +572,28 @@ struct DoctorPatientDetailView: View {
 }
 
 #Preview {
-    DoctorPatientDetailView(patient: DoctorMockData.patients.first!)
+    DoctorPatientDetailView(patient: DoctorPatientData(
+        id: UUID(),
+        name: "Preview Patient",
+        age: 45,
+        avatarEmoji: "\u{1F468}",
+        primaryCondition: "Hypertension",
+        status: .warning,
+        lastVitalLabel: "BP",
+        lastVitalValue: "142/92",
+        lastVitalTime: "2h ago",
+        adherencePercent: 68,
+        heartRate: 82,
+        bpSystolic: 142,
+        bpDiastolic: 92,
+        spO2: 97,
+        glucose: 110,
+        hrTrend: .stable,
+        bpTrend: .up,
+        spO2Trend: .stable,
+        glucoseTrend: .stable,
+        medications: [],
+        recentSymptoms: [],
+        dailyAdherence7Days: [100, 67, 100, 33, 100, 67, 100]
+    ))
 }

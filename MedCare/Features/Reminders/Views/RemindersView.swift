@@ -10,6 +10,8 @@ struct RemindersView: View {
     @State private var showDatePicker = false
     @State private var confirmedMedicineName: String?
     @State private var showAddReminder = false
+    @State private var showSnoozeOptions = false
+    @State private var pendingSnoozeDose: DoseLog?
 
     private var activeProfile: UserProfile? { users.first?.activeProfile }
 
@@ -69,7 +71,8 @@ struct RemindersView: View {
                                                             handleDoseAction(dose, status: .skipped)
                                                         },
                                                         onSnooze: {
-                                                            handleDoseAction(dose, status: .snoozed)
+                                                            pendingSnoozeDose = dose
+                                                            showSnoozeOptions = true
                                                         }
                                                     )
                                                     .listRowInsets(EdgeInsets(top: 4, leading: MCSpacing.screenPadding, bottom: 4, trailing: MCSpacing.screenPadding))
@@ -97,6 +100,10 @@ struct RemindersView: View {
                     }
                 }
             }
+            .refreshable {
+                // Re-evaluate dose data for current date
+                try? await Task.sleep(for: .milliseconds(300))
+            }
             .background(MCColors.backgroundLight)
             .dynamicTypeSize(.xSmall ... .accessibility3)
             .navigationTitle("Reminders")
@@ -122,6 +129,14 @@ struct RemindersView: View {
                     }
                 }
             }
+            .confirmationDialog("Snooze Duration", isPresented: $showSnoozeOptions, titleVisibility: .visible) {
+                Button("5 minutes") { handleSnooze(minutes: 5) }
+                Button("10 minutes") { handleSnooze(minutes: 10) }
+                Button("15 minutes") { handleSnooze(minutes: 15) }
+                Button("30 minutes") { handleSnooze(minutes: 30) }
+                Button("1 hour") { handleSnooze(minutes: 60) }
+                Button("Cancel", role: .cancel) { pendingSnoozeDose = nil }
+            }
             .onAppear {
                 Task {
                     let _ = await NotificationService.shared.requestPermission()
@@ -137,9 +152,11 @@ struct RemindersView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: MCSpacing.sm) {
                     ForEach(-2..<5, id: \.self) { offset in
-                        let date = Calendar.current.date(byAdding: .day, value: offset, to: Date())!
+                        let date = Calendar.current.date(byAdding: .day, value: offset, to: Date()) ?? Date()
                         Button {
-                            selectedDate = date
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
+                                selectedDate = date
+                            }
                         } label: {
                             VStack(spacing: MCSpacing.xxs) {
                                 Text(dayName(date))
@@ -151,9 +168,22 @@ struct RemindersView: View {
                                     .foregroundStyle(isSelected(date) ? .white : MCColors.textPrimary)
                             }
                             .frame(width: 52, height: 64)
-                            .background(isSelected(date) ? MCColors.primaryTeal : MCColors.cardBackground)
-                            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
-                            .shadow(color: .black.opacity(isSelected(date) ? 0.1 : 0.03), radius: 4, y: 2)
+                            .background {
+                                if isSelected(date) {
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .fill(LinearGradient(
+                                            colors: [MCColors.primaryTeal, MCColors.primaryTealDark],
+                                            startPoint: .topLeading,
+                                            endPoint: .bottomTrailing
+                                        ))
+                                } else {
+                                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                        .fill(.ultraThinMaterial)
+                                }
+                            }
+                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                            .shadow(color: .black.opacity(isSelected(date) ? 0.12 : 0.03), radius: isSelected(date) ? 6 : 3, y: isSelected(date) ? 3 : 1)
+                            .scaleEffect(isSelected(date) ? 1.08 : 1.0)
                         }
                     }
                 }
@@ -179,8 +209,10 @@ struct RemindersView: View {
             summaryItem(count: pending, label: "Pending", color: MCColors.textSecondary, icon: "clock")
         }
         .padding(MCSpacing.cardPadding)
-        .background(MCColors.cardBackground)
-        .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+        .background(.ultraThinMaterial)
+        .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius, style: .continuous))
+        .shadow(color: .black.opacity(0.04), radius: 3, y: 1)
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 4)
         .padding(.horizontal, MCSpacing.screenPadding)
         .accessibilityElement(children: .combine)
         .accessibilityLabel("Today's summary: \(taken) taken, \(skipped) skipped, \(pending) pending")
@@ -193,6 +225,8 @@ struct RemindersView: View {
                     .font(.footnote)
                 Text("\(count)")
                     .font(MCTypography.title2)
+                    .contentTransition(.numericText())
+                    .animation(.spring(response: 0.4, dampingFraction: 0.8), value: count)
             }
             .foregroundStyle(color)
 
@@ -248,21 +282,36 @@ struct RemindersView: View {
         Task {
             if status == .taken || status == .skipped {
                 await liveActivityService.endActivity(doseLogId: dose.id)
-            } else if status == .snoozed, let med = dose.medicine {
+            }
+        }
+    }
+
+    private func handleSnooze(minutes: Int) {
+        guard let dose = pendingSnoozeDose else { return }
+        pendingSnoozeDose = nil
+
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+        withAnimation {
+            dataService.logDose(dose, status: .snoozed)
+        }
+
+        Task {
+            if let med = dose.medicine {
                 await NotificationService.shared.scheduleSnooze(
                     medicineId: med.id,
                     medicineName: med.brandName,
                     dosage: med.dosage,
-                    doseLogId: dose.id
-                )
-                let snoozedUntil = Date().addingTimeInterval(15 * 60)
-                await liveActivityService.updateActivity(
                     doseLogId: dose.id,
-                    status: .snoozed,
-                    minutesRemaining: 15,
-                    snoozedUntil: snoozedUntil
+                    minutes: minutes
                 )
             }
+            let snoozedUntil = Date().addingTimeInterval(Double(minutes) * 60)
+            await liveActivityService.updateActivity(
+                doseLogId: dose.id,
+                status: .snoozed,
+                minutesRemaining: minutes,
+                snoozedUntil: snoozedUntil
+            )
         }
     }
 
@@ -271,7 +320,7 @@ struct RemindersView: View {
     private func dosesForDate(profile: UserProfile) -> [DoseLog] {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: selectedDate)
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else { return [] }
 
         return profile.episodes
             .flatMap { $0.medicines }
@@ -368,7 +417,8 @@ struct RemindersView: View {
                     Text(reminder.title)
                         .font(MCTypography.headline)
                         .foregroundStyle(MCColors.textPrimary)
-                        .lineLimit(1)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.85)
 
                     HStack(spacing: MCSpacing.xs) {
                         Image(systemName: "clock")
@@ -407,6 +457,7 @@ struct RemindersView: View {
                         .foregroundStyle(MCColors.success)
                 }
                 .accessibilityLabel("Mark \(reminder.title) as done")
+                .buttonStyle(.mcBounce)
             }
         }
     }

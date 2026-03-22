@@ -117,8 +117,7 @@ struct TreatmentTimelineView: View {
                 color: "007AFF"
             )
 
-            if !episode.symptomLogs.isEmpty {
-                let latest = episode.symptomLogs.sorted { $0.date > $1.date }.first!
+            if let latest = episode.symptomLogs.sorted(by: { $0.date > $1.date }).first {
                 StatPill(
                     icon: "face.smiling",
                     label: "Feeling",

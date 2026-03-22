@@ -1,10 +1,16 @@
 import express from 'express';
+import { createServer } from 'http';
 import cors from 'cors';
 import helmet from 'helmet';
 import morgan from 'morgan';
 import { env } from './config/env';
 import { checkConnection } from './config/db';
 import { errorHandler } from './middleware/errorHandler';
+
+// Service imports
+import { initWebSocket, getConnectedCount } from './services/websocket';
+import { initAPNProvider, shutdownAPNProvider } from './services/pushNotification';
+import { startScheduledJobs, shutdownQueues, getQueueHealth } from './services/jobQueue';
 
 // Route imports
 import authRoutes from './routes/auth';
@@ -17,8 +23,26 @@ import appointmentRoutes from './routes/appointments';
 import prescriptionRoutes from './routes/prescriptions';
 import abdmRoutes from './routes/abdm';
 import paymentRoutes from './routes/payments';
+import notificationRoutes from './routes/notifications';
+import achievementRoutes from './routes/achievements';
+import invoiceRoutes from './routes/invoices';
 
 const app = express();
+const httpServer = createServer(app);
+
+// ============================================================
+// WebSocket server (Socket.IO)
+// ============================================================
+const io = initWebSocket(httpServer);
+
+// ============================================================
+// Push notification provider
+// ============================================================
+if (process.env.APN_KEY_ID && process.env.APN_TEAM_ID) {
+  initAPNProvider();
+} else {
+  console.warn('[APN] Missing APN_KEY_ID / APN_TEAM_ID — push notifications disabled');
+}
 
 // ============================================================
 // Middleware
@@ -39,11 +63,19 @@ app.use(express.urlencoded({ extended: true }));
 // ============================================================
 app.get('/health', async (_req, res) => {
   const dbOk = await checkConnection();
+  const wsClients = await getConnectedCount();
+  let queueHealth = {};
+  try {
+    queueHealth = await getQueueHealth();
+  } catch { /* redis may not be available */ }
+
   res.status(dbOk ? 200 : 503).json({
     status: dbOk ? 'healthy' : 'degraded',
     timestamp: new Date().toISOString(),
     services: {
       database: dbOk ? 'connected' : 'disconnected',
+      websocket: { connected_clients: wsClients },
+      queues: queueHealth,
     },
   });
 });
@@ -61,6 +93,9 @@ app.use('/api/v1/appointments', appointmentRoutes);
 app.use('/api/v1/prescriptions', prescriptionRoutes);
 app.use('/api/v1/abdm', abdmRoutes);
 app.use('/api/v1/payments', paymentRoutes);
+app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/achievements', achievementRoutes);
+app.use('/api/v1/invoices', invoiceRoutes);
 
 // ============================================================
 // 404 handler
@@ -82,10 +117,34 @@ app.use(errorHandler);
 // ============================================================
 // Start server
 // ============================================================
-app.listen(env.PORT, () => {
+httpServer.listen(env.PORT, async () => {
   console.log(`MedCare API running on port ${env.PORT}`);
   console.log(`Environment: ${env.NODE_ENV}`);
   console.log(`Health: http://localhost:${env.PORT}/health`);
+
+  // Start background job processors
+  try {
+    await startScheduledJobs();
+    console.log('Background job queues started');
+  } catch (err) {
+    console.error('Failed to start job queues (Redis may not be available):', err);
+  }
 });
+
+// ============================================================
+// Graceful shutdown
+// ============================================================
+async function gracefulShutdown(signal: string) {
+  console.log(`\n${signal} received — shutting down gracefully...`);
+  shutdownAPNProvider();
+  await shutdownQueues();
+  httpServer.close(() => {
+    console.log('HTTP server closed');
+    process.exit(0);
+  });
+}
+
+process.on('SIGTERM', () => gracefulShutdown('SIGTERM'));
+process.on('SIGINT', () => gracefulShutdown('SIGINT'));
 
 export default app;

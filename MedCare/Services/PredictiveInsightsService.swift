@@ -296,27 +296,29 @@ final class PredictiveInsightsService {
         var checkDate = calendar.startOfDay(for: Date())
 
         for _ in 0..<365 {
-            let dayEnd = calendar.date(byAdding: .day, value: 1, to: checkDate)!
+            guard let dayEnd = calendar.date(byAdding: .day, value: 1, to: checkDate) else { break }
             let dayLogs = pastDoses.filter {
                 $0.scheduledTime >= checkDate && $0.scheduledTime < dayEnd
             }
 
             if dayLogs.isEmpty {
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
+                guard let prev = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+                checkDate = prev
                 continue
             }
 
             let allTaken = dayLogs.allSatisfy { $0.status == .taken }
             if allTaken {
                 streak += 1
-                checkDate = calendar.date(byAdding: .day, value: -1, to: checkDate)!
+                guard let prev = calendar.date(byAdding: .day, value: -1, to: checkDate) else { break }
+                checkDate = prev
             } else {
                 break
             }
         }
 
         // Calculate recent adherence (last 7 days)
-        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: Date())!
+        let sevenDaysAgo = calendar.date(byAdding: .day, value: -7, to: Date()) ?? Date()
         let recentDoses = pastDoses.filter { $0.scheduledTime >= sevenDaysAgo }
         let recentAdherence = recentDoses.isEmpty ? 0 : Double(recentDoses.filter { $0.status == .taken }.count) / Double(recentDoses.count)
 

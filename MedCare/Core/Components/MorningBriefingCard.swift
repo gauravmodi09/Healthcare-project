@@ -107,6 +107,15 @@ struct MorningBriefingCard: View {
                     .clipShape(RoundedRectangle(cornerRadius: 8))
                 }
                 .buttonStyle(.plain)
+
+                // AI disclaimer
+                HStack(spacing: 3) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 9))
+                    Text("AI-generated \u{00B7} Not medical advice")
+                        .font(.system(size: 10, weight: .regular))
+                }
+                .foregroundStyle(MCColors.textTertiary)
             }
             .padding(16)
         }

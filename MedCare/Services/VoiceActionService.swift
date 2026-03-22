@@ -442,7 +442,7 @@ final class VoiceActionService {
         for word in words where !stopWords.contains(word) && word.count > 2 {
             let results = IndianDrugDatabase.shared.searchMedicines(query: word)
             if !results.isEmpty {
-                return results.first!.brandName
+                return results.first?.brandName ?? word
             }
         }
 

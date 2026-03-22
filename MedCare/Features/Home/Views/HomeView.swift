@@ -1,16 +1,21 @@
 import SwiftUI
 import SwiftData
+import StoreKit
 
 struct HomeView: View {
     @Environment(AppRouter.self) private var router
     @Environment(DataService.self) private var dataService
     @Environment(SmartNudgeService.self) private var nudgeService
     @Environment(LiveActivityService.self) private var liveActivityService
+    @Environment(\.requestReview) private var requestReview
     @Query private var users: [User]
     @State private var showUpload = false
     @State private var showMessages = false
     @State private var showStreakCelebration = false
     @State private var previousStreak: Int?
+    @State private var isLoading = true
+    @State private var profileLoadFailed = false
+    @AppStorage("mc_has_requested_review") private var hasRequestedReview = false
 
     private let morningBriefingService = MorningBriefingService()
     private let analyticsService = AnalyticsService()
@@ -41,7 +46,35 @@ struct HomeView: View {
                     // Header with greeting & profile switcher
                     headerSection
 
-                    if let profile = activeProfile {
+                    if isLoading {
+                        // Skeleton loading placeholders
+                        ForEach(0..<3, id: \.self) { _ in
+                            SkeletonCardView()
+                        }
+                    } else if profileLoadFailed {
+                        MCErrorView(
+                            "Couldn't Load Profile",
+                            message: "There was a problem loading your health data. Please try again.",
+                            retryAction: {
+                                profileLoadFailed = false
+                                isLoading = true
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                                    withAnimation(.easeOut(duration: 0.3)) {
+                                        isLoading = false
+                                        if activeProfile == nil && currentUser != nil {
+                                            profileLoadFailed = true
+                                        }
+                                    }
+                                }
+                            }
+                        )
+                    } else if activeProfile == nil {
+                        // No profile yet — welcome empty state
+                        welcomeEmptyState
+                    } else if let profile = activeProfile {
+                        // Hero Health Score
+                        healthScoreHero(profile: profile)
+
                         // Morning Briefing (before noon only)
                         if isMorning {
                             morningBriefingCard(profile: profile)
@@ -78,10 +111,18 @@ struct HomeView: View {
 
                         // Upcoming Tasks
                         upcomingTasksSection(profile: profile)
+
+                        // Child Growth Chart (only for child profiles)
+                        if ChildCareService.isChildProfile(profile) {
+                            ChildGrowthChartCard(profile: profile)
+                        }
                     }
                 }
                 .padding(.horizontal, MCSpacing.screenPadding)
                 .padding(.bottom, MCSpacing.xxl)
+            }
+            .refreshable {
+                await refreshHomeData()
             }
             .background(MCColors.backgroundLight)
             .dynamicTypeSize(.xSmall ... .accessibility3)
@@ -104,6 +145,15 @@ struct HomeView: View {
                 }
             }
             .onAppear {
+                // Brief skeleton loading state
+                if isLoading {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            isLoading = false
+                        }
+                    }
+                }
+
                 if let profile = activeProfile {
                     let streak = bestStreak(for: profile)
                     // Show celebration when streak hits a milestone
@@ -119,8 +169,96 @@ struct HomeView: View {
                         }
                     }
                     previousStreak = streak
+
+                    // Request app review after 7-day streak (only once)
+                    if !hasRequestedReview && streak >= 7 {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                            requestReview()
+                            hasRequestedReview = true
+                        }
+                    }
+
+                    // Also trigger review when an episode is completed
+                    if !hasRequestedReview {
+                        let completedEpisodes = profile.episodes.filter { $0.status == .completed }
+                        if !completedEpisodes.isEmpty {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                                requestReview()
+                                hasRequestedReview = true
+                            }
+                        }
+                    }
                 }
             }
+        }
+    }
+
+    // MARK: - Pull-to-Refresh
+
+    @MainActor
+    private func refreshHomeData() async {
+        if let profile = activeProfile {
+            nudgeService.evaluateNudges(
+                profile: profile,
+                modelContext: dataService.modelContainer.mainContext
+            )
+        }
+        // Brief delay so the refresh indicator feels intentional
+        try? await Task.sleep(for: .milliseconds(300))
+    }
+
+    // MARK: - Welcome Empty State (no profile)
+
+    private var welcomeEmptyState: some View {
+        VStack(spacing: MCSpacing.lg) {
+            Spacer().frame(height: MCSpacing.xl)
+
+            ZStack {
+                Circle()
+                    .fill(MCColors.primaryTeal.opacity(0.1))
+                    .frame(width: 120, height: 120)
+                Image(systemName: "heart.text.square.fill")
+                    .font(.system(size: 52, weight: .medium))
+                    .foregroundStyle(MCColors.primaryTeal)
+            }
+
+            VStack(spacing: MCSpacing.sm) {
+                Text("Welcome to MedCare")
+                    .font(MCTypography.title)
+                    .foregroundStyle(MCColors.textPrimary)
+
+                Text("Your personal health companion. Set up your profile to get started with medication tracking, reminders, and AI-powered health insights.")
+                    .font(MCTypography.body)
+                    .foregroundStyle(MCColors.textSecondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, MCSpacing.md)
+            }
+
+            VStack(spacing: MCSpacing.sm) {
+                MCPrimaryButton("Add Your First Profile", icon: "person.badge.plus") {
+                    // Switch to Profile tab where user can set up their profile
+                    router.selectedTab = .profile
+                }
+
+                Button {
+                    showUpload = true
+                } label: {
+                    HStack(spacing: MCSpacing.xs) {
+                        Image(systemName: "doc.text.viewfinder")
+                            .font(.system(size: 15, weight: .medium))
+                        Text("Upload a Prescription")
+                            .font(MCTypography.bodyMedium)
+                    }
+                    .foregroundStyle(MCColors.primaryTeal)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, MCSpacing.sm)
+                    .background(MCColors.primaryTeal.opacity(0.1))
+                    .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                }
+            }
+            .padding(.horizontal, MCSpacing.md)
+
+            Spacer()
         }
     }
 
@@ -133,9 +271,15 @@ struct HomeView: View {
                     .font(MCTypography.callout)
                     .foregroundStyle(MCColors.textSecondary)
 
-                Text(activeProfile?.name ?? "User")
-                    .font(MCTypography.display)
-                    .foregroundStyle(MCColors.textPrimary)
+                HStack(spacing: MCSpacing.xs) {
+                    Text(activeProfile?.name ?? "User")
+                        .font(MCTypography.display)
+                        .foregroundStyle(MCColors.textPrimary)
+
+                    if let profile = activeProfile, ChildCareService.isChildProfile(profile) {
+                        ChildProfileBadge()
+                    }
+                }
             }
 
             Spacer()
@@ -182,7 +326,7 @@ struct HomeView: View {
         }
 
         let allDoseLogs = profile.episodes.flatMap { $0.medicines }.flatMap { $0.doseLogs }
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
         let yesterdayStart = Calendar.current.startOfDay(for: yesterday)
         let todayStart = Calendar.current.startOfDay(for: Date())
         let yesterdayDoses = allDoseLogs.filter { $0.scheduledTime >= yesterdayStart && $0.scheduledTime < todayStart }
@@ -285,6 +429,7 @@ struct HomeView: View {
                             Text(timeUntil(nextDose.scheduledTime))
                                 .font(MCTypography.caption)
                                 .foregroundStyle(.white.opacity(0.8))
+                                .contentTransition(.numericText())
                         }
                     }
 
@@ -323,8 +468,10 @@ struct HomeView: View {
                         endPoint: .bottomTrailing
                     )
                 )
-                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusLarge, style: .continuous))
+                .shadow(color: .black.opacity(0.06), radius: 16, y: 8)
                 .shadow(color: MCColors.primaryTeal.opacity(0.3), radius: 12, y: 6)
+                .shadow(color: .black.opacity(0.03), radius: 2, y: 1)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Next dose: \(nextDose.medicine?.brandName ?? "Medicine"), \(nextDose.medicine?.dosage ?? ""), scheduled at \(nextDose.scheduledTime.formatted(date: .omitted, time: .shortened))")
                 .accessibilityHint("Shows your next upcoming medication dose")
@@ -470,11 +617,12 @@ struct HomeView: View {
                     }
                 }
                 .padding(MCSpacing.cardPadding)
-                .background(MCColors.cardBackground)
-                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
-                .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius, style: .continuous))
+                .shadow(color: .black.opacity(0.06), radius: 16, y: 8)
+                .shadow(color: .black.opacity(0.03), radius: 2, y: 1)
                 .overlay(
-                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius)
+                    RoundedRectangle(cornerRadius: MCSpacing.cornerRadius, style: .continuous)
                         .stroke(streak >= 3 ? level.color.opacity(0.2) : Color.clear, lineWidth: 1)
                 )
                 .accessibilityElement(children: .combine)
@@ -502,9 +650,10 @@ struct HomeView: View {
                         .foregroundStyle(MCColors.textSecondary)
                 }
                 .padding(MCSpacing.cardPadding)
-                .background(MCColors.cardBackground)
-                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
-                .shadow(color: .black.opacity(0.04), radius: 8, y: 2)
+                .background(.ultraThinMaterial)
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius, style: .continuous))
+                .shadow(color: .black.opacity(0.06), radius: 16, y: 8)
+                .shadow(color: .black.opacity(0.03), radius: 2, y: 1)
                 .accessibilityElement(children: .combine)
                 .accessibilityLabel("Today's progress: \(taken) of \(totalDoses) doses taken, \(Int(adherence * 100)) percent")
             }
@@ -562,6 +711,7 @@ struct HomeView: View {
                         .stroke(MCColors.accentCoral.opacity(0.2), lineWidth: 1)
                 )
             }
+            .buttonStyle(PressableButtonStyle())
             .accessibilityLabel("Upload Prescription")
             .accessibilityHint("Double tap to scan or upload a prescription photo")
 
@@ -599,6 +749,7 @@ struct HomeView: View {
                         .stroke(MCColors.primaryTeal.opacity(0.2), lineWidth: 1)
                 )
             }
+            .buttonStyle(PressableButtonStyle())
             .accessibilityLabel("AI Health Chat")
             .accessibilityHint("Double tap to open the AI health assistant")
 
@@ -636,6 +787,7 @@ struct HomeView: View {
                         .stroke(MCColors.info.opacity(0.2), lineWidth: 1)
                 )
             }
+            .buttonStyle(PressableButtonStyle())
             .accessibilityLabel("Doctor Messages")
             .accessibilityHint("Double tap to message your doctors")
         }
@@ -705,6 +857,63 @@ struct HomeView: View {
         let insights = analyticsService.generateInsights(for: profile)
 
         return InsightsCard(insights: insights)
+    }
+
+    // MARK: - Hero Health Score
+
+    private func healthScoreHero(profile: UserProfile) -> some View {
+        let allDoseLogs = profile.episodes.flatMap { $0.medicines }.flatMap { $0.doseLogs }
+        let allSymptomLogs = profile.episodes.flatMap { $0.symptomLogs }
+        let healthScoreService = HealthScoreService()
+        let score = healthScoreService.calculateFromLogs(
+            doseLogs: allDoseLogs,
+            symptomLogs: allSymptomLogs,
+            totalEpisodeFields: profile.episodes.count * 5,
+            filledEpisodeFields: profile.episodes.filter { $0.diagnosis != nil }.count * 5,
+            documentCount: profile.episodes.flatMap { $0.images }.count
+        )
+
+        return MCGlassCard {
+            VStack(spacing: MCSpacing.xs) {
+                Text("Health Score")
+                    .font(MCTypography.metricLabel)
+                    .foregroundStyle(MCColors.textSecondary)
+                    .textCase(.uppercase)
+                    .kerning(1.2)
+
+                ZStack {
+                    Circle()
+                        .stroke(MCColors.primaryTeal.opacity(0.15), lineWidth: 8)
+                        .frame(width: 100, height: 100)
+
+                    Circle()
+                        .trim(from: 0, to: CGFloat(score.total) / 100.0)
+                        .stroke(
+                            LinearGradient(
+                                colors: [MCColors.primaryTeal, MCColors.primaryTealDark],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ),
+                            style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                        )
+                        .frame(width: 100, height: 100)
+                        .rotationEffect(.degrees(-90))
+
+                    Text("\(score.total)")
+                        .font(MCTypography.heroMetric)
+                        .foregroundStyle(MCColors.textPrimary)
+                        .contentTransition(.numericText())
+                }
+
+                Text("out of 100")
+                    .font(MCTypography.metricLabel)
+                    .foregroundStyle(MCColors.textTertiary)
+            }
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, MCSpacing.sm)
+        }
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel("Health score \(score.total) out of 100")
     }
 
     // MARK: - Helpers
@@ -845,7 +1054,15 @@ struct EpisodeCard: View {
                             .frame(height: 6)
 
                         Capsule()
-                            .fill(adherence > 0.7 ? MCColors.success : MCColors.warning)
+                            .fill(
+                                LinearGradient(
+                                    colors: adherence > 0.7
+                                        ? [MCColors.success, MCColors.primaryTeal]
+                                        : [MCColors.warning, MCColors.accentCoral],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
                             .frame(width: geo.size.width * adherence, height: 6)
                     }
                 }
@@ -1048,5 +1265,15 @@ struct StreakFlameIcon: View {
                 animatePulse = true
             }
         }
+    }
+}
+
+// MARK: - Pressable Button Style (scale on press)
+
+struct PressableButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .scaleEffect(configuration.isPressed ? 0.97 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: configuration.isPressed)
     }
 }

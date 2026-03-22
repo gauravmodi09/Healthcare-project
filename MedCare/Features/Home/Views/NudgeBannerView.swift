@@ -23,11 +23,11 @@ struct NudgeBannerView: View {
                 VStack(alignment: .leading, spacing: 3) {
                     Text(nudge.title)
                         .font(.system(size: 14, weight: .bold))
-                        .foregroundColor(Color(hex: "1F2937"))
+                        .foregroundColor(MCColors.textPrimary)
 
                     Text(nudge.body)
                         .font(.system(size: 13))
-                        .foregroundColor(Color(hex: "6B7280"))
+                        .foregroundColor(MCColors.textSecondary)
                         .lineLimit(2)
                 }
 
@@ -44,14 +44,14 @@ struct NudgeBannerView: View {
                 } label: {
                     Image(systemName: "xmark")
                         .font(.system(size: 12, weight: .bold))
-                        .foregroundColor(Color(hex: "9CA3AF"))
+                        .foregroundColor(MCColors.textTertiary)
                         .frame(width: 24, height: 24)
                 }
             }
             .padding(14)
             .background(
                 RoundedRectangle(cornerRadius: 14)
-                    .fill(.white)
+                    .fill(MCColors.cardBackground)
                     .shadow(color: .black.opacity(0.06), radius: 8, x: 0, y: 2)
             )
             .overlay(

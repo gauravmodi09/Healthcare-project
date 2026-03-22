@@ -6,7 +6,7 @@ extension Date {
     }
 
     var endOfDay: Date {
-        Calendar.current.date(byAdding: .day, value: 1, to: startOfDay)!
+        Calendar.current.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay.addingTimeInterval(86400)
     }
 
     var isToday: Bool {

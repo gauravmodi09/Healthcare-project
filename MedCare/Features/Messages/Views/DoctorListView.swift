@@ -4,22 +4,17 @@ import SwiftData
 struct DoctorListView: View {
     @Environment(DataService.self) private var dataService
     @Environment(\.dismiss) private var dismiss
+    @Query(sort: \Doctor.name) private var doctors: [Doctor]
 
-    @State private var doctors: [DoctorInfo] = DoctorInfo.sampleDoctors
     @State private var showAddDoctor = false
-    @State private var inviteCode = ""
     @State private var searchText = ""
 
-    private var filteredDoctors: [DoctorInfo] {
+    private var filteredDoctors: [Doctor] {
         if searchText.isEmpty { return doctors }
         return doctors.filter {
             $0.name.localizedCaseInsensitiveContains(searchText) ||
             $0.specialty.localizedCaseInsensitiveContains(searchText)
         }
-    }
-
-    private var totalUnread: Int {
-        doctors.reduce(0) { $0 + $1.unreadCount }
     }
 
     var body: some View {
@@ -54,17 +49,9 @@ struct DoctorListView: View {
                 }
             }
             .searchable(text: $searchText, prompt: "Search doctors")
-            .alert("Add Doctor", isPresented: $showAddDoctor) {
-                TextField("Enter invite code", text: $inviteCode)
-                    .textInputAutocapitalization(.characters)
-                Button("Cancel", role: .cancel) {
-                    inviteCode = ""
-                }
-                Button("Link") {
-                    linkDoctor()
-                }
-            } message: {
-                Text("Enter the invite code from your doctor to start messaging.")
+            .sheet(isPresented: $showAddDoctor) {
+                AddDoctorSheet()
+                    .environment(dataService)
             }
         }
     }
@@ -90,7 +77,7 @@ struct DoctorListView: View {
                     .font(MCTypography.title)
                     .foregroundStyle(MCColors.textPrimary)
 
-                Text("Connect with your doctor to message them directly instead of using WhatsApp.")
+                Text("Add your doctor to message them directly.")
                     .font(MCTypography.body)
                     .foregroundStyle(MCColors.textSecondary)
                     .multilineTextAlignment(.center)
@@ -121,121 +108,196 @@ struct DoctorListView: View {
     // MARK: - Doctor List
 
     private var doctorList: some View {
-        ScrollView {
-            LazyVStack(spacing: MCSpacing.sm) {
-                ForEach(filteredDoctors) { doctor in
-                    NavigationLink {
-                        DoctorMessageView(doctor: doctor)
-                    } label: {
-                        doctorRow(doctor)
-                    }
-                    .buttonStyle(.plain)
+        List {
+            ForEach(filteredDoctors) { doctor in
+                NavigationLink {
+                    DoctorMessageView(doctor: doctor)
+                } label: {
+                    doctorRow(doctor)
                 }
+                .listRowBackground(MCColors.cardBackground)
+                .listRowSeparator(.hidden)
             }
-            .padding(.horizontal, MCSpacing.screenPadding)
-            .padding(.top, MCSpacing.sm)
-            .padding(.bottom, MCSpacing.xxl)
+            .onDelete(perform: deleteDoctors)
         }
+        .listStyle(.plain)
     }
 
     // MARK: - Doctor Row
 
-    private func doctorRow(_ doctor: DoctorInfo) -> some View {
-        MCCard {
-            HStack(spacing: MCSpacing.sm) {
-                // Avatar with online indicator
-                ZStack(alignment: .bottomTrailing) {
-                    Text(doctor.avatarEmoji)
-                        .font(.system(size: 28))
-                        .frame(width: MCSpacing.avatarSize, height: MCSpacing.avatarSize)
-                        .background(MCColors.primaryTeal.opacity(0.1))
-                        .clipShape(Circle())
+    private func doctorRow(_ doctor: Doctor) -> some View {
+        HStack(spacing: MCSpacing.sm) {
+            // Avatar with online indicator
+            ZStack(alignment: .bottomTrailing) {
+                Text(doctor.avatarEmoji)
+                    .font(.system(size: 28))
+                    .frame(width: MCSpacing.avatarSize, height: MCSpacing.avatarSize)
+                    .background(MCColors.primaryTeal.opacity(0.1))
+                    .clipShape(Circle())
 
-                    Circle()
-                        .fill(doctor.isOnline ? MCColors.success : MCColors.textTertiary)
-                        .frame(width: 12, height: 12)
-                        .overlay(
-                            Circle()
-                                .stroke(MCColors.cardBackground, lineWidth: 2)
-                        )
-                        .offset(x: 2, y: 2)
-                }
+                Circle()
+                    .fill(doctor.isOnline ? MCColors.success : MCColors.textTertiary)
+                    .frame(width: 12, height: 12)
+                    .overlay(
+                        Circle()
+                            .stroke(MCColors.cardBackground, lineWidth: 2)
+                    )
+                    .offset(x: 2, y: 2)
+            }
 
-                // Doctor info
-                VStack(alignment: .leading, spacing: MCSpacing.xxs) {
-                    Text(doctor.name)
-                        .font(MCTypography.bodyMedium)
-                        .foregroundStyle(MCColors.textPrimary)
+            // Doctor info
+            VStack(alignment: .leading, spacing: MCSpacing.xxs) {
+                Text(doctor.name)
+                    .font(MCTypography.bodyMedium)
+                    .foregroundStyle(MCColors.textPrimary)
 
-                    Text(doctor.specialty)
+                Text(doctor.specialty)
+                    .font(MCTypography.caption)
+                    .foregroundStyle(MCColors.primaryTeal)
+
+                if !doctor.phone.isEmpty {
+                    Text(doctor.phone)
                         .font(MCTypography.caption)
-                        .foregroundStyle(MCColors.primaryTeal)
-
-                    if let preview = doctor.lastMessagePreview {
-                        Text(preview)
-                            .font(MCTypography.caption)
-                            .foregroundStyle(MCColors.textSecondary)
-                            .lineLimit(1)
-                    }
+                        .foregroundStyle(MCColors.textSecondary)
+                        .lineLimit(1)
                 }
+            }
 
-                Spacer()
+            Spacer()
 
-                // Timestamp + unread
+            if doctor.consultationFee > 0 {
                 VStack(alignment: .trailing, spacing: MCSpacing.xxs) {
-                    if let date = doctor.lastMessageDate {
-                        Text(relativeTime(date))
-                            .font(.system(size: 11))
-                            .foregroundStyle(MCColors.textTertiary)
-                    }
-
-                    if doctor.unreadCount > 0 {
-                        Text("\(doctor.unreadCount)")
-                            .font(.system(size: 12, weight: .bold))
-                            .foregroundStyle(.white)
-                            .frame(width: 22, height: 22)
-                            .background(MCColors.primaryTeal)
-                            .clipShape(Circle())
-                    }
-
-                    Image(systemName: "chevron.right")
-                        .font(.system(size: 11, weight: .semibold))
+                    Text("\u{20B9}\(Int(doctor.consultationFee))")
+                        .font(MCTypography.captionBold)
+                        .foregroundStyle(MCColors.primaryTeal)
+                    Text("Fee")
+                        .font(.system(size: 9))
                         .foregroundStyle(MCColors.textTertiary)
                 }
             }
+
+            Image(systemName: "chevron.right")
+                .font(.system(size: 11, weight: .semibold))
+                .foregroundStyle(MCColors.textTertiary)
         }
+        .padding(.vertical, MCSpacing.xs)
         .accessibilityElement(children: .combine)
-        .accessibilityLabel("\(doctor.name), \(doctor.specialty), \(doctor.unreadCount) unread messages")
+        .accessibilityLabel("\(doctor.name), \(doctor.specialty)")
     }
 
-    // MARK: - Helpers
+    // MARK: - Actions
 
-    private func relativeTime(_ date: Date) -> String {
-        let interval = Date().timeIntervalSince(date)
-        if interval < 60 { return "now" }
-        if interval < 3600 { return "\(Int(interval / 60))m" }
-        if interval < 86400 { return "\(Int(interval / 3600))h" }
-        if interval < 604800 { return "\(Int(interval / 86400))d" }
-        return date.formatted(.dateTime.month(.abbreviated).day())
+    private func deleteDoctors(at offsets: IndexSet) {
+        for index in offsets {
+            let doctor = filteredDoctors[index]
+            dataService.modelContext.delete(doctor)
+        }
+        try? dataService.modelContext.save()
+    }
+}
+
+// MARK: - Add Doctor Sheet
+
+struct AddDoctorSheet: View {
+    @Environment(DataService.self) private var dataService
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name = ""
+    @State private var specialty = "General Physician"
+    @State private var phone = ""
+    @State private var email = ""
+    @State private var registrationNumber = ""
+    @State private var consultationFee = ""
+
+    private let specialties = [
+        "General Physician",
+        "Cardiologist",
+        "Neurologist",
+        "Orthopedic",
+        "Dermatologist",
+        "ENT Specialist",
+        "Ophthalmologist",
+        "Pulmonologist",
+        "Gastroenterologist",
+        "Endocrinologist",
+        "Psychiatrist",
+        "Pediatrician",
+        "Gynecologist",
+        "Urologist",
+        "Oncologist",
+        "Nephrologist",
+        "Ayurvedic",
+        "Homeopathic",
+        "Other"
+    ]
+
+    var body: some View {
+        NavigationStack {
+            Form {
+                Section("Doctor Details") {
+                    TextField("Full Name", text: $name)
+                        .textContentType(.name)
+
+                    Picker("Specialty", selection: $specialty) {
+                        ForEach(specialties, id: \.self) { spec in
+                            Text(spec).tag(spec)
+                        }
+                    }
+                }
+
+                Section("Contact") {
+                    TextField("Phone Number", text: $phone)
+                        .keyboardType(.phonePad)
+                        .textContentType(.telephoneNumber)
+
+                    TextField("Email (optional)", text: $email)
+                        .keyboardType(.emailAddress)
+                        .textContentType(.emailAddress)
+                        .textInputAutocapitalization(.never)
+                }
+
+                Section("Registration") {
+                    TextField("Registration Number (optional)", text: $registrationNumber)
+                        .textInputAutocapitalization(.characters)
+
+                    TextField("Consultation Fee (optional)", text: $consultationFee)
+                        .keyboardType(.decimalPad)
+                }
+            }
+            .navigationTitle("Add Doctor")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                }
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        saveDoctor()
+                    }
+                    .disabled(name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .fontWeight(.semibold)
+                }
+            }
+        }
     }
 
-    private func linkDoctor() {
-        guard !inviteCode.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else { return }
+    private func saveDoctor() {
+        let trimmedName = name.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !trimmedName.isEmpty else { return }
 
-        // In a real app this would verify the code against a backend
-        let newDoctor = DoctorInfo(
-            id: UUID(),
-            name: "Dr. \(inviteCode.prefix(1).uppercased() + inviteCode.dropFirst().lowercased())",
-            specialty: "General Physician",
-            avatarEmoji: "🩺",
-            isOnline: false,
-            inviteCode: inviteCode.uppercased(),
-            lastMessagePreview: nil,
-            lastMessageDate: nil,
-            unreadCount: 0
+        let doctor = Doctor(
+            name: trimmedName,
+            specialty: specialty,
+            phone: phone.trimmingCharacters(in: .whitespacesAndNewlines),
+            email: email.trimmingCharacters(in: .whitespacesAndNewlines),
+            registrationNumber: registrationNumber.trimmingCharacters(in: .whitespacesAndNewlines),
+            consultationFee: Double(consultationFee) ?? 0
         )
-        doctors.append(newDoctor)
-        inviteCode = ""
+
+        dataService.modelContext.insert(doctor)
+        try? dataService.modelContext.save()
+
         UIImpactFeedbackGenerator(style: .medium).impactOccurred()
+        dismiss()
     }
 }

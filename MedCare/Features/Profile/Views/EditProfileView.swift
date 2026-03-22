@@ -24,7 +24,7 @@ struct EditProfileView: View {
     init(profile: UserProfile) {
         self.profile = profile
         _name = State(initialValue: profile.name)
-        _dateOfBirth = State(initialValue: profile.dateOfBirth ?? Calendar.current.date(byAdding: .year, value: -30, to: Date())!)
+        _dateOfBirth = State(initialValue: profile.dateOfBirth ?? (Calendar.current.date(byAdding: .year, value: -30, to: Date()) ?? Date()))
         _hasDOB = State(initialValue: profile.dateOfBirth != nil)
         _gender = State(initialValue: profile.gender)
         _bloodGroup = State(initialValue: profile.bloodGroup ?? "")

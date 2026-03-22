@@ -279,9 +279,11 @@ final class HealthKitService {
         for identifier in typesToObserve {
             guard let type = HKQuantityType.quantityType(forIdentifier: identifier) else { continue }
             store.enableBackgroundDelivery(for: type, frequency: .hourly) { success, error in
+                #if DEBUG
                 if let error {
                     print("Background delivery failed for \(identifier.rawValue): \(error.localizedDescription)")
                 }
+                #endif
             }
         }
     }
@@ -534,7 +536,7 @@ final class HealthKitService {
     }
 
     private func fetchLatestSleepDataPoint() async -> VitalDataPoint? {
-        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date())!
+        let yesterday = Calendar.current.date(byAdding: .day, value: -1, to: Date()) ?? Date()
         if let hours = await fetchSleepHours(for: yesterday) {
             return VitalDataPoint(value: hours, date: yesterday, source: "Apple Health")
         }

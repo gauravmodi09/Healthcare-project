@@ -21,9 +21,14 @@ struct ProfileManagementView: View {
     @State private var showConsentManagement = false
     @State private var showDataDeletion = false
     @State private var showABHALinking = false
+    @State private var showHealthRecordImport = false
     @State private var showPayment = false
     @State private var showDoctorDashboard = false
+    @State private var showDemoConfirmation = false
+    @State private var showAISettings = false
+    @State private var showHealthProfile = false
     @AppStorage("mc_doctor_mode_enabled") private var doctorModeEnabled = false
+    @AppStorage("mc_has_seeded_demo") private var hasSeededData = false
     private let exportService = ExportService()
 
     private var currentUser: User? { users.first }
@@ -43,9 +48,11 @@ struct ProfileManagementView: View {
                             quickStatsRow(profile)
                         }
                     }
+                    healthProfileButton
                     settingsSection
                     privacyDataSection
                     dangerZoneSection
+                    demoModeSection
                     versionFooter
                 }
                 .padding(.vertical, MCSpacing.md)
@@ -105,6 +112,9 @@ struct ProfileManagementView: View {
             .sheet(isPresented: $showABHALinking) {
                 ABHALinkingView()
             }
+            .sheet(isPresented: $showHealthRecordImport) {
+                HealthRecordImportView()
+            }
             .sheet(isPresented: $showPayment) {
                 PaymentView()
             }
@@ -137,6 +147,14 @@ struct ProfileManagementView: View {
             }
             .fullScreenCover(isPresented: $showDoctorDashboard) {
                 DoctorDashboardView()
+            }
+            .sheet(isPresented: $showAISettings) {
+                AISettingsView()
+            }
+            .sheet(isPresented: $showHealthProfile) {
+                if let profile = currentUser?.activeProfile {
+                    ComprehensiveProfileView(profile: profile)
+                }
             }
         }
     }
@@ -178,6 +196,12 @@ struct ProfileManagementView: View {
                     }
                 }
                 subscriptionBadge
+
+                // Child profile badge
+                if ChildCareService.isChildProfile(profile) {
+                    ChildProfileBadge()
+                }
+
                 Button {
                     showEditProfile = true
                 } label: {
@@ -366,6 +390,43 @@ struct ProfileManagementView: View {
         .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
     }
 
+    // MARK: - Health Profile Button
+
+    private var healthProfileButton: some View {
+        Button {
+            showHealthProfile = true
+        } label: {
+            HStack(spacing: MCSpacing.sm) {
+                Image(systemName: "heart.text.clipboard.fill")
+                    .font(.system(size: 18, weight: .semibold))
+                    .foregroundStyle(.white)
+                    .frame(width: 36, height: 36)
+                    .background(MCColors.primaryGradient)
+                    .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("My Health Profile")
+                        .font(MCTypography.headline)
+                        .foregroundStyle(MCColors.textPrimary)
+                    Text("Conditions, allergies, vaccinations & more")
+                        .font(MCTypography.caption)
+                        .foregroundStyle(MCColors.textSecondary)
+                }
+
+                Spacer()
+
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 12, weight: .semibold))
+                    .foregroundStyle(MCColors.textTertiary)
+            }
+            .padding(MCSpacing.cardPadding)
+        }
+        .background(MCColors.cardBackground)
+        .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+        .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+        .padding(.horizontal, MCSpacing.screenPadding)
+    }
+
     // MARK: - Settings List
 
     private var settingsSection: some View {
@@ -378,11 +439,15 @@ struct ProfileManagementView: View {
             Divider().padding(.leading, 60)
             settingsRow(icon: "checkmark.shield.fill", title: "ABHA Linking", color: MCColors.primaryTeal) { showABHALinking = true }
             Divider().padding(.leading, 60)
+            settingsRow(icon: "arrow.down.doc.fill", title: "Import Health Records", color: MCColors.info) { showHealthRecordImport = true }
+            Divider().padding(.leading, 60)
             settingsRow(icon: "trophy.fill", title: "Achievements", color: MCColors.warning) { showAchievements = true }
             Divider().padding(.leading, 60)
             settingsRow(icon: "stethoscope", title: "Doctor Visit Prep", color: MCColors.accentCoral) { showDoctorVisitPrep = true }
             Divider().padding(.leading, 60)
             settingsRow(icon: "figure.walk", title: "Elder Mode", color: MCColors.success) { showElderMode = true }
+            Divider().padding(.leading, 60)
+            settingsRow(icon: "sparkles", title: "AI Settings", color: Color(hex: "A78BFA")) { showAISettings = true }
             Divider().padding(.leading, 60)
             doctorModeRow
             Divider().padding(.leading, 60)
@@ -561,6 +626,54 @@ struct ProfileManagementView: View {
         authService.logout()
     }
 
+    // MARK: - Demo Mode
+
+    private var demoModeSection: some View {
+        VStack(spacing: MCSpacing.sm) {
+            if !hasSeededData {
+                Button {
+                    showDemoConfirmation = true
+                } label: {
+                    HStack(spacing: MCSpacing.sm) {
+                        Image(systemName: "play.circle.fill")
+                            .foregroundStyle(MCColors.info)
+                            .font(.system(size: 15))
+                            .frame(width: 32, height: 32)
+                            .background(MCColors.info.opacity(0.1))
+                            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("Try Demo Mode")
+                                .font(MCTypography.body)
+                                .foregroundStyle(MCColors.textPrimary)
+                            Text("Load sample profiles & medicines to explore")
+                                .font(MCTypography.caption)
+                                .foregroundStyle(MCColors.textSecondary)
+                        }
+                        Spacer()
+                        Image(systemName: "chevron.right")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundStyle(MCColors.textTertiary)
+                    }
+                    .padding(.horizontal, MCSpacing.cardPadding)
+                    .padding(.vertical, MCSpacing.sm)
+                }
+                .background(MCColors.cardBackground)
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+                .shadow(color: .black.opacity(0.06), radius: 8, y: 2)
+                .padding(.horizontal, MCSpacing.screenPadding)
+                .alert("Load Demo Data?", isPresented: $showDemoConfirmation) {
+                    Button("Cancel", role: .cancel) {}
+                    Button("Load Demo") {
+                        let _ = dataService.seedDemoData()
+                        hasSeededData = true
+                    }
+                } message: {
+                    Text("This will create sample profiles (Rahul, Mom, Dad) with medicines and dose history for you to explore. You can delete them later.")
+                }
+            }
+        }
+    }
+
     // MARK: - Version Footer
 
     private var versionFooter: some View {
@@ -580,7 +693,7 @@ struct AddFamilyProfileView: View {
     @Query private var users: [User]
     @State private var name = ""
     @State private var relation: ProfileRelation = .parent
-    @State private var dateOfBirth = Calendar.current.date(byAdding: .year, value: -50, to: Date())!
+    @State private var dateOfBirth = Calendar.current.date(byAdding: .year, value: -50, to: Date()) ?? Date()
     @State private var gender: Gender?
 
     var body: some View {

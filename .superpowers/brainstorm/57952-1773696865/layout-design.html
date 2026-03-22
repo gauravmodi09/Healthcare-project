@@ -1,0 +1,142 @@
+<h2>Layout: Enhanced Kanban</h2>
+<p class="subtitle">Minimalistic but effective — here's the proposed structure</p>
+
+<div class="mockup">
+  <div class="mockup-header">MedCare Tracker — Proposed Layout</div>
+  <div class="mockup-body" style="background:#f8fafb;padding:0;overflow:hidden;">
+
+    <!-- Header -->
+    <div style="background:white;padding:14px 20px;border-bottom:1px solid #e8ecf0;display:flex;align-items:center;justify-content:space-between;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div style="width:24px;height:24px;background:linear-gradient(135deg,#0A7E8C,#0ea5e9);border-radius:6px;display:flex;align-items:center;justify-content:center;color:white;font-size:12px;font-weight:bold;">+</div>
+        <span style="font-weight:700;font-size:15px;color:#1a2332;">MedCare</span>
+        <span style="font-size:13px;color:#94a3b8;font-weight:400;">Tracker</span>
+      </div>
+      <div style="display:flex;gap:6px;">
+        <div style="padding:5px 10px;border-radius:6px;border:1px solid #e2e8f0;font-size:11px;color:#64748b;background:white;">Export</div>
+        <div style="padding:5px 10px;border-radius:6px;border:1px solid #e2e8f0;font-size:11px;color:#64748b;background:white;">Import</div>
+      </div>
+    </div>
+
+    <!-- Quick Add Bar -->
+    <div style="padding:12px 20px;background:white;border-bottom:1px solid #e8ecf0;">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <div style="flex:1;background:#f1f5f9;border-radius:8px;padding:10px 14px;font-size:13px;color:#94a3b8;border:1.5px solid transparent;">
+          ⚡ Quick add — type a task and press Enter...
+        </div>
+        <div style="display:flex;gap:4px;">
+          <span style="padding:4px 10px;border-radius:12px;font-size:11px;background:#e8f5f6;color:#0A7E8C;font-weight:500;">All</span>
+          <span style="padding:4px 10px;border-radius:12px;font-size:11px;background:white;color:#94a3b8;border:1px solid #e2e8f0;">Features</span>
+          <span style="padding:4px 10px;border-radius:12px;font-size:11px;background:white;color:#94a3b8;border:1px solid #e2e8f0;">Bugs</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats - minimal -->
+    <div style="padding:10px 20px;display:flex;gap:16px;font-size:11px;color:#94a3b8;">
+      <span><strong style="color:#1a2332;font-size:14px;">38</strong> total</span>
+      <span><strong style="color:#0A7E8C;font-size:14px;">6</strong> to do</span>
+      <span><strong style="color:#f59e0b;font-size:14px;">2</strong> in progress</span>
+      <span><strong style="color:#22c55e;font-size:14px;">28</strong> done</span>
+      <span style="margin-left:auto;"><span style="display:inline-block;width:80px;height:4px;background:#e2e8f0;border-radius:2px;position:relative;vertical-align:middle;"><span style="position:absolute;left:0;top:0;height:4px;width:74%;background:linear-gradient(90deg,#0A7E8C,#22c55e);border-radius:2px;"></span></span> 74%</span>
+    </div>
+
+    <!-- Board -->
+    <div style="padding:0 20px 20px;display:flex;gap:12px;overflow-x:auto;">
+
+      <!-- Backlog Column -->
+      <div style="flex:1;min-width:180px;background:#f1f5f9;border-radius:10px;overflow:hidden;">
+        <div style="padding:10px 12px;font-size:12px;font-weight:600;color:#64748b;display:flex;justify-content:space-between;align-items:center;">
+          Backlog <span style="background:white;padding:1px 6px;border-radius:8px;font-size:10px;color:#94a3b8;">8</span>
+        </div>
+        <div style="padding:0 8px 8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,0.04);border-left:3px solid #0A7E8C;">
+            <div style="font-size:12px;font-weight:600;color:#1a2332;">Voice input for symptoms</div>
+            <div style="font-size:10px;color:#94a3b8;margin-top:4px;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden;">Speech-to-text, AI extraction...</div>
+            <div style="display:flex;gap:4px;margin-top:6px;align-items:center;">
+              <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+              <span style="font-size:9px;color:#d4d4d8;">Phase 2.5</span>
+              <span style="margin-left:auto;font-size:9px;color:#94a3b8;">💬 2</span>
+            </div>
+          </div>
+          <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,0.04);border-left:3px solid #94a3b8;">
+            <div style="font-size:12px;font-weight:600;color:#1a2332;">Treatment timeline viz</div>
+            <div style="display:flex;gap:4px;margin-top:6px;">
+              <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+              <span style="font-size:9px;color:#d4d4d8;">Phase 2.5</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- To Do Column -->
+      <div style="flex:1;min-width:180px;background:#f1f5f9;border-radius:10px;overflow:hidden;">
+        <div style="padding:10px 12px;font-size:12px;font-weight:600;color:#0A7E8C;display:flex;justify-content:space-between;align-items:center;">
+          To Do <span style="background:#e8f5f6;padding:1px 6px;border-radius:8px;font-size:10px;color:#0A7E8C;">3</span>
+        </div>
+        <div style="padding:0 8px 8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,0.04);border-left:3px solid #ef4444;">
+            <div style="font-size:12px;font-weight:600;color:#1a2332;">AI Chat — Core engine</div>
+            <div style="display:flex;gap:4px;margin-top:6px;">
+              <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+              <span style="font-size:9px;background:#fef2f2;color:#dc2626;padding:1px 6px;border-radius:6px;">critical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- In Progress Column -->
+      <div style="flex:1;min-width:180px;background:#f1f5f9;border-radius:10px;overflow:hidden;">
+        <div style="padding:10px 12px;font-size:12px;font-weight:600;color:#f59e0b;display:flex;justify-content:space-between;align-items:center;">
+          In Progress <span style="background:#fef3c7;padding:1px 6px;border-radius:8px;font-size:10px;color:#92400e;">1</span>
+        </div>
+        <div style="padding:0 8px 8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,0.04);border-left:3px solid #f59e0b;">
+            <div style="font-size:12px;font-weight:600;color:#1a2332;">Smart nudges — adherence</div>
+            <div style="display:flex;gap:4px;margin-top:6px;">
+              <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+              <span style="font-size:9px;background:#fef2f2;color:#dc2626;padding:1px 6px;border-radius:6px;">critical</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Done Column -->
+      <div style="flex:1;min-width:180px;background:#f0fdf4;border-radius:10px;overflow:hidden;">
+        <div style="padding:10px 12px;font-size:12px;font-weight:600;color:#22c55e;display:flex;justify-content:space-between;align-items:center;">
+          Done <span style="background:#dcfce7;padding:1px 6px;border-radius:8px;font-size:10px;color:#16a34a;">28</span>
+        </div>
+        <div style="padding:0 8px 8px;display:flex;flex-direction:column;gap:6px;">
+          <div style="background:white;border-radius:8px;padding:10px;box-shadow:0 1px 2px rgba(0,0,0,0.04);border-left:3px solid #22c55e;opacity:0.8;">
+            <div style="font-size:12px;font-weight:600;color:#1a2332;">Auth flow</div>
+            <div style="display:flex;gap:4px;margin-top:6px;">
+              <span style="font-size:9px;background:#ede9fe;color:#7c3aed;padding:1px 6px;border-radius:6px;">feature</span>
+              <span style="font-size:9px;color:#d4d4d8;">Phase 1</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div style="margin-top:24px;">
+  <h3>Key Design Decisions</h3>
+  <div class="options">
+    <div class="option" data-choice="approve" onclick="toggleSelect(this)">
+      <div class="letter">✓</div>
+      <div class="content">
+        <h3>This looks right</h3>
+        <p>Proceed with this layout direction</p>
+      </div>
+    </div>
+    <div class="option" data-choice="changes" onclick="toggleSelect(this)">
+      <div class="letter">✎</div>
+      <div class="content">
+        <h3>Needs changes</h3>
+        <p>I'll describe what to adjust in the terminal</p>
+      </div>
+    </div>
+  </div>
+</div>

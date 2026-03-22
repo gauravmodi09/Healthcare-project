@@ -330,7 +330,8 @@ final class SymptomCorrelationService {
         let diff = lastAvg - firstAvg
         guard abs(diff) > 0.3 else { return [] }
 
-        let daySpan = Calendar.current.dateComponents([.day], from: sorted.first!.date, to: sorted.last!.date).day ?? 1
+        guard let firstLog = sorted.first, let lastLog = sorted.last else { return [] }
+        let daySpan = Calendar.current.dateComponents([.day], from: firstLog.date, to: lastLog.date).day ?? 1
 
         if diff > 0 {
             let confidence = min(diff / 2.0, 0.90) * min(Double(sorted.count) / 10.0, 1.0)

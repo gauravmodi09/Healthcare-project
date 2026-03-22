@@ -246,7 +246,7 @@
     "category": "bug",
     "priority": "critical",
     "phase": "Phase 3: Polish",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -282,7 +282,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -354,7 +354,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -364,7 +364,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -390,7 +390,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -410,7 +410,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -430,7 +430,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -450,7 +450,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -460,7 +460,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -470,7 +470,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -500,7 +500,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -590,7 +590,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -620,7 +620,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -630,7 +630,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -640,7 +640,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -650,7 +650,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -670,7 +670,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -700,7 +700,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -710,7 +710,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -730,7 +730,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -750,7 +750,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -760,7 +760,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -780,7 +780,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -810,7 +810,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -820,7 +820,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -830,7 +830,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -840,7 +840,7 @@
     "category": "design",
     "priority": "low",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -850,7 +850,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -860,7 +860,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -870,7 +870,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -880,7 +880,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -890,7 +890,7 @@
     "category": "design",
     "priority": "low",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -900,7 +900,7 @@
     "category": "design",
     "priority": "high",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -910,7 +910,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -920,7 +920,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 7: Platform",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -930,7 +930,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -940,7 +940,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -950,7 +950,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -960,7 +960,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -970,7 +970,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -980,7 +980,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -990,7 +990,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 8: Growth",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16"
   },
   {
@@ -1202,7 +1202,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": []
   },
@@ -1285,7 +1285,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 4: Intelligence",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1333,7 +1333,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1365,7 +1365,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1429,7 +1429,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 5: Connected",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1445,7 +1445,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1461,7 +1461,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 6: Engagement",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1504,7 +1504,7 @@
     "category": "design",
     "priority": "low",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": []
   },
@@ -1515,7 +1515,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": []
   },
@@ -1526,7 +1526,7 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": [
       {
@@ -1542,7 +1542,7 @@
     "category": "design",
     "priority": "low",
     "phase": "Phase 3: Polish",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-16",
     "notes": []
   },
@@ -1580,7 +1580,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1590,7 +1590,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1600,7 +1600,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1610,7 +1610,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1620,7 +1620,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1630,7 +1630,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1640,7 +1640,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1650,7 +1650,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1660,7 +1660,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1670,7 +1670,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1680,7 +1680,7 @@
     "category": "infra",
     "priority": "medium",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1690,7 +1690,7 @@
     "category": "infra",
     "priority": "medium",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1700,7 +1700,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1710,7 +1710,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1720,7 +1720,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1730,7 +1730,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1740,7 +1740,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 9: India \u2014 ABDM",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1770,7 +1770,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1780,7 +1780,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1790,7 +1790,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1800,7 +1800,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1810,7 +1810,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1820,7 +1820,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1830,7 +1830,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1840,7 +1840,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1850,7 +1850,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1870,7 +1870,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1900,7 +1900,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 10: India \u2014 DPDPA",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1920,7 +1920,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1930,7 +1930,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1940,7 +1940,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1950,7 +1950,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1960,7 +1960,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1970,7 +1970,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1980,7 +1980,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -1990,7 +1990,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2000,7 +2000,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2010,7 +2010,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2020,7 +2020,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2030,7 +2030,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 11: India \u2014 UPI",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2040,7 +2040,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2050,7 +2050,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2060,7 +2060,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2070,7 +2070,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2080,7 +2080,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2090,7 +2090,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2100,7 +2100,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2110,7 +2110,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2120,7 +2120,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2130,7 +2130,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 12: India \u2014 Telemedicine",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2140,7 +2140,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2150,7 +2150,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2160,7 +2160,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2170,7 +2170,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2180,7 +2180,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2190,7 +2190,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2200,7 +2200,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2220,7 +2220,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2230,7 +2230,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2240,7 +2240,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2250,7 +2250,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2260,7 +2260,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2270,7 +2270,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2280,7 +2280,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2290,7 +2290,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2300,7 +2300,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2310,7 +2310,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 13: India \u2014 Wearables",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2320,7 +2320,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2330,7 +2330,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2340,7 +2340,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2350,7 +2350,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2360,7 +2360,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2370,7 +2370,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2380,7 +2380,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2390,7 +2390,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2400,7 +2400,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2410,7 +2410,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2420,7 +2420,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2430,7 +2430,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2440,7 +2440,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2450,7 +2450,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 14: India \u2014 Communication",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2460,7 +2460,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2490,7 +2490,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2500,7 +2500,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2510,7 +2510,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2520,7 +2520,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2530,7 +2530,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2540,7 +2540,7 @@
     "category": "infra",
     "priority": "medium",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2550,7 +2550,7 @@
     "category": "infra",
     "priority": "medium",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2560,7 +2560,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2570,7 +2570,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2580,7 +2580,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2650,7 +2650,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 15: India \u2014 Ecosystem",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2660,7 +2660,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2670,7 +2670,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2680,7 +2680,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2690,7 +2690,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2700,7 +2700,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2710,7 +2710,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2720,7 +2720,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2730,7 +2730,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2740,7 +2740,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2750,7 +2750,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2760,7 +2760,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2770,7 +2770,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2780,7 +2780,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2790,7 +2790,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2800,7 +2800,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2810,7 +2810,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2820,7 +2820,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2830,7 +2830,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2840,7 +2840,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2850,7 +2850,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2860,7 +2860,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2870,7 +2870,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2880,7 +2880,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2890,7 +2890,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2900,7 +2900,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2910,7 +2910,7 @@
     "category": "feature",
     "priority": "low",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2920,7 +2920,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 16: Platform \u2014 Backend",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2930,7 +2930,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2940,7 +2940,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2950,7 +2950,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2960,7 +2960,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2970,7 +2970,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2980,7 +2980,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -2990,7 +2990,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3000,7 +3000,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3010,7 +3010,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3020,7 +3020,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3030,7 +3030,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3040,7 +3040,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3050,7 +3050,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3060,7 +3060,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3070,7 +3070,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3080,7 +3080,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3090,7 +3090,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3100,7 +3100,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3110,7 +3110,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3120,7 +3120,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3130,7 +3130,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3140,7 +3140,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3150,7 +3150,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3160,7 +3160,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3170,7 +3170,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3180,7 +3180,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3190,7 +3190,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3200,7 +3200,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3210,7 +3210,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3220,7 +3220,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3230,7 +3230,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3240,7 +3240,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3250,7 +3250,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3260,7 +3260,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 17: Platform \u2014 Doctor App",
-    "status": "backlog",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3270,7 +3270,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3280,7 +3280,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3290,7 +3290,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3300,7 +3300,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3310,7 +3310,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3320,7 +3320,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3330,7 +3330,7 @@
     "category": "feature",
     "priority": "critical",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3340,7 +3340,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3350,7 +3350,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3360,7 +3360,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3370,7 +3370,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3380,7 +3380,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3390,7 +3390,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3420,7 +3420,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3440,7 +3440,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3450,7 +3450,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3460,7 +3460,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3470,7 +3470,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3480,7 +3480,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 18: Platform \u2014 Hospital",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3490,7 +3490,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3500,7 +3500,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3510,7 +3510,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3520,7 +3520,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3530,7 +3530,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3540,7 +3540,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3550,7 +3550,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3560,7 +3560,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3580,7 +3580,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3590,7 +3590,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3600,7 +3600,7 @@
     "category": "infra",
     "priority": "high",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3610,7 +3610,7 @@
     "category": "infra",
     "priority": "critical",
     "phase": "Phase 19: Infrastructure",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3630,7 +3630,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3640,7 +3640,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3650,7 +3650,7 @@
     "category": "feature",
     "priority": "high",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3670,7 +3670,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3690,7 +3690,7 @@
     "category": "feature",
     "priority": "medium",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3710,7 +3710,7 @@
     "category": "design",
     "priority": "high",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
   },
   {
@@ -3720,7 +3720,237 @@
     "category": "design",
     "priority": "medium",
     "phase": "Phase 20: Growth",
-    "status": "todo",
+    "status": "done",
     "created": "2026-03-21"
+  },
+  {
+    "id": "gv_001",
+    "title": "Comprehensive Medical Profile (10 sections)",
+    "desc": "Guava-style profile with basic info, health score, medications, conditions, allergies, vaccinations, appointments, family history, providers, lifestyle",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 21: Guava-Inspired",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "gv_002",
+    "title": "Daily Tracking View (Today tab with 8 modules)",
+    "desc": "Guava-style daily tracker: medications, mood, water, sleep, activity, symptoms, vitals, journal with daily score",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 21: Guava-Inspired",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "gv_003",
+    "title": "Water Tracking Service",
+    "desc": "Glass counter per day per profile, daily goal (8 glasses), persistent storage",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 21: Guava-Inspired",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_001",
+    "title": "Fix all force unwraps \u2014 replace with safe unwrapping",
+    "desc": "Search for ! force unwraps across all Swift files, replace with guard let / if let / nil coalescing",
+    "category": "bug",
+    "priority": "critical",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_002",
+    "title": "Add medical disclaimer on every AI response",
+    "desc": "Show \"AI-generated, not medical advice\" disclaimer below every Medi chat response and AI insight",
+    "category": "feature",
+    "priority": "critical",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_003",
+    "title": "Add proper notification permission request flow",
+    "desc": "Show permission primer screen before requesting iOS notification permission, explain why reminders matter",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_004",
+    "title": "Add error states with retry buttons everywhere",
+    "desc": "Network errors, data load failures, AI failures \u2014 show user-friendly error with Retry button instead of silent failure",
+    "category": "bug",
+    "priority": "high",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_005",
+    "title": "Add loading states to all data-dependent views",
+    "desc": "ProfileManagementView, EpisodeDetailView, HistoryView \u2014 show skeleton/spinner while data loads",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_006",
+    "title": "Remove all debug print statements",
+    "desc": "Search for print(), debugPrint(), NSLog across all files and remove or guard behind DEBUG flag",
+    "category": "bug",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_007",
+    "title": "Add crash-safe ModelContainer recovery",
+    "desc": "If SwiftData schema migration fails, auto-delete old store and recreate \u2014 already partially done, verify all edge cases",
+    "category": "bug",
+    "priority": "critical",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_008",
+    "title": "Fix long medicine names truncation",
+    "desc": "Ensure medicine names, doctor names, condition names dont get cut off on small screens",
+    "category": "bug",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_009",
+    "title": "Add VoiceOver labels to all custom components",
+    "desc": "Charts, progress rings, streak badges, dose cards \u2014 need descriptive VoiceOver labels",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_010",
+    "title": "Add in-app feedback / bug report mechanism",
+    "desc": "Shake-to-report or button in About that opens email with device info + app version pre-filled",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_011",
+    "title": "Add \"Whats New\" version tracking",
+    "desc": "Show whats new sheet on first launch after update with key feature highlights",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_012",
+    "title": "Add contextual feature tips for first-time use",
+    "desc": "Tooltip-style tips on first use of: dose swipe, AI chat, doctor mode, prescription upload",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_013",
+    "title": "Fix snooze to allow custom duration choice",
+    "desc": "Currently hardcoded 15min \u2014 let user choose 5/10/15/30/60 min snooze duration",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_014",
+    "title": "Add pull-to-refresh on Home and Reminders",
+    "desc": "SwiftUI .refreshable modifier on ScrollView for manual data refresh",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_015",
+    "title": "Validate prescription extraction results before saving",
+    "desc": "Show confidence scores clearly, flag low-confidence fields in red, require user confirmation for each medicine",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_016",
+    "title": "Add data backup reminder",
+    "desc": "Periodic prompt to export data, especially before deleting account",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 22: Production Ready",
+    "status": "todo",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_017",
+    "title": "Test and fix dark mode across ALL views",
+    "desc": "Verify every screen looks correct in dark mode \u2014 fix any color issues, contrast problems",
+    "category": "bug",
+    "priority": "high",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_018",
+    "title": "Add terms of service and privacy policy in-app",
+    "desc": "Show ToS + privacy policy as scrollable text views, not just external links",
+    "category": "feature",
+    "priority": "high",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_019",
+    "title": "Add rate app prompt after positive interactions",
+    "desc": "After 7-day streak or completing an episode, ask user to rate on App Store",
+    "category": "feature",
+    "priority": "low",
+    "phase": "Phase 22: Production Ready",
+    "status": "done",
+    "created": "2026-03-22"
+  },
+  {
+    "id": "pr_020",
+    "title": "Implement proper pagination for large data sets",
+    "desc": "Dose logs, messages, achievements \u2014 paginate instead of loading all into memory",
+    "category": "feature",
+    "priority": "medium",
+    "phase": "Phase 22: Production Ready",
+    "status": "todo",
+    "created": "2026-03-22"
   }
 ]

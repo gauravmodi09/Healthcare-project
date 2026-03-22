@@ -229,12 +229,16 @@ final class HealthJournalService {
 
         // Improvements
         if !summary.improvements.isEmpty {
-            parts.append(summary.improvements.first!)
+            if let first = summary.improvements.first {
+                parts.append(first)
+            }
         }
 
         // Concerns
         if !summary.concerns.isEmpty {
-            parts.append(summary.concerns.first!)
+            if let first = summary.concerns.first {
+                parts.append(first)
+            }
         }
 
         // Closing

@@ -6,8 +6,15 @@ struct MainTabView: View {
     @Environment(DataService.self) private var dataService
     @Environment(SmartNudgeService.self) private var nudgeService
     @AppStorage("mc_has_seeded_demo") private var hasSeededData = false
+    @Query private var users: [User]
+    @State private var showProfileSetup = false
 
     private var networkMonitor = NetworkMonitor.shared
+    private var currentUser: User? { users.first }
+    private var needsProfileSetup: Bool {
+        guard let user = currentUser else { return false }
+        return user.profiles.isEmpty
+    }
 
     var body: some View {
         @Bindable var router = router
@@ -62,10 +69,22 @@ struct MainTabView: View {
         .tint(MCColors.primaryTeal)
         } // end VStack
         .animation(.easeInOut(duration: 0.3), value: networkMonitor.isConnected)
+        .sheet(isPresented: $showProfileSetup) {
+            NavigationStack {
+                ProfileSetupView(phoneNumber: currentUser?.phoneNumber ?? "")
+            }
+        }
         .onAppear {
+            // Seed demo data on first launch for all personas
             if !hasSeededData {
                 let _ = dataService.seedDemoData()
+                seedSampleDoctors()
                 hasSeededData = true
+            }
+
+            // Auto-show profile setup for new users with no profiles
+            if needsProfileSetup {
+                showProfileSetup = true
             }
 
             // Evaluate smart nudges for the active profile
@@ -101,6 +120,37 @@ struct MainTabView: View {
                 }
             }
         }
+    }
+
+    // MARK: - Seed Sample Doctors
+
+    private func seedSampleDoctors() {
+        let context = dataService.modelContext
+
+        let doctors: [(name: String, specialty: String, phone: String, email: String, reg: String, fee: Double, emoji: String)] = [
+            ("Dr. Priya Mehta", "General Medicine", "9876543210", "priya.mehta@hospital.com", "MCI-12345", 500, "👩‍⚕️"),
+            ("Dr. Anil Kumar", "Endocrinology", "9876543211", "anil.kumar@maxhealth.com", "MCI-23456", 800, "👨‍⚕️"),
+            ("Dr. Rajesh Sharma", "Cardiology", "9876543212", "rajesh.sharma@medanta.com", "MCI-34567", 1200, "👨‍⚕️"),
+            ("Dr. Neha Gupta", "Dermatology", "9876543213", "neha.gupta@fortis.com", "MCI-45678", 600, "👩‍⚕️"),
+            ("Dr. Vikram Singh", "Orthopedics", "9876543214", "vikram.singh@aiims.com", "MCI-56789", 1000, "👨‍⚕️"),
+            ("Dr. Sunita Reddy", "Pediatrics", "9876543215", "sunita.reddy@rainbow.com", "MCI-67890", 700, "👩‍⚕️"),
+            ("Dr. Arjun Patel", "Psychiatry", "9876543216", "arjun.patel@nimhans.com", "MCI-78901", 900, "👨‍⚕️"),
+            ("Dr. Kavita Desai", "Gynecology", "9876543217", "kavita.desai@apollo.com", "MCI-89012", 800, "👩‍⚕️"),
+        ]
+
+        for doc in doctors {
+            let doctor = Doctor(
+                name: doc.name,
+                specialty: doc.specialty,
+                phone: doc.phone,
+                email: doc.email,
+                registrationNumber: doc.reg,
+                consultationFee: doc.fee
+            )
+            doctor.avatarEmoji = doc.emoji
+            context.insert(doctor)
+        }
+        try? context.save()
     }
 
     /// AI Chat tab — finds the active profile and passes it to AIChatView

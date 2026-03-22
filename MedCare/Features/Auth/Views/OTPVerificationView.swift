@@ -38,6 +38,20 @@ struct OTPVerificationView: View {
                     .multilineTextAlignment(.center)
             }
 
+            // Demo mode hint banner
+            HStack(spacing: MCSpacing.xs) {
+                Image(systemName: "info.circle.fill")
+                    .font(.system(size: 14, weight: .medium))
+                Text("Demo mode: Use OTP \(AuthService.demoOTP)")
+                    .font(MCTypography.footnote)
+            }
+            .foregroundStyle(MCColors.info)
+            .padding(.horizontal, MCSpacing.md)
+            .padding(.vertical, MCSpacing.xs)
+            .frame(maxWidth: .infinity)
+            .background(MCColors.info.opacity(0.1))
+            .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadiusSmall))
+
             // OTP Input
             MCOTPField(otp: $otp, digitCount: 6)
 
@@ -99,12 +113,10 @@ struct OTPVerificationView: View {
         Task {
             let success = try? await authService.verifyOTP(otp, phoneNumber: phoneNumber)
             if success == true {
-                // Check if profile exists
-                let user = dataService.getOrCreateUser(phoneNumber: phoneNumber)
-                if user.profiles.isEmpty {
-                    showProfileSetup = true
-                }
-                // If profiles exist, RootView will auto-switch to MainTabView
+                // Ensure a User record exists for this phone number.
+                // Profile setup is handled by MainTabView if no profiles exist.
+                let _ = dataService.getOrCreateUser(phoneNumber: phoneNumber)
+                // RootView will auto-switch to MainTabView once isAuthenticated = true
             }
         }
     }

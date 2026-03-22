@@ -75,7 +75,9 @@ final class AIExtractionService {
                 return try await extractWithGroqVision(apiKey: apiKey, imageData: imageData)
             } catch {
                 // Fall through to mock on any failure
+                #if DEBUG
                 print("[AIExtractionService] Groq Vision failed, falling back to mock: \(error.localizedDescription)")
+                #endif
             }
         }
 
@@ -150,7 +152,10 @@ final class AIExtractionService {
             "response_format": ["type": "json_object"]
         ]
 
-        var request = URLRequest(url: URL(string: "https://api.groq.com/openai/v1/chat/completions")!)
+        guard let apiURL = URL(string: "https://api.groq.com/openai/v1/chat/completions") else {
+            throw URLError(.badURL)
+        }
+        var request = URLRequest(url: apiURL)
         request.httpMethod = "POST"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")

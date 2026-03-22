@@ -476,7 +476,7 @@ final class ContextualTipsService {
         let month = Calendar.current.component(.month, from: Date())
 
         switch month {
-        case 6, 7, 8, 9: // Monsoon (June-September)
+        case 7, 8, 9: // Monsoon (July-September)
             let hasImmunosuppressant = medicines.contains { $0.category == .antiInfective || $0.category == .antibiotic }
             if hasImmunosuppressant {
                 tips.append(HealthTip(
@@ -486,15 +486,28 @@ final class ContextualTipsService {
                     icon: "cloud.rain.fill",
                     colorHex: "60A5FA"
                 ))
-            } else {
-                tips.append(HealthTip(
-                    message: "Monsoon tip: Store your medicines in a dry, cool place. Humidity can affect tablet quality.",
-                    category: .seasonal,
-                    priority: 4,
-                    icon: "cloud.rain.fill",
-                    colorHex: "60A5FA"
-                ))
             }
+            tips.append(HealthTip(
+                message: "Monsoon tip: Store your medicines in a dry, cool place. Humidity can affect tablet quality.",
+                category: .seasonal,
+                priority: 4,
+                icon: "cloud.rain.fill",
+                colorHex: "60A5FA"
+            ))
+            tips.append(HealthTip(
+                message: "Dengue prevention: Use mosquito repellent, avoid stagnant water. Watch for fever, body aches, or rash.",
+                category: .seasonal,
+                priority: 2,
+                icon: "ladybug.fill",
+                colorHex: "EF4444"
+            ))
+            tips.append(HealthTip(
+                message: "Monsoon waterborne diseases are common. Drink only boiled/filtered water and avoid street food.",
+                category: .seasonal,
+                priority: 3,
+                icon: "drop.triangle.fill",
+                colorHex: "60A5FA"
+            ))
 
         case 10, 11: // Festival season (Dussehra/Diwali)
             let hasDiabetes = medicines.contains { $0.category == .antidiabetic }
@@ -517,8 +530,50 @@ final class ContextualTipsService {
                     colorHex: "F59E0B"
                 ))
             }
+            // Diwali air quality alert
+            let hasRespiratory = medicines.contains { $0.category == .respiratory }
+            if hasRespiratory {
+                tips.append(HealthTip(
+                    message: "Diwali air quality alert: Firecrackers worsen air pollution. Keep your inhaler handy and consider wearing a mask outdoors.",
+                    category: .seasonal,
+                    priority: 1,
+                    icon: "aqi.medium",
+                    colorHex: "EF4444"
+                ))
+            }
 
-        case 4, 5: // Summer (April-May)
+        case 3: // Holi season (March)
+            tips.append(HealthTip(
+                message: "Holi tip: Chemical colors can cause skin allergies. Use organic colors and moisturize well after playing.",
+                category: .seasonal,
+                priority: 3,
+                icon: "paintpalette.fill",
+                colorHex: "A78BFA"
+            ))
+            // Photosensitive drug warning
+            let hasPhotosensitive = medicines.contains {
+                $0.category == .antibiotic || $0.category == .antiInfective
+            }
+            if hasPhotosensitive {
+                tips.append(HealthTip(
+                    message: "Your medication may make skin more sensitive. Be extra cautious with Holi colors and sun exposure.",
+                    category: .seasonal,
+                    priority: 2,
+                    icon: "exclamationmark.triangle.fill",
+                    colorHex: "F59E0B"
+                ))
+            }
+
+            // Also summer starts
+            tips.append(HealthTip(
+                message: "Summer is starting \u{2014} stay hydrated. Dehydration affects how your body processes medication.",
+                category: .seasonal,
+                priority: 4,
+                icon: "sun.max.fill",
+                colorHex: "F59E0B"
+            ))
+
+        case 4, 5, 6: // Summer (April-June)
             tips.append(HealthTip(
                 message: "Summer heat can affect how your body absorbs medicines. Drink at least 8 glasses of water daily.",
                 category: .seasonal,
@@ -526,8 +581,22 @@ final class ContextualTipsService {
                 icon: "sun.max.fill",
                 colorHex: "F59E0B"
             ))
+            tips.append(HealthTip(
+                message: "Heat stroke alert: Avoid direct sun between 11am-3pm. Watch for dizziness, nausea, or rapid heartbeat.",
+                category: .seasonal,
+                priority: 3,
+                icon: "thermometer.sun.fill",
+                colorHex: "EF4444"
+            ))
+            tips.append(HealthTip(
+                message: "Store medicines below 25\u{00B0}C. Heat can reduce effectiveness of tablets and syrups.",
+                category: .seasonal,
+                priority: 3,
+                icon: "thermometer.high",
+                colorHex: "F59E0B"
+            ))
 
-        case 12, 1, 2: // Winter
+        case 12, 1, 2: // Winter (November-February)
             let hasRespiratory = medicines.contains { $0.category == .respiratory }
             if hasRespiratory {
                 tips.append(HealthTip(
@@ -538,12 +607,86 @@ final class ContextualTipsService {
                     colorHex: "60A5FA"
                 ))
             }
+            tips.append(HealthTip(
+                message: "Flu season: Wash hands frequently and consider a flu vaccine. Report any fever or body aches early.",
+                category: .seasonal,
+                priority: 3,
+                icon: "allergens.fill",
+                colorHex: "60A5FA"
+            ))
+            tips.append(HealthTip(
+                message: "Winter Vitamin D tip: Get 15-20 minutes of morning sunlight. Low Vitamin D affects bone health and immunity.",
+                category: .seasonal,
+                priority: 4,
+                icon: "sun.min.fill",
+                colorHex: "F59E0B"
+            ))
+            tips.append(HealthTip(
+                message: "Cold weather can increase joint pain and stiffness. Stay active and keep joints warm.",
+                category: .seasonal,
+                priority: 4,
+                icon: "figure.walk",
+                colorHex: "60A5FA"
+            ))
 
         default:
             break
         }
 
         return tips
+    }
+
+    // MARK: - Get Seasonal Alert
+
+    /// Returns the most relevant seasonal health alert for the current date
+    func getSeasonalAlert() -> HealthTip? {
+        let month = Calendar.current.component(.month, from: Date())
+        let day = Calendar.current.component(.day, from: Date())
+
+        switch month {
+        case 7, 8, 9:
+            return HealthTip(
+                message: "Monsoon season: Stay alert for dengue, waterborne diseases. Store medicines in dry places away from humidity.",
+                category: .seasonal,
+                priority: 2,
+                icon: "cloud.rain.fill",
+                colorHex: "60A5FA"
+            )
+        case 11 where day >= 1 && day <= 15:
+            return HealthTip(
+                message: "Diwali air quality alert: Post-Diwali pollution can worsen respiratory issues. Wear a mask outdoors if needed.",
+                category: .seasonal,
+                priority: 1,
+                icon: "aqi.medium",
+                colorHex: "EF4444"
+            )
+        case 12, 1, 2:
+            return HealthTip(
+                message: "Flu season: Boost immunity with warm fluids, Vitamin C, and adequate sleep. Get your flu shot if you haven't.",
+                category: .seasonal,
+                priority: 3,
+                icon: "snowflake",
+                colorHex: "60A5FA"
+            )
+        case 3 where day >= 10 && day <= 30:
+            return HealthTip(
+                message: "Holi season: Use organic colors to avoid skin allergies. Stay hydrated and protect eyes from chemical colors.",
+                category: .seasonal,
+                priority: 3,
+                icon: "paintpalette.fill",
+                colorHex: "A78BFA"
+            )
+        case 4, 5, 6:
+            return HealthTip(
+                message: "Summer alert: Drink 3+ litres of water daily. Watch for heat stroke signs: dizziness, nausea, rapid pulse.",
+                category: .seasonal,
+                priority: 3,
+                icon: "sun.max.fill",
+                colorHex: "F59E0B"
+            )
+        default:
+            return nil
+        }
     }
 
     // MARK: - General Wellness Tips

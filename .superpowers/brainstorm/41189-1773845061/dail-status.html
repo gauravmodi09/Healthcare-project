@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dail.ai — Status & Priority Plan</title>
+<style>
+  * { margin:0;padding:0;box-sizing:border-box }
+  body { font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:#F7F5F0;color:#0f0f0f;line-height:1.5 }
+
+  .header { background:#0f0f0f;color:#F7F5F0;padding:20px 28px;position:sticky;top:0;z-index:10 }
+  .header h1 { font-size:22px;font-weight:700;letter-spacing:-0.5px }
+  .header p { font-size:13px;color:rgba(247,245,240,0.5);margin-top:2px }
+
+  .content { max-width:1100px;margin:0 auto;padding:24px }
+
+  .section { margin-bottom:28px }
+  .section h2 { font-size:16px;font-weight:700;margin-bottom:12px;color:#0f0f0f }
+  .section-sub { font-size:12px;color:#7a7a7a;margin-bottom:14px }
+
+  .grid-2 { display:grid;grid-template-columns:1fr 1fr;gap:12px }
+  .grid-3 { display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px }
+
+  .card { background:white;border-radius:12px;padding:14px 16px;box-shadow:0 2px 12px rgba(0,0,0,0.06) }
+  .card h3 { font-size:13px;font-weight:700;margin-bottom:4px }
+  .card p { font-size:12px;color:#7a7a7a;line-height:1.5 }
+
+  .status-done { border-left:3px solid #27AE60 }
+  .status-partial { border-left:3px solid #C4962A }
+  .status-missing { border-left:3px solid #C0392B }
+
+  .badge { display:inline-block;padding:2px 8px;border-radius:8px;font-size:10px;font-weight:600;margin-right:4px }
+  .badge-done { background:#E8F5E9;color:#27AE60 }
+  .badge-partial { background:#FDF6E3;color:#C4962A }
+  .badge-missing { background:#FDECEA;color:#C0392B }
+  .badge-p0 { background:#FDECEA;color:#C0392B }
+  .badge-p1 { background:#FDF6E3;color:#C4962A }
+  .badge-p2 { background:#E8F5F2;color:#2A7C6F }
+
+  .priority-card { background:white;border-radius:12px;padding:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border-left:4px solid }
+  .priority-card h3 { font-size:14px;font-weight:700;margin-bottom:6px }
+  .priority-card p { font-size:12px;color:#3a3a3a;line-height:1.6 }
+  .priority-card .tasks { margin-top:8px;font-size:11px;color:#7a7a7a }
+  .priority-card .tasks li { margin-bottom:3px }
+  .priority-card .tech { margin-top:8px;display:flex;gap:4px;flex-wrap:wrap }
+  .tech-tag { font-size:9px;padding:2px 6px;border-radius:6px;font-weight:500 }
+  .tech-swift { background:#FAF0EA;color:#C8522A }
+  .tech-supa { background:#E8F5F2;color:#2A7C6F }
+  .tech-ui { background:#F0EEF8;color:#5A4A8A }
+
+  .flow { display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin:16px 0 }
+  .flow-step { background:white;border-radius:10px;padding:8px 14px;font-size:12px;font-weight:600;box-shadow:0 1px 4px rgba(0,0,0,0.06) }
+  .flow-arrow { color:#b0b0b0;font-size:16px }
+
+  .approach-box { background:#0f0f0f;color:#F7F5F0;border-radius:14px;padding:18px 20px;margin-top:16px }
+  .approach-box h3 { font-size:14px;font-weight:700;margin-bottom:8px;color:#C8522A }
+  .approach-box p { font-size:12px;color:rgba(247,245,240,0.7);line-height:1.6 }
+  .approach-box strong { color:#F7F5F0 }
+
+  @media(max-width:768px){ .grid-2,.grid-3{grid-template-columns:1fr} }
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+  <h1>Dail.ai — Current Status & What to Build</h1>
+  <p>4,200 lines of Swift · 5 Edge Functions · Strong local app, needs cloud wiring</p>
+</div>
+
+<div class="content">
+
+  <!-- Current Status -->
+  <div class="section">
+    <h2>Current Status Assessment</h2>
+    <p class="section-sub">What's built, what's partial, what's missing</p>
+
+    <div class="grid-3">
+      <div class="card status-done">
+        <span class="badge badge-done">Built</span>
+        <h3>UI Framework</h3>
+        <p>5 tabs, all screens, design system, capture bar, onboarding, settings</p>
+      </div>
+      <div class="card status-done">
+        <span class="badge badge-done">Built</span>
+        <h3>Local Database</h3>
+        <p>GRDB with all models, migrations, CRUD, streak tracking, carry-forward</p>
+      </div>
+      <div class="card status-done">
+        <span class="badge badge-done">Built</span>
+        <h3>AI Classification</h3>
+        <p>Groq Llama 3.3 70B with keyword fallback. Tasks, reminders, notes parsed.</p>
+      </div>
+      <div class="card status-done">
+        <span class="badge badge-done">Built</span>
+        <h3>Audio Recording</h3>
+        <p>AVAudioRecorder with m4a output. Recording overlay UI with waveform.</p>
+      </div>
+      <div class="card status-done">
+        <span class="badge badge-done">Built</span>
+        <h3>Edge Functions</h3>
+        <p>5 Supabase functions: classify, embed, search, transcribe, validate</p>
+      </div>
+      <div class="card status-done">
+        <span class="badge badge-done">Built</span>
+        <h3>DB Schema</h3>
+        <p>PostgreSQL with pgvector, RLS policies, all tables, match_memories RPC</p>
+      </div>
+
+      <div class="card status-partial">
+        <span class="badge badge-partial">Partial</span>
+        <h3>Supabase Client</h3>
+        <p>SDK imported, SupabaseService.swift exists but is placeholder. No calls to edge functions.</p>
+      </div>
+      <div class="card status-partial">
+        <span class="badge badge-partial">Partial</span>
+        <h3>Memory Search</h3>
+        <p>UI exists, backend ready. Not wired — search hits local GRDB only, not vector search.</p>
+      </div>
+      <div class="card status-partial">
+        <span class="badge badge-partial">Partial</span>
+        <h3>Widget</h3>
+        <p>Basic widget UI exists. No App Groups — shows placeholder data, not live.</p>
+      </div>
+
+      <div class="card status-missing">
+        <span class="badge badge-missing">Missing</span>
+        <h3>Authentication</h3>
+        <p>No login/signup flow. App launches straight to home with sample data.</p>
+      </div>
+      <div class="card status-missing">
+        <span class="badge badge-missing">Missing</span>
+        <h3>Cloud Sync</h3>
+        <p>No sync between GRDB and Supabase. All data local-only.</p>
+      </div>
+      <div class="card status-missing">
+        <span class="badge badge-missing">Missing</span>
+        <h3>Meeting Pipeline</h3>
+        <p>Record → Upload → Whisper → Claude flow not connected end-to-end.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- The Critical Path -->
+  <div class="section">
+    <h2>Priority Plan — Making Dail "Up and Running"</h2>
+    <p class="section-sub">Ordered by: what unblocks the most features downstream</p>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+
+      <!-- P0: Wire Supabase -->
+      <div class="priority-card" style="border-left-color:#C0392B">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="badge badge-p0">P0 — Do First</span>
+          <h3 style="margin:0">Wire Up Supabase Client + Auth</h3>
+        </div>
+        <p>Complete SupabaseService.swift — real initialization, auth flow (Apple Sign In + email), session management. This unblocks <strong>everything</strong>: cloud sync, meeting pipeline, vector search, push notifications.</p>
+        <ul class="tasks">
+          <li>• Initialize Supabase client with real project URL + anon key</li>
+          <li>• Build login/signup screens (Apple Sign In + email magic link)</li>
+          <li>• Session persistence + token refresh</li>
+          <li>• Wire AppService to call edge functions instead of local-only</li>
+          <li>• Add .env / Secrets.plist entries for Supabase credentials</li>
+        </ul>
+        <div class="tech">
+          <span class="tech-tag tech-swift">Swift</span>
+          <span class="tech-tag tech-supa">Supabase Auth</span>
+          <span class="tech-tag tech-ui">Login UI</span>
+        </div>
+      </div>
+
+      <!-- P0: Meeting Pipeline -->
+      <div class="priority-card" style="border-left-color:#C0392B">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="badge badge-p0">P0 — Do First</span>
+          <h3 style="margin:0">Complete Meeting Recording Pipeline</h3>
+        </div>
+        <p>Wire the full flow: Record audio → Upload to Supabase Storage → Call transcribe-meeting edge function → Display structured notes → Auto-create tasks from action items. This is the #1 "wow moment" feature.</p>
+        <ul class="tasks">
+          <li>• Upload recorded audio to Supabase Storage after stop</li>
+          <li>• Call transcribe-meeting edge function</li>
+          <li>• Parse response → populate MeetingNotes view</li>
+          <li>• Auto-create tasks from action_items where is_mine=true</li>
+          <li>• Show "Saved to memory" confirmation bar</li>
+          <li>• Delete audio after transcription confirmed</li>
+        </ul>
+        <div class="tech">
+          <span class="tech-tag tech-swift">AudioRecorderService</span>
+          <span class="tech-tag tech-supa">Storage + Edge Fn</span>
+          <span class="tech-tag tech-swift">MeetingNotesView</span>
+        </div>
+      </div>
+
+      <!-- P1: Cloud Sync -->
+      <div class="priority-card" style="border-left-color:#C4962A">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="badge badge-p1">P1 — Core Loop</span>
+          <h3 style="margin:0">Cloud Sync + Offline Queue</h3>
+        </div>
+        <p>Sync local GRDB data to Supabase. Capture locally → queue for upload → sync on connectivity. Pull cloud data on launch. Last-write-wins conflict resolution.</p>
+        <ul class="tasks">
+          <li>• Create SyncService with upload queue</li>
+          <li>• On capture: write GRDB + enqueue Supabase insert</li>
+          <li>• Background sync on app launch + every 5 min</li>
+          <li>• Pull cloud changes to local on sync</li>
+          <li>• Handle offline gracefully (queue up to 100 items)</li>
+        </ul>
+        <div class="tech">
+          <span class="tech-tag tech-swift">SyncService</span>
+          <span class="tech-tag tech-supa">Supabase Realtime</span>
+          <span class="tech-tag tech-swift">GRDB queue</span>
+        </div>
+      </div>
+
+      <!-- P1: Vector Search -->
+      <div class="priority-card" style="border-left-color:#C4962A">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="badge badge-p1">P1 — Core Loop</span>
+          <h3 style="margin:0">Wire Vector Search to UI</h3>
+        </div>
+        <p>Connect MemorySearchView to search-memory edge function. Generate embeddings on capture. Show AI synthesis + source cards. This makes the "searchable life memory" promise real.</p>
+        <ul class="tasks">
+          <li>• On new capture → call generate-embedding edge function</li>
+          <li>• Search bar → call search-memory edge function</li>
+          <li>• Display AI synthesis answer</li>
+          <li>• Show source memory cards with dates</li>
+          <li>• Fallback to local GRDB search when offline</li>
+        </ul>
+        <div class="tech">
+          <span class="tech-tag tech-supa">pgvector</span>
+          <span class="tech-tag tech-supa">Edge Functions</span>
+          <span class="tech-tag tech-ui">MemorySearchView</span>
+        </div>
+      </div>
+
+      <!-- P2: Widget + Notifications -->
+      <div class="priority-card" style="border-left-color:#2A7C6F">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="badge badge-p2">P2 — Polish</span>
+          <h3 style="margin:0">Widget App Groups + Smart Notifications</h3>
+        </div>
+        <p>Share data between app and widget via App Groups. Add morning brief (7:30am), evening reflection (9pm) push notifications. Smart reminder context cards.</p>
+        <ul class="tasks">
+          <li>• Create App Group container</li>
+          <li>• Write widget data to shared UserDefaults on every change</li>
+          <li>• Widget reads live task count + streak</li>
+          <li>• Morning notification: "X tasks today, meeting at Y"</li>
+          <li>• Evening notification: "How was your day?"</li>
+          <li>• Reminder context cards from generate-reminder-context</li>
+        </ul>
+        <div class="tech">
+          <span class="tech-tag tech-swift">WidgetKit</span>
+          <span class="tech-tag tech-swift">App Groups</span>
+          <span class="tech-tag tech-swift">UNNotification</span>
+        </div>
+      </div>
+
+      <!-- P2: UI Polish with frontend-design -->
+      <div class="priority-card" style="border-left-color:#5A4A8A">
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+          <span class="badge" style="background:#F0EEF8;color:#5A4A8A">FRONTEND DESIGN</span>
+          <h3 style="margin:0">Landing Page + Web Dashboard</h3>
+        </div>
+        <p>Use the frontend-design plugin to build a stunning marketing landing page for Dail.ai and a web-based companion dashboard for memory browsing.</p>
+        <ul class="tasks">
+          <li>• Marketing landing page: hero, features, pricing, CTA</li>
+          <li>• Follows Dail design system (DM Serif + DM Sans, warm palette)</li>
+          <li>• Web memory viewer (read-only dashboard)</li>
+          <li>• App Store download links</li>
+        </ul>
+        <div class="tech">
+          <span class="tech-tag tech-ui">Frontend Design Plugin</span>
+          <span class="tech-tag" style="background:#FDF6E3;color:#C4962A">HTML/CSS/JS</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Recommended approach -->
+  <div class="approach-box">
+    <h3>My Recommendation</h3>
+    <p>Start with <strong>P0: Supabase Auth + Meeting Pipeline</strong> — these are the two features that make Dail feel real instead of a prototype. Auth unblocks everything downstream. The meeting pipeline is your #1 "wow" moment. Then wire cloud sync + vector search. Finally polish with widget + notifications + landing page using the frontend-design plugin.</p>
+    <p style="margin-top:8px">The existing prototype HTML (<strong>dail_app_prototype.html</strong>) is beautiful — we can evolve it into the marketing landing page with the frontend-design plugin.</p>
+  </div>
+
+</div>
+</body>
+</html>

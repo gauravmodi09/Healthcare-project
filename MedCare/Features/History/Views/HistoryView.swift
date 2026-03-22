@@ -5,8 +5,9 @@ import SwiftData
 
 struct HistoryView: View {
     @Query private var users: [User]
-    @State private var selectedTab: HealthTab = .overview
+    @State private var selectedTab: HealthTab = .today
     @State private var showExportSheet = false
+    @State private var isLoading = true
 
     private let healthScoreService = HealthScoreService()
 
@@ -25,6 +26,7 @@ struct HistoryView: View {
     }
 
     enum HealthTab: String, CaseIterable {
+        case today = "Today"
         case overview = "Overview"
         case calendar = "Calendar"
         case insights = "Insights"
@@ -35,7 +37,21 @@ struct HistoryView: View {
     var body: some View {
         NavigationStack {
             ScrollView {
-                if let profile = activeProfile {
+                if isLoading {
+                    VStack(spacing: MCSpacing.md) {
+                        ForEach(0..<3, id: \.self) { _ in
+                            SkeletonCardView()
+                        }
+                    }
+                    .padding(.horizontal, MCSpacing.screenPadding)
+                    .padding(.top, MCSpacing.md)
+                    .task {
+                        try? await Task.sleep(nanoseconds: 400_000_000)
+                        withAnimation(.easeOut(duration: 0.3)) {
+                            isLoading = false
+                        }
+                    }
+                } else if let profile = activeProfile {
                     VStack(spacing: MCSpacing.lg) {
                         // Segmented picker
                         Picker("Section", selection: $selectedTab) {
@@ -47,6 +63,8 @@ struct HistoryView: View {
                         .padding(.horizontal, MCSpacing.screenPadding)
 
                         switch selectedTab {
+                        case .today:
+                            DailyTrackingView(profile: profile)
                         case .overview:
                             HealthOverviewSection(profile: profile)
                         case .calendar:
@@ -71,6 +89,10 @@ struct HistoryView: View {
                         systemImage: "person.crop.circle.badge.questionmark"
                     )
                 }
+            }
+            .refreshable {
+                // Trigger SwiftUI to re-evaluate health data
+                try? await Task.sleep(for: .milliseconds(300))
             }
             .background(MCColors.backgroundLight)
             .navigationTitle("Health")
@@ -334,9 +356,9 @@ private struct HealthOverviewSection: View {
         let monday = calendar.date(from: comps) ?? Date()
 
         return (0..<7).map { offset in
-            let date = calendar.date(byAdding: .day, value: offset, to: monday)!
+            let date = calendar.date(byAdding: .day, value: offset, to: monday) ?? monday
             let startOfDay = calendar.startOfDay(for: date)
-            let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+            let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) ?? startOfDay.addingTimeInterval(86400)
 
             let doses = allDoseLogs.filter {
                 $0.scheduledTime >= startOfDay && $0.scheduledTime < endOfDay
@@ -363,9 +385,9 @@ private struct HealthOverviewSection: View {
         var results: [SymptomDay] = []
 
         for offset in (0..<7).reversed() {
-            let date = calendar.date(byAdding: .day, value: -offset, to: Date())!
+            guard let date = calendar.date(byAdding: .day, value: -offset, to: Date()) else { continue }
             let startOfDay = calendar.startOfDay(for: date)
-            let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+            guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else { continue }
 
             let dayLogs = allSymptomLogs.filter {
                 $0.date >= startOfDay && $0.date < endOfDay
@@ -584,6 +606,16 @@ private struct HealthInsightsSection: View {
                     }
                     .padding(.horizontal, MCSpacing.screenPadding)
                 }
+
+                // AI disclaimer
+                HStack(spacing: 3) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 9))
+                    Text("AI-generated \u{00B7} Not medical advice")
+                        .font(.system(size: 10, weight: .regular))
+                }
+                .foregroundStyle(MCColors.textTertiary)
+                .padding(.horizontal, MCSpacing.screenPadding)
             }
         }
     }
@@ -854,8 +886,8 @@ private struct HealthInsightsSection: View {
         let now = Date()
 
         func adherenceForWeek(startingDaysAgo: Int) -> Double {
-            let start = calendar.date(byAdding: .day, value: -startingDaysAgo, to: calendar.startOfDay(for: now))!
-            let end = calendar.date(byAdding: .day, value: 7, to: start)!
+            guard let start = calendar.date(byAdding: .day, value: -startingDaysAgo, to: calendar.startOfDay(for: now)),
+                  let end = calendar.date(byAdding: .day, value: 7, to: start) else { return 0 }
 
             let doses = allDoseLogs.filter {
                 $0.scheduledTime >= start && $0.scheduledTime < end
@@ -906,6 +938,8 @@ struct EpisodeHistoryCard: View {
                         Text(episode.title)
                             .font(MCTypography.bodyMedium)
                             .foregroundStyle(MCColors.textPrimary)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.85)
                     }
 
                     HStack(spacing: MCSpacing.sm) {

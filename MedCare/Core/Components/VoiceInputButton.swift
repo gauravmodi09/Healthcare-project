@@ -324,8 +324,7 @@ struct VoiceInputButton: View {
 
             HStack {
                 Spacer()
-                VoiceInputButton { action in
-                    print("Action confirmed: \(action.displayTitle)")
+                VoiceInputButton { _ in
                 }
                 .padding(.trailing, 20)
                 .padding(.bottom, 20)

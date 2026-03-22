@@ -11,12 +11,14 @@ struct AIChatView: View {
     @Environment(\.dismiss) private var dismiss
     @State private var showSymptomLog = false
     @State private var showTimeline = false
+    @State private var showShareSheet = false
+    @State private var shareChatText = ""
 
     let profile: UserProfile
 
     var body: some View {
         ZStack {
-            Color(hex: "F7F9FC")
+            MCColors.backgroundLight
                 .ignoresSafeArea()
 
             VStack(spacing: 0) {
@@ -75,6 +77,11 @@ struct AIChatView: View {
                 }
             }
         }
+        .sheet(isPresented: $showShareSheet) {
+            if !shareChatText.isEmpty {
+                ShareSheetView(items: [shareChatText])
+            }
+        }
         .onAppear {
             chatService.loadHistory(modelContext: modelContext, profileId: profile.id)
             if chatService.messages.isEmpty {
@@ -92,7 +99,7 @@ struct AIChatView: View {
             } label: {
                 Image(systemName: "chevron.left")
                     .font(.system(size: 18, weight: .semibold))
-                    .foregroundColor(Color(hex: "1F2937"))
+                    .foregroundColor(MCColors.textPrimary)
             }
 
             Spacer()
@@ -113,8 +120,15 @@ struct AIChatView: View {
 
             Spacer()
 
-            // Clear chat
+            // Menu
             Menu {
+                Button {
+                    shareChatText = formatChatForSharing()
+                    showShareSheet = true
+                } label: {
+                    Label("Share Chat", systemImage: "square.and.arrow.up")
+                }
+
                 Button(role: .destructive) {
                     chatService.clearHistory(modelContext: modelContext)
                     addWelcomeMessage()
@@ -129,7 +143,7 @@ struct AIChatView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 12)
-        .background(.ultraThinMaterial)
+        .background(.ultraThinMaterial, in: UnevenRoundedRectangle(bottomLeadingRadius: 16, bottomTrailingRadius: 16, style: .continuous))
     }
 
     // MARK: - Disclaimer
@@ -141,11 +155,11 @@ struct AIChatView: View {
             Text("I'm your health companion, not your doctor. Always follow your doctor's advice.")
                 .font(.caption2.weight(.medium))
         }
-        .foregroundColor(Color(hex: "0A7E8C"))
+        .foregroundColor(MCColors.primaryTeal)
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .frame(maxWidth: .infinity)
-        .background(Color(hex: "0A7E8C").opacity(0.08))
+        .background(MCColors.primaryTeal.opacity(0.08))
     }
 
     // MARK: - Messages List
@@ -166,6 +180,10 @@ struct AIChatView: View {
                                 }
                             }
                             .id(message.id)
+                            .transition(.asymmetric(
+                                insertion: .scale(scale: 0.94).combined(with: .opacity),
+                                removal: .opacity
+                            ))
                         }
                     }
 
@@ -183,8 +201,7 @@ struct AIChatView: View {
                                         .foregroundColor(MCColors.textPrimary)
                                         .lineSpacing(3)
                                         .padding(14)
-                                        .background(MCColors.surface)
-                                        .clipShape(RoundedRectangle(cornerRadius: 16))
+                                        .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 18, style: .continuous))
 
                                     Spacer(minLength: 60)
                                 }
@@ -193,6 +210,20 @@ struct AIChatView: View {
                             }
                         }
                         .id("typing")
+                    }
+
+                    // Error state with inline retry
+                    if let error = chatService.lastError {
+                        MCInlineErrorView(message: error) {
+                            if let failedText = chatService.lastFailedMessage {
+                                messageText = failedText
+                                chatService.lastError = nil
+                                chatService.lastFailedMessage = nil
+                                sendMessage()
+                            }
+                        }
+                        .id("error")
+                        .transition(.scale(scale: 0.94).combined(with: .opacity))
                     }
                 }
                 .padding(.horizontal, 16)
@@ -238,7 +269,7 @@ struct AIChatView: View {
             .padding(.horizontal, 16)
             .padding(.vertical, 6)
         }
-        .background(Color(hex: "F7F9FC").opacity(0.9))
+        .background(.ultraThinMaterial)
     }
 
     private func quickChip(_ label: String, query: String) -> some View {
@@ -248,13 +279,14 @@ struct AIChatView: View {
         } label: {
             Text(label)
                 .font(.caption.weight(.medium))
-                .foregroundColor(Color(hex: "0A7E8C"))
+                .foregroundColor(MCColors.primaryTeal)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(Color(hex: "0A7E8C").opacity(0.08))
+                .background(.ultraThinMaterial)
                 .clipShape(Capsule())
-                .overlay(Capsule().stroke(Color(hex: "0A7E8C").opacity(0.15), lineWidth: 1))
+                .overlay(Capsule().stroke(MCColors.primaryTeal.opacity(0.15), lineWidth: 1))
         }
+        .buttonStyle(.mcBounce)
     }
 
     // MARK: - Input Bar
@@ -270,8 +302,7 @@ struct AIChatView: View {
                     .font(.body)
                     .padding(.horizontal, 16)
                     .padding(.vertical, 10)
-                    .background(Color(hex: "F0F2F5"))
-                    .clipShape(RoundedRectangle(cornerRadius: 22))
+                    .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 22, style: .continuous))
                     .lineLimit(1...4)
                     .focused($isInputFocused)
             }
@@ -283,7 +314,7 @@ struct AIChatView: View {
                 } label: {
                     Image(systemName: "stop.circle.fill")
                         .font(.system(size: 30))
-                        .foregroundColor(Color(hex: "EF4444"))
+                        .foregroundColor(MCColors.error)
                 }
             } else if messageText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
                 Button {
@@ -291,7 +322,7 @@ struct AIChatView: View {
                 } label: {
                     Image(systemName: "mic.fill")
                         .font(.system(size: 30))
-                        .foregroundColor(Color(hex: "9CA3AF"))
+                        .foregroundColor(MCColors.textTertiary)
                 }
             } else {
                 Button {
@@ -299,8 +330,15 @@ struct AIChatView: View {
                 } label: {
                     Image(systemName: "arrow.up.circle.fill")
                         .font(.system(size: 30))
-                        .foregroundColor(Color(hex: "0A7E8C"))
+                        .foregroundStyle(
+                            LinearGradient(
+                                colors: [MCColors.primaryTeal, MCColors.primaryTealDark],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
                 }
+                .buttonStyle(.mcBounce)
             }
         }
         .padding(.horizontal, 16)
@@ -326,12 +364,12 @@ struct AIChatView: View {
             VStack(alignment: .leading, spacing: 2) {
                 Text("Listening...")
                     .font(.caption.weight(.semibold))
-                    .foregroundColor(Color(hex: "EF4444"))
+                    .foregroundColor(MCColors.error)
 
                 if !speechService.transcribedText.isEmpty {
                     Text(speechService.transcribedText)
                         .font(.subheadline)
-                        .foregroundColor(Color(hex: "1F2937"))
+                        .foregroundColor(MCColors.textPrimary)
                         .lineLimit(2)
                 }
             }
@@ -340,7 +378,7 @@ struct AIChatView: View {
         }
         .padding(.horizontal, 16)
         .padding(.vertical, 10)
-        .background(Color(hex: "FEF2F2"))
+        .background(MCColors.error.opacity(0.06))
         .clipShape(RoundedRectangle(cornerRadius: 22))
     }
 
@@ -348,7 +386,7 @@ struct AIChatView: View {
         HStack(spacing: 3) {
             ForEach(0..<5, id: \.self) { index in
                 RoundedRectangle(cornerRadius: 2)
-                    .fill(Color(hex: "EF4444"))
+                    .fill(MCColors.error)
                     .frame(width: 3, height: waveformBarHeight(for: index))
                     .animation(.easeInOut(duration: 0.15), value: speechService.audioLevel)
             }
@@ -479,21 +517,29 @@ struct AIChatView: View {
 
     // MARK: - Quick Action Chips (shown at start)
 
+    @State private var chipsAppeared = false
+
     private var quickActionChips: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                quickActionChip("How am I doing?", icon: "chart.line.uptrend.xyaxis")
-                quickActionChip("Side effects?", icon: "exclamationmark.triangle")
-                quickActionChip("My medicines", icon: "pills")
-                quickActionChip("Feel unwell", icon: "heart.text.square")
+                quickActionChip("How am I doing?", icon: "chart.line.uptrend.xyaxis", index: 0)
+                quickActionChip("Side effects?", icon: "exclamationmark.triangle", index: 1)
+                quickActionChip("My medicines", icon: "pills", index: 2)
+                quickActionChip("Feel unwell", icon: "heart.text.square", index: 3)
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 8)
         }
-        .background(MCColors.backgroundLight.opacity(0.9))
+        .background(.ultraThinMaterial)
+        .onAppear {
+            withAnimation(.spring(response: 0.5, dampingFraction: 0.7)) {
+                chipsAppeared = true
+            }
+        }
+        .onDisappear { chipsAppeared = false }
     }
 
-    private func quickActionChip(_ label: String, icon: String) -> some View {
+    private func quickActionChip(_ label: String, icon: String, index: Int) -> some View {
         Button {
             messageText = label
             sendMessage()
@@ -507,10 +553,32 @@ struct AIChatView: View {
             .foregroundColor(MCColors.primaryTeal)
             .padding(.horizontal, 14)
             .padding(.vertical, 9)
-            .background(MCColors.primaryTeal.opacity(0.08))
+            .background(.ultraThinMaterial)
             .clipShape(Capsule())
             .overlay(Capsule().stroke(MCColors.primaryTeal.opacity(0.15), lineWidth: 1))
         }
+        .buttonStyle(.mcBounce)
+        .scaleEffect(chipsAppeared ? 1.0 : 0.6)
+        .opacity(chipsAppeared ? 1.0 : 0)
+        .animation(
+            .spring(response: 0.45, dampingFraction: 0.65).delay(Double(index) * 0.08),
+            value: chipsAppeared
+        )
+    }
+
+    private func formatChatForSharing() -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateStyle = .medium
+        dateFormatter.timeStyle = .short
+
+        var text = "Medi Health Chat \u{2014} \(dateFormatter.string(from: Date()))\n\n"
+
+        for message in chatService.messages where message.role != .system {
+            let sender = message.role.isUser ? "[\(profile.name)]" : "[Medi]"
+            text += "\(sender): \(message.content)\n\n"
+        }
+
+        return text
     }
 
     private func handleAction(_ action: ChatAction) {
@@ -551,12 +619,27 @@ struct MediAvatarBadge: View {
                 .foregroundStyle(.white, MCColors.primaryTeal)
             Text("Medi")
                 .font(.system(size: 11, weight: .bold))
-                .foregroundColor(MCColors.primaryTeal)
+                .foregroundStyle(
+                    LinearGradient(
+                        colors: [MCColors.primaryTeal, MCColors.primaryTealDark],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
         }
         .padding(.horizontal, 8)
         .padding(.vertical, 3)
-        .background(MCColors.primaryTeal.opacity(0.1))
-        .clipShape(Capsule())
+        .background(
+            Capsule(style: .continuous)
+                .fill(
+                    LinearGradient(
+                        colors: [MCColors.primaryTeal.opacity(0.12), MCColors.primaryTealDark.opacity(0.06)],
+                        startPoint: .topLeading,
+                        endPoint: .bottomTrailing
+                    )
+                )
+        )
+        .clipShape(Capsule(style: .continuous))
     }
 }
 
@@ -599,3 +682,4 @@ struct MediTypingIndicator: View {
         }
     }
 }
+

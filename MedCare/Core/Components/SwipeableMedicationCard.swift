@@ -35,6 +35,8 @@ struct SwipeableMedicationCard: View {
                     Text(medicineName)
                         .font(MCTypography.headline)
                         .foregroundStyle(MCColors.textPrimary)
+                        .lineLimit(2)
+                        .minimumScaleFactor(0.8)
 
                     Text(dosage)
                         .font(MCTypography.subheadline)

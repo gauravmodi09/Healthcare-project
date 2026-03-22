@@ -306,16 +306,39 @@ struct UploadPrescriptionView: View {
                 }
             }
 
-            // Process button
-            MCCoralButton("Extract with AI", icon: "wand.and.stars", isLoading: aiService.isExtracting) {
-                processImages()
-            }
+            // Extraction error inline
+            if let error = errorMessage {
+                MCErrorView(
+                    "Extraction Failed",
+                    message: error,
+                    retryAction: {
+                        errorMessage = nil
+                        processImages()
+                    }
+                )
 
-            Button("Enter manually instead") {
-                showManualEntry = true
+                Button("Enter Manually Instead") {
+                    errorMessage = nil
+                    showManualEntry = true
+                }
+                .font(MCTypography.bodyMedium)
+                .foregroundStyle(MCColors.primaryTeal)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(MCColors.primaryTeal.opacity(0.1))
+                .clipShape(RoundedRectangle(cornerRadius: MCSpacing.cornerRadius))
+            } else {
+                // Process button
+                MCCoralButton("Extract with AI", icon: "wand.and.stars", isLoading: aiService.isExtracting) {
+                    processImages()
+                }
+
+                Button("Enter manually instead") {
+                    showManualEntry = true
+                }
+                .font(MCTypography.footnote)
+                .foregroundStyle(MCColors.textTertiary)
             }
-            .font(MCTypography.footnote)
-            .foregroundStyle(MCColors.textTertiary)
         }
         .onChange(of: medicinePhotoItems) { _, newItems in
             Task {

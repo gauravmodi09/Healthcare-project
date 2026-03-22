@@ -10,6 +10,8 @@ final class AIChatService {
     var currentStreamedText = ""
     var messages: [ChatMessage] = []
     var activeEmergency: EmergencyType?
+    var lastError: String?
+    var lastFailedMessage: String?
     var currentSession: ChatSession?
     private var currentStreamTask: Task<Void, Never>?
     private let llmService = LLMService()
@@ -301,11 +303,14 @@ final class AIChatService {
         // 5. Stream AI response
         isStreaming = true
         currentStreamedText = ""
+        lastError = nil
+        lastFailedMessage = nil
 
         let assistantMessage = ChatMessage(role: .assistant, content: "", sessionId: currentSession?.id)
         messages.append(assistantMessage)
 
         // Try real LLM first, fall back to mock responses
+        var streamFailed = false
         if llmService.isConfigured {
             do {
                 let history = buildConversationHistory()
@@ -323,8 +328,12 @@ final class AIChatService {
                 // LLM failed — fall back to mock if nothing was streamed yet
                 if currentStreamedText.isEmpty {
                     let response = await generateMockResponse(for: text, context: context)
-                    currentStreamedText = response
-                    assistantMessage.content = response
+                    if response.isEmpty {
+                        streamFailed = true
+                    } else {
+                        currentStreamedText = response
+                        assistantMessage.content = response
+                    }
                 }
             }
         } else {
@@ -335,6 +344,19 @@ final class AIChatService {
                 assistantMessage.content = currentStreamedText
                 try? await Task.sleep(nanoseconds: 30_000_000)
             }
+        }
+
+        // Handle complete failure
+        if streamFailed || assistantMessage.content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            lastError = "Medi couldn't generate a response. Please try again."
+            lastFailedMessage = text
+            // Remove the empty assistant message
+            if let idx = messages.lastIndex(where: { $0.id == assistantMessage.id }) {
+                messages.remove(at: idx)
+            }
+            isStreaming = false
+            currentStreamedText = ""
+            return
         }
 
         // 6. Extract suggested replies from LLM response

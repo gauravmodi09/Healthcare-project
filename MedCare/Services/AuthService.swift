@@ -22,16 +22,24 @@ final class AuthService {
         }
     }
 
+    /// The fixed demo OTP code. Displayed to users on the OTP screen.
+    static let demoOTP = "123456"
+
     func sendOTP(to phoneNumber: String, countryCode: String = "+91") async throws {
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
 
-        // Simulate API call
+        // Simulate network latency
         try await Task.sleep(nanoseconds: 1_500_000_000)
 
-        // In production: call POST /auth/send-otp
-        // For now, always succeed
+        // MARK: - Production SMS Integration Point
+        // In production, replace this with a real SMS provider call:
+        //   let response = try await MSG91Service.sendOTP(
+        //       phone: "\(countryCode)\(phoneNumber)",
+        //       templateId: "YOUR_MSG91_TEMPLATE_ID"
+        //   )
+        //   guard response.success else { throw AuthError.otpSendFailed }
     }
 
     func verifyOTP(_ otp: String, phoneNumber: String) async throws -> Bool {
@@ -39,19 +47,38 @@ final class AuthService {
         errorMessage = nil
         defer { isLoading = false }
 
-        // Simulate API call
+        // Simulate network latency
         try await Task.sleep(nanoseconds: 1_000_000_000)
 
-        // In production: call POST /auth/verify-otp
-        // For demo, accept any 6-digit OTP
         guard otp.count == 6 else {
             errorMessage = "Please enter a valid 6-digit OTP"
             return false
         }
 
-        // Store token
-        let mockToken = "jwt_\(UUID().uuidString)"
-        KeychainHelper.save(key: keychainKey, value: mockToken)
+        // MARK: - Production OTP Verification Point
+        // In production, replace this with a real verification call:
+        //   let response = try await MSG91Service.verifyOTP(
+        //       phone: "\(countryCode)\(phoneNumber)",
+        //       otp: otp
+        //   )
+        //   guard response.verified else {
+        //       errorMessage = "Invalid OTP. Please try again."
+        //       return false
+        //   }
+
+        // Demo mode: only accept the fixed demo OTP
+        guard otp == Self.demoOTP else {
+            errorMessage = "Invalid OTP. Hint: use \(Self.demoOTP)"
+            return false
+        }
+
+        // Generate a realistic-looking JWT token (header.payload.signature)
+        let header = Data("{\"alg\":\"HS256\",\"typ\":\"JWT\"}".utf8).base64EncodedString()
+        let payload = Data("{\"sub\":\"\(phoneNumber)\",\"iat\":\(Int(Date().timeIntervalSince1970)),\"exp\":\(Int(Date().timeIntervalSince1970) + 86400)}".utf8).base64EncodedString()
+        let signature = Data(UUID().uuidString.utf8).base64EncodedString()
+        let token = "\(header).\(payload).\(signature)"
+
+        KeychainHelper.save(key: keychainKey, value: token)
         isAuthenticated = true
         return true
     }

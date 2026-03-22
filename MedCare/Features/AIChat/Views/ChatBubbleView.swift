@@ -16,7 +16,7 @@ struct ChatBubbleView: View {
                     // Message content
                     Text(LocalizedStringKey(message.content))
                         .font(.system(size: 15, weight: .regular))
-                        .foregroundColor(message.role.isUser ? .white : Color(hex: "1F2937"))
+                        .foregroundColor(message.role.isUser ? .white : MCColors.textPrimary)
                         .lineSpacing(3)
 
                     // Action buttons (if any)
@@ -28,10 +28,10 @@ struct ChatBubbleView: View {
                                 } label: {
                                     Text(action.title)
                                         .font(.system(size: 12, weight: .semibold))
-                                        .foregroundColor(Color(hex: "0A7E8C"))
+                                        .foregroundColor(MCColors.primaryTeal)
                                         .padding(.horizontal, 12)
                                         .padding(.vertical, 6)
-                                        .background(Color(hex: "0A7E8C").opacity(0.1))
+                                        .background(MCColors.primaryTeal.opacity(0.1))
                                         .clipShape(Capsule())
                                 }
                             }
@@ -39,14 +39,41 @@ struct ChatBubbleView: View {
                     }
                 }
                 .padding(14)
-                .background(bubbleBackground)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
+                .background {
+                    if message.isEmergency {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(Color.red.opacity(0.1))
+                    } else if message.role.isUser {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(LinearGradient(
+                                colors: [MCColors.primaryTeal, MCColors.primaryTealDark],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            ))
+                    } else {
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .fill(.ultraThinMaterial)
+                    }
+                }
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
                 .overlay(
-                    RoundedRectangle(cornerRadius: 16)
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
                         .stroke(message.isEmergency ? Color.red.opacity(0.6) : Color.clear, lineWidth: 2)
                 )
 
                 if !message.role.isUser { Spacer(minLength: 60) }
+            }
+
+            // AI disclaimer footer for assistant messages
+            if !message.role.isUser {
+                HStack(spacing: 3) {
+                    Image(systemName: "info.circle")
+                        .font(.system(size: 9))
+                    Text("AI-generated \u{00B7} Not medical advice")
+                        .font(.system(size: 10, weight: .regular))
+                }
+                .foregroundStyle(MCColors.textTertiary)
+                .padding(.leading, 4)
             }
 
             // Timestamp (shown on tap)
@@ -65,14 +92,7 @@ struct ChatBubbleView: View {
         }
     }
 
-    private var bubbleBackground: some ShapeStyle {
-        if message.isEmergency {
-            return Color.red.opacity(0.1)
-        }
-        return message.role.isUser
-            ? Color(hex: "0A7E8C")
-            : Color(hex: "F0F2F5")
-    }
+    // bubbleBackground now handled inline in the body via .background { } builder
 }
 
 // MARK: - Typing Indicator
@@ -85,14 +105,14 @@ struct TypingIndicatorView: View {
             HStack(spacing: 5) {
                 ForEach(0..<3, id: \.self) { index in
                     Circle()
-                        .fill(Color(hex: "9CA3AF"))
+                        .fill(MCColors.textTertiary)
                         .frame(width: 8, height: 8)
                         .scaleEffect(dotScale[index])
                 }
             }
             .padding(.horizontal, 16)
             .padding(.vertical, 12)
-            .background(Color(hex: "F0F2F5"))
+            .background(MCColors.surface)
             .clipShape(RoundedRectangle(cornerRadius: 16))
 
             Spacer()
@@ -125,10 +145,10 @@ struct AIBadgeView: View {
             Text("MedCare AI")
                 .font(.system(size: 11, weight: .bold))
         }
-        .foregroundColor(Color(hex: "0A7E8C"))
+        .foregroundColor(MCColors.primaryTeal)
         .padding(.horizontal, 8)
         .padding(.vertical, 3)
-        .background(Color(hex: "0A7E8C").opacity(0.1))
+        .background(MCColors.primaryTeal.opacity(0.1))
         .clipShape(Capsule())
     }
 }

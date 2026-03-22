@@ -7,11 +7,18 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		DTR001DAILY00000001 /* DailyTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DTR001DAILY00000011 /* DailyTrackingView.swift */; };
+		WTR001WATER00000001 /* WaterTrackingService.swift in Sources */ = {isa = PBXBuildFile; fileRef = WTR001WATER00000011 /* WaterTrackingService.swift */; };
+		HIU0001000000000001 /* HealthRecordImportView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HIU0001000000000011 /* HealthRecordImportView.swift */; };
 		MSG001000000000001 /* Message.swift in Sources */ = {isa = PBXBuildFile; fileRef = MSG001000000000011 /* Message.swift */; };
 		MSG001000000000002 /* DoctorMessageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MSG001000000000012 /* DoctorMessageView.swift */; };
 		MSG001000000000003 /* DoctorListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = MSG001000000000013 /* DoctorListView.swift */; };
 		HK001VITALS00000001 /* VitalsTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HK001VITALS00000011 /* VitalsTrackingView.swift */; };
 		HK001VITALS00000002 /* AddVitalEntryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = HK001VITALS00000012 /* AddVitalEntryView.swift */; };
+		GLU001TRACK00000001 /* GlucoseTrackingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = GLU001TRACK00000011 /* GlucoseTrackingView.swift */; };
+		BPT001TREND00000001 /* BPTrendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BPT001TREND00000011 /* BPTrendView.swift */; };
+		WRB001SERV000000001 /* WearableService.swift in Sources */ = {isa = PBXBuildFile; fileRef = WRB001SERV000000011 /* WearableService.swift */; };
+		CDV001VIEW000000001 /* ConnectedDevicesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CDV001VIEW000000011 /* ConnectedDevicesView.swift */; };
 		A1C2D3E4F5061728394A5B6C /* CustomReminder.swift in Sources */ = {isa = PBXBuildFile; fileRef = B2D3E4F5A6071839405B6C7D /* CustomReminder.swift */; };
 		C3D4E5F6A7081940516B7C8D /* AddReminderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4E5F6A7B8092051627C8D9E /* AddReminderView.swift */; };
 		CC92D8BF9F584F05B842D5DC /* DoseConfirmationOverlay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9180C9A3ECDB451AB24CB12E /* DoseConfirmationOverlay.swift */; };
@@ -94,6 +101,7 @@
 		DB98810E3BB766F63ACC1458 /* Nudge.swift in Sources */ = {isa = PBXBuildFile; fileRef = F520431DDEA8AF8185D13977 /* Nudge.swift */; };
 		DBDDAF884139C56ED5F0F2A8 /* WidgetDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4173F5BD62B9418CD1C077 /* WidgetDataService.swift */; };
 		DC3DFD2FB96E57212798BA44 /* MCEmptyState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 411572CD64A8B9EB2DC4A554 /* MCEmptyState.swift */; };
+		DCERR001000000000001 /* MCErrorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DCERR002000000000001 /* MCErrorView.swift */; };
 		E1E6B9663DC3E0F3AC5D5B3B /* TreatmentTimelineView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DB40B55F8C65FAC91BE91335 /* TreatmentTimelineView.swift */; };
 		F2054610DAA2A058ED75F640 /* DoseReminderAttributes.swift in Sources */ = {isa = PBXBuildFile; fileRef = B353E5360CE9EF2259BC5455 /* DoseReminderAttributes.swift */; };
 		F536AE445276F4C36D423EE7 /* ChatMessage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B698A28C46329BC1C47C012 /* ChatMessage.swift */; };
@@ -115,11 +123,13 @@
 		AE922B2788484B87BB7BA0F1 /* DrugQAService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 074674E64A64452687C9D6FB /* DrugQAService.swift */; };
 		A8802DD987DE4C17944CC4CB /* ElderModeService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39937A2CE5DE4566BD7D3545 /* ElderModeService.swift */; };
 		12C655A809E443739438276A /* ElderModeSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D6CD6318814E48BDBB1B1899 /* ElderModeSettingsView.swift */; };
+		A1B2C3D4E5F647890ABCDE01 /* AISettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F647890ABCDE02 /* AISettingsView.swift */; };
 		F2E1D0C9B8A7F6E5D4C3B2A1 /* NotificationSettingsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D4E5F6A7B8C9D0E1F2 /* NotificationSettingsView.swift */; };
 		F2E1D0C9A8B7C6D5E4F3A2B1 /* AboutMedCareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A2B3C4D5E6F7A8B9C0D1E2F /* AboutMedCareView.swift */; };
 		A7B8C9D0E1F2A3B4C5D6E7F8 /* AchievementsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = C5D6E7F8A9B0C1D2E3F4A5B6 /* AchievementsView.swift */; };
 		APPCAL001000000000001 /* AppointmentCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = APPCAL001000000000011 /* AppointmentCalendarView.swift */; };
 		E3F2A1B0C9D8E7F6A5B4C3D2 /* EditProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B4C5D6E7F8A9B0C1D2E3F4A5 /* EditProfileView.swift */; };
+		CPHV00100000000000001 /* ComprehensiveProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CPHV00100000000000011 /* ComprehensiveProfileView.swift */; };
 		8CD7F9D01DEC4CEBA28B6D44 /* HealthJournalService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DA25944B105945E08CC8EC25 /* HealthJournalService.swift */; };
 		276DD3B14C5A48AEB1DDA797 /* HealthJournalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 70C122DE3FAD431EBD5A5EAD /* HealthJournalView.swift */; };
 		FC0BBD291EE64A4B8ED9984B /* HealthKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8F33448251D4A358396B325 /* HealthKitService.swift */; };
@@ -143,6 +153,7 @@
 		72F3423B0A1D4307BE9EA37F /* SpeechService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 27C3D35806434791A1075388 /* SpeechService.swift */; };
 		57935971C4864425985BC329 /* StreakBadgeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 276F2EB541744812B664B43D /* StreakBadgeView.swift */; };
 		B52936E3A27C432491E2E79A /* SubscriptionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 053EE16FD6D1465897814F03 /* SubscriptionService.swift */; };
+		A1B2C3D4E5F647A8B9C0D1E2 /* StoreKitService.swift in Sources */ = {isa = PBXBuildFile; fileRef = F1E2D3C4B5A647F8E9D0C1B2 /* StoreKitService.swift */; };
 		812F909CD9FD42D58D9EEB34 /* SwipeableMedicationCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C25821E6F24347ADAF4BB9 /* SwipeableMedicationCard.swift */; };
 		9FB7ECD81EB247F88C832952 /* SymptomCorrelationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15F08CA5A98C4DB9B09C3038 /* SymptomCorrelationService.swift */; };
 		86F22F24A14B418C88F3C061 /* VoiceActionService.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0D66994CCC54EDE98E19370 /* VoiceActionService.swift */; };
@@ -156,13 +167,27 @@
 		DPDPA001000000000002 /* ExportService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DPDPA001000000000012 /* ExportService.swift */; };
 		DPDPA001000000000003 /* ConsentManagementView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DPDPA001000000000013 /* ConsentManagementView.swift */; };
 		DPDPA001000000000004 /* DataDeletionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DPDPA001000000000014 /* DataDeletionView.swift */; };
+		LEGAL01000000000001 /* LegalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = LEGAL01000000000011 /* LegalView.swift */; };
+		WHNEW01000000000001 /* WhatsNewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = WHNEW01000000000011 /* WhatsNewView.swift */; };
+		NTFP001000000000001 /* NotificationPermissionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = NTFP001000000000011 /* NotificationPermissionView.swift */; };
 		DOC001000000000001 /* DoctorDashboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000011 /* DoctorDashboardView.swift */; };
+		DOC002000000000001 /* Doctor.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC002000000000011 /* Doctor.swift */; };
+		DOC002000000000002 /* DoctorPatientData.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC002000000000012 /* DoctorPatientData.swift */; };
 		DOC001000000000002 /* DoctorPatientDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000012 /* DoctorPatientDetailView.swift */; };
 		DOC001000000000003 /* EPrescriptionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000013 /* EPrescriptionView.swift */; };
+		DOC001000000000004 /* WalkInQueueView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000014 /* WalkInQueueView.swift */; };
+		DOC001000000000005 /* PatientQueueCard.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000015 /* PatientQueueCard.swift */; };
+		DOC001000000000006 /* DoctorCalendarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000016 /* DoctorCalendarView.swift */; };
+		DOC001000000000007 /* VideoCallView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000017 /* VideoCallView.swift */; };
+		DOC001000000000008 /* ConsultationNotesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = DOC001000000000018 /* ConsultationNotesView.swift */; };
+		APPT01000000000001 /* QueueStatusView.swift in Sources */ = {isa = PBXBuildFile; fileRef = APPT01000000000011 /* QueueStatusView.swift */; };
 		ABDM001000000000001 /* ABDMService.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDM001000000000011 /* ABDMService.swift */; };
 		ABDM001000000000002 /* ABHALinkingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = ABDM001000000000012 /* ABHALinkingView.swift */; };
 		UPI0001000000000001 /* PaymentService.swift in Sources */ = {isa = PBXBuildFile; fileRef = UPI0001000000000011 /* PaymentService.swift */; };
 		UPI0001000000000002 /* PaymentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = UPI0001000000000012 /* PaymentView.swift */; };
+		SKEL001000000000001 /* SkeletonView.swift in Sources */ = {isa = PBXBuildFile; fileRef = SKEL001000000000011 /* SkeletonView.swift */; };
+		APPI001000000000001 /* AppIntentsService.swift in Sources */ = {isa = PBXBuildFile; fileRef = APPI001000000000011 /* AppIntentsService.swift */; };
+		CHLD001000000000001 /* ChildCareService.swift in Sources */ = {isa = PBXBuildFile; fileRef = CHLD001000000000011 /* ChildCareService.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -197,11 +222,17 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		DTR001DAILY00000011 /* DailyTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyTrackingView.swift; sourceTree = "<group>"; };
+		WTR001WATER00000011 /* WaterTrackingService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaterTrackingService.swift; sourceTree = "<group>"; };
 		MSG001000000000011 /* Message.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Message.swift; sourceTree = "<group>"; };
 		MSG001000000000012 /* DoctorMessageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorMessageView.swift; sourceTree = "<group>"; };
 		MSG001000000000013 /* DoctorListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorListView.swift; sourceTree = "<group>"; };
 		HK001VITALS00000011 /* VitalsTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VitalsTrackingView.swift; sourceTree = "<group>"; };
 		HK001VITALS00000012 /* AddVitalEntryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddVitalEntryView.swift; sourceTree = "<group>"; };
+		GLU001TRACK00000011 /* GlucoseTrackingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseTrackingView.swift; sourceTree = "<group>"; };
+		BPT001TREND00000011 /* BPTrendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BPTrendView.swift; sourceTree = "<group>"; };
+		WRB001SERV000000011 /* WearableService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WearableService.swift; sourceTree = "<group>"; };
+		CDV001VIEW000000011 /* ConnectedDevicesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConnectedDevicesView.swift; sourceTree = "<group>"; };
 		B2D3E4F5A6071839405B6C7D /* CustomReminder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomReminder.swift; sourceTree = "<group>"; };
 		D4E5F6A7B8092051627C8D9E /* AddReminderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddReminderView.swift; sourceTree = "<group>"; };
 		9180C9A3ECDB451AB24CB12E /* DoseConfirmationOverlay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoseConfirmationOverlay.swift; sourceTree = "<group>"; };
@@ -231,6 +262,7 @@
 		3E4F62CF8A1F26336018727C /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		3F4DEDBEBAD4454E0CF7A83A /* MedCareWidgetExtension.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MedCareWidgetExtension.entitlements; sourceTree = "<group>"; };
 		411572CD64A8B9EB2DC4A554 /* MCEmptyState.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCEmptyState.swift; sourceTree = "<group>"; };
+		DCERR002000000000001 /* MCErrorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MCErrorView.swift; sourceTree = "<group>"; };
 		42FCFBEE1DC2039D02A2F074 /* AIExtractionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIExtractionService.swift; sourceTree = "<group>"; };
 		4A96CB51A32C79ED676F5A46 /* APIService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIService.swift; sourceTree = "<group>"; };
 		4D2418FBB225C8E13359A71F /* Medicine.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Medicine.swift; sourceTree = "<group>"; };
@@ -309,11 +341,13 @@
 		074674E64A64452687C9D6FB /* DrugQAService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DrugQAService.swift; sourceTree = "<group>"; };
 		39937A2CE5DE4566BD7D3545 /* ElderModeService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElderModeService.swift; sourceTree = "<group>"; };
 		D6CD6318814E48BDBB1B1899 /* ElderModeSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ElderModeSettingsView.swift; sourceTree = "<group>"; };
+		A1B2C3D4E5F647890ABCDE02 /* AISettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AISettingsView.swift; sourceTree = "<group>"; };
 		A1B2C3D4E5F6A7B8C9D0E1F2 /* NotificationSettingsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationSettingsView.swift; sourceTree = "<group>"; };
 		1A2B3C4D5E6F7A8B9C0D1E2F /* AboutMedCareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutMedCareView.swift; sourceTree = "<group>"; };
 		C5D6E7F8A9B0C1D2E3F4A5B6 /* AchievementsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AchievementsView.swift; sourceTree = "<group>"; };
 		APPCAL001000000000011 /* AppointmentCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppointmentCalendarView.swift; sourceTree = "<group>"; };
 		B4C5D6E7F8A9B0C1D2E3F4A5 /* EditProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditProfileView.swift; sourceTree = "<group>"; };
+		CPHV00100000000000011 /* ComprehensiveProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComprehensiveProfileView.swift; sourceTree = "<group>"; };
 		DA25944B105945E08CC8EC25 /* HealthJournalService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthJournalService.swift; sourceTree = "<group>"; };
 		70C122DE3FAD431EBD5A5EAD /* HealthJournalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthJournalView.swift; sourceTree = "<group>"; };
 		A8F33448251D4A358396B325 /* HealthKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthKitService.swift; sourceTree = "<group>"; };
@@ -337,6 +371,7 @@
 		27C3D35806434791A1075388 /* SpeechService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpeechService.swift; sourceTree = "<group>"; };
 		276F2EB541744812B664B43D /* StreakBadgeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StreakBadgeView.swift; sourceTree = "<group>"; };
 		053EE16FD6D1465897814F03 /* SubscriptionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubscriptionService.swift; sourceTree = "<group>"; };
+		F1E2D3C4B5A647F8E9D0C1B2 /* StoreKitService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoreKitService.swift; sourceTree = "<group>"; };
 		16C25821E6F24347ADAF4BB9 /* SwipeableMedicationCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeableMedicationCard.swift; sourceTree = "<group>"; };
 		15F08CA5A98C4DB9B09C3038 /* SymptomCorrelationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SymptomCorrelationService.swift; sourceTree = "<group>"; };
 		C0D66994CCC54EDE98E19370 /* VoiceActionService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceActionService.swift; sourceTree = "<group>"; };
@@ -350,13 +385,28 @@
 		DPDPA001000000000012 /* ExportService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExportService.swift; sourceTree = "<group>"; };
 		DPDPA001000000000013 /* ConsentManagementView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsentManagementView.swift; sourceTree = "<group>"; };
 		DPDPA001000000000014 /* DataDeletionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDeletionView.swift; sourceTree = "<group>"; };
+		LEGAL01000000000011 /* LegalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LegalView.swift; sourceTree = "<group>"; };
+		WHNEW01000000000011 /* WhatsNewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WhatsNewView.swift; sourceTree = "<group>"; };
+		NTFP001000000000011 /* NotificationPermissionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationPermissionView.swift; sourceTree = "<group>"; };
 		DOC001000000000011 /* DoctorDashboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorDashboardView.swift; sourceTree = "<group>"; };
+		DOC002000000000011 /* Doctor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Doctor.swift; sourceTree = "<group>"; };
+		DOC002000000000012 /* DoctorPatientData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientData.swift; sourceTree = "<group>"; };
 		DOC001000000000012 /* DoctorPatientDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorPatientDetailView.swift; sourceTree = "<group>"; };
 		DOC001000000000013 /* EPrescriptionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EPrescriptionView.swift; sourceTree = "<group>"; };
+		DOC001000000000014 /* WalkInQueueView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalkInQueueView.swift; sourceTree = "<group>"; };
+		DOC001000000000015 /* PatientQueueCard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PatientQueueCard.swift; sourceTree = "<group>"; };
+		DOC001000000000016 /* DoctorCalendarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DoctorCalendarView.swift; sourceTree = "<group>"; };
+		DOC001000000000017 /* VideoCallView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallView.swift; sourceTree = "<group>"; };
+		DOC001000000000018 /* ConsultationNotesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConsultationNotesView.swift; sourceTree = "<group>"; };
+		APPT01000000000011 /* QueueStatusView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueStatusView.swift; sourceTree = "<group>"; };
 		ABDM001000000000011 /* ABDMService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABDMService.swift; sourceTree = "<group>"; };
 		ABDM001000000000012 /* ABHALinkingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ABHALinkingView.swift; sourceTree = "<group>"; };
+		HIU0001000000000011 /* HealthRecordImportView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthRecordImportView.swift; sourceTree = "<group>"; };
 		UPI0001000000000011 /* PaymentService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentService.swift; sourceTree = "<group>"; };
 		UPI0001000000000012 /* PaymentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaymentView.swift; sourceTree = "<group>"; };
+		SKEL001000000000011 /* SkeletonView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeletonView.swift; sourceTree = "<group>"; };
+		APPI001000000000011 /* AppIntentsService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppIntentsService.swift; sourceTree = "<group>"; };
+		CHLD001000000000011 /* ChildCareService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChildCareService.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -460,7 +510,9 @@
 				C295CB0060698E0AEA624EDA /* MCCard.swift */,
 				9180C9A3ECDB451AB24CB12E /* DoseConfirmationOverlay.swift */,
 				411572CD64A8B9EB2DC4A554 /* MCEmptyState.swift */,
+				DCERR002000000000001 /* MCErrorView.swift */,
 				24188DD9C1575658D75D710E /* MCTextField.swift */,
+				SKEL001000000000011 /* SkeletonView.swift */,
 			);
 			path = Components;
 			sourceTree = "<group>";
@@ -525,6 +577,7 @@
 				DEE02F86B61A1F8C8B17F7E1 /* CareTask.swift */,
 				B2D3E4F5A6071839405B6C7D /* CustomReminder.swift */,
 				3B698A28C46329BC1C47C012 /* ChatMessage.swift */,
+				DOC002000000000011 /* Doctor.swift */,
 				6AE7F931AD9D922B26A33144 /* DoseLog.swift */,
 				D2C76F007E4B9C5B037D97C0 /* Episode.swift */,
 				6A0E4A191EAA8E91F635F5C3 /* EpisodeImage.swift */,
@@ -573,7 +626,9 @@
 				APPCAL001000000000011 /* AppointmentCalendarView.swift */,
 				7725853CF0254491BBD8E1EA /* DoctorVisitPrepView.swift */,
 				3C4D5E6F7A8B9C0D1E2F3A4B /* DoctorVisitPrepWrapper.swift */,
+				CPHV00100000000000011 /* ComprehensiveProfileView.swift */,
 				B4C5D6E7F8A9B0C1D2E3F4A5 /* EditProfileView.swift */,
+				A1B2C3D4E5F647890ABCDE02 /* AISettingsView.swift */,
 				D6CD6318814E48BDBB1B1899 /* ElderModeSettingsView.swift */,
 				A1B2C3D4E5F6A7B8C9D0E1F2 /* NotificationSettingsView.swift */,
 				A9E063B71DD33DDA14099AFA /* ProfileManagementView.swift */,
@@ -612,6 +667,7 @@
 			isa = PBXGroup;
 			children = (
 				BBCD2DE4DFC50E31B34BD071 /* AIChat */,
+				APPT01000000000020 /* Appointments */,
 				CBFF045E223B38644300558D /* Auth */,
 				DOC001000000000020 /* Doctor */,
 				MSG001000000000020 /* Messages */,
@@ -698,6 +754,7 @@
 				35B36B7B124747F791BCCF83 /* RefillReminderService.swift */,
 				27C3D35806434791A1075388 /* SpeechService.swift */,
 				053EE16FD6D1465897814F03 /* SubscriptionService.swift */,
+				F1E2D3C4B5A647F8E9D0C1B2 /* StoreKitService.swift */,
 				15F08CA5A98C4DB9B09C3038 /* SymptomCorrelationService.swift */,
 				C0D66994CCC54EDE98E19370 /* VoiceActionService.swift */,
 				F64E9ECF7FC0DEAA7532C56B /* AIChatService.swift */,
@@ -726,6 +783,10 @@
 				DPDPA001000000000012 /* ExportService.swift */,
 				ABDM001000000000011 /* ABDMService.swift */,
 				UPI0001000000000011 /* PaymentService.swift */,
+				WRB001SERV000000011 /* WearableService.swift */,
+				APPI001000000000011 /* AppIntentsService.swift */,
+				CHLD001000000000011 /* ChildCareService.swift */,
+				WTR001WATER00000011 /* WaterTrackingService.swift */,
 				24B982F38165328DAE9727D4 /* LLM */,
 			);
 			path = Services;
@@ -919,6 +980,10 @@
 				ABDM001000000000012 /* ABHALinkingView.swift */,
 				UPI0001000000000012 /* PaymentView.swift */,
 				REF001000000000011 /* ReferralView.swift */,
+				HIU0001000000000011 /* HealthRecordImportView.swift */,
+				NTFP001000000000011 /* NotificationPermissionView.swift */,
+				LEGAL01000000000011 /* LegalView.swift */,
+				WHNEW01000000000011 /* WhatsNewView.swift */,
 			);
 			path = Settings;
 			sourceTree = "<group>";
@@ -934,7 +999,11 @@
 		HK001VITALS00000021 /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				DTR001DAILY00000011 /* DailyTrackingView.swift */,
 				HK001VITALS00000012 /* AddVitalEntryView.swift */,
+				BPT001TREND00000011 /* BPTrendView.swift */,
+				CDV001VIEW000000011 /* ConnectedDevicesView.swift */,
+				GLU001TRACK00000011 /* GlucoseTrackingView.swift */,
 				HK001VITALS00000011 /* VitalsTrackingView.swift */,
 			);
 			path = Views;
@@ -952,8 +1021,30 @@
 			isa = PBXGroup;
 			children = (
 				DOC001000000000011 /* DoctorDashboardView.swift */,
+				DOC002000000000012 /* DoctorPatientData.swift */,
 				DOC001000000000012 /* DoctorPatientDetailView.swift */,
 				DOC001000000000013 /* EPrescriptionView.swift */,
+				DOC001000000000014 /* WalkInQueueView.swift */,
+				DOC001000000000015 /* PatientQueueCard.swift */,
+				DOC001000000000016 /* DoctorCalendarView.swift */,
+				DOC001000000000017 /* VideoCallView.swift */,
+				DOC001000000000018 /* ConsultationNotesView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		APPT01000000000020 /* Appointments */ = {
+			isa = PBXGroup;
+			children = (
+				APPT01000000000021 /* Views */,
+			);
+			path = Appointments;
+			sourceTree = "<group>";
+		};
+		APPT01000000000021 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				APPT01000000000011 /* QueueStatusView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -1112,11 +1203,13 @@
 				2D3927A6BC3B411997D613B7 /* DoseCalendarView.swift in Sources */,
 				AE922B2788484B87BB7BA0F1 /* DrugQAService.swift in Sources */,
 				A8802DD987DE4C17944CC4CB /* ElderModeService.swift in Sources */,
+				A1B2C3D4E5F647890ABCDE01 /* AISettingsView.swift in Sources */,
 				12C655A809E443739438276A /* ElderModeSettingsView.swift in Sources */,
 				F2E1D0C9B8A7F6E5D4C3B2A1 /* NotificationSettingsView.swift in Sources */,
 				F2E1D0C9A8B7C6D5E4F3A2B1 /* AboutMedCareView.swift in Sources */,
 				A7B8C9D0E1F2A3B4C5D6E7F8 /* AchievementsView.swift in Sources */,
 				APPCAL001000000000001 /* AppointmentCalendarView.swift in Sources */,
+				CPHV00100000000000001 /* ComprehensiveProfileView.swift in Sources */,
 				E3F2A1B0C9D8E7F6A5B4C3D2 /* EditProfileView.swift in Sources */,
 				8CD7F9D01DEC4CEBA28B6D44 /* HealthJournalService.swift in Sources */,
 				276DD3B14C5A48AEB1DDA797 /* HealthJournalView.swift in Sources */,
@@ -1141,6 +1234,7 @@
 				72F3423B0A1D4307BE9EA37F /* SpeechService.swift in Sources */,
 				57935971C4864425985BC329 /* StreakBadgeView.swift in Sources */,
 				B52936E3A27C432491E2E79A /* SubscriptionService.swift in Sources */,
+				A1B2C3D4E5F647A8B9C0D1E2 /* StoreKitService.swift in Sources */,
 				812F909CD9FD42D58D9EEB34 /* SwipeableMedicationCard.swift in Sources */,
 				9FB7ECD81EB247F88C832952 /* SymptomCorrelationService.swift in Sources */,
 				86F22F24A14B418C88F3C061 /* VoiceActionService.swift in Sources */,
@@ -1185,6 +1279,7 @@
 				597534C0FAF027EEE5E8AF5C /* MCCard.swift in Sources */,
 				BBF86CB40A4F0AD97C5EDE25 /* MCColors.swift in Sources */,
 				DC3DFD2FB96E57212798BA44 /* MCEmptyState.swift in Sources */,
+				DCERR001000000000001 /* MCErrorView.swift in Sources */,
 				8DA8DCE408B3307667A9AD3C /* MCSpacing.swift in Sources */,
 				18C052C43EA393FDBB014CF4 /* MCTextField.swift in Sources */,
 				90F695E209A43FBBD687FE18 /* MCTypography.swift in Sources */,
@@ -1228,20 +1323,41 @@
 				CC92D8BF9F584F05B842D5DC /* DoseConfirmationOverlay.swift in Sources */,
 				HK001VITALS00000001 /* VitalsTrackingView.swift in Sources */,
 				HK001VITALS00000002 /* AddVitalEntryView.swift in Sources */,
+				GLU001TRACK00000001 /* GlucoseTrackingView.swift in Sources */,
+				BPT001TREND00000001 /* BPTrendView.swift in Sources */,
+				WRB001SERV000000001 /* WearableService.swift in Sources */,
+				CDV001VIEW000000001 /* ConnectedDevicesView.swift in Sources */,
 				DPDPA001000000000001 /* ConsentService.swift in Sources */,
 				DPDPA001000000000002 /* ExportService.swift in Sources */,
 				DPDPA001000000000003 /* ConsentManagementView.swift in Sources */,
 				DPDPA001000000000004 /* DataDeletionView.swift in Sources */,
+				NTFP001000000000001 /* NotificationPermissionView.swift in Sources */,
 				MSG001000000000001 /* Message.swift in Sources */,
 				MSG001000000000002 /* DoctorMessageView.swift in Sources */,
 				MSG001000000000003 /* DoctorListView.swift in Sources */,
 				DOC001000000000001 /* DoctorDashboardView.swift in Sources */,
+				DOC002000000000001 /* Doctor.swift in Sources */,
+				DOC002000000000002 /* DoctorPatientData.swift in Sources */,
 				DOC001000000000002 /* DoctorPatientDetailView.swift in Sources */,
 				DOC001000000000003 /* EPrescriptionView.swift in Sources */,
+				DOC001000000000004 /* WalkInQueueView.swift in Sources */,
+				DOC001000000000005 /* PatientQueueCard.swift in Sources */,
+				DOC001000000000006 /* DoctorCalendarView.swift in Sources */,
+				DOC001000000000007 /* VideoCallView.swift in Sources */,
+				DOC001000000000008 /* ConsultationNotesView.swift in Sources */,
+				APPT01000000000001 /* QueueStatusView.swift in Sources */,
 				ABDM001000000000001 /* ABDMService.swift in Sources */,
 				ABDM001000000000002 /* ABHALinkingView.swift in Sources */,
+				HIU0001000000000001 /* HealthRecordImportView.swift in Sources */,
 				UPI0001000000000001 /* PaymentService.swift in Sources */,
 				UPI0001000000000002 /* PaymentView.swift in Sources */,
+				SKEL001000000000001 /* SkeletonView.swift in Sources */,
+				APPI001000000000001 /* AppIntentsService.swift in Sources */,
+				CHLD001000000000001 /* ChildCareService.swift in Sources */,
+				DTR001DAILY00000001 /* DailyTrackingView.swift in Sources */,
+				WTR001WATER00000001 /* WaterTrackingService.swift in Sources */,
+				LEGAL01000000000001 /* LegalView.swift in Sources */,
+				WHNEW01000000000001 /* WhatsNewView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

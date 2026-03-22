@@ -83,3 +83,41 @@ export interface ConditionData {
   count: number;
   percentage: number;
 }
+
+export interface PaymentTransaction {
+  id: string;
+  date: string;
+  patientId: string;
+  patientName: string;
+  doctorId: string;
+  doctorName: string;
+  amount: number;
+  mode: "upi" | "cash" | "insurance" | "card";
+  status: "paid" | "pending" | "refunded" | "failed";
+  invoiceId?: string;
+  description: string;
+}
+
+export interface StaffMember {
+  id: string;
+  name: string;
+  role: "doctor" | "nurse" | "receptionist" | "lab-tech" | "pharmacist" | "admin";
+  department: string;
+  phone: string;
+  status: "active" | "on-leave" | "inactive";
+  joinedAt: string;
+}
+
+export interface Department {
+  id: string;
+  name: string;
+  headDoctorId?: string;
+  staffCount: number;
+}
+
+export interface WorkingHours {
+  day: string;
+  open: string;
+  close: string;
+  isOpen: boolean;
+}

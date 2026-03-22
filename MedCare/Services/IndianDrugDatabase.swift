@@ -42,6 +42,71 @@ enum DrugCategory: String, Codable, CaseIterable {
     case antiInfective = "Anti-infective"
     case skinCare = "Skin Care"
     case other = "Other"
+    case ayurvedic = "Ayurvedic"
+}
+
+// MARK: - Ayurvedic Medicine Model
+
+struct AyurvedicMedicine: Identifiable, Codable {
+    let id: String
+    let nameHindi: String        // Sanskrit/Hindi name
+    let nameEnglish: String      // English name
+    let form: AyurvedicForm
+    let commonUses: [String]
+    let dosageGuidance: String
+    let timing: String           // before/after food, with water/milk/honey
+    let contraindications: [String]
+    let category: AyurvedicCategory
+
+    var formIcon: String { form.icon }
+}
+
+enum AyurvedicForm: String, Codable, CaseIterable {
+    case churna = "Churna"       // Powder
+    case vati = "Vati"           // Tablet/pill
+    case kadha = "Kadha"         // Decoction
+    case ark = "Ark"             // Distillate/drops
+    case avaleha = "Avaleha"     // Jam/paste
+    case asava = "Asava"         // Fermented liquid
+    case arishta = "Arishta"     // Fermented decoction
+    case bhasma = "Bhasma"       // Ash/calcined
+    case guggulu = "Guggulu"     // Resin-based
+    case taila = "Taila"         // Oil
+    case ghrita = "Ghrita"       // Ghee-based
+    case kwath = "Kwath"         // Decoction
+    case ras = "Ras"             // Rasa/mercury-based
+    case pishti = "Pishti"       // Fine paste
+    case syrup = "Syrup"
+    case tablet = "Tablet"
+    case capsule = "Capsule"
+    case other = "Other"
+
+    var icon: String {
+        switch self {
+        case .churna: return "\u{1F343}"    // leaf
+        case .kadha, .kwath, .asava, .arishta: return "\u{2615}" // cup
+        case .vati, .tablet, .capsule, .guggulu: return "\u{26AA}" // circle
+        case .ark, .taila: return "\u{1F4A7}"  // drop
+        case .avaleha, .ghrita: return "\u{1F36F}" // honey
+        case .bhasma, .pishti: return "\u{2728}" // sparkle
+        case .ras: return "\u{1F48A}"       // pill
+        case .syrup: return "\u{1F9C9}"     // beverage
+        case .other: return "\u{1F33F}"     // herb
+        }
+    }
+}
+
+enum AyurvedicCategory: String, Codable, CaseIterable {
+    case digestive = "Digestive"
+    case immunity = "Immunity"
+    case jointPain = "Joint & Pain"
+    case respiratory = "Respiratory"
+    case cardiac = "Cardiac"
+    case diabetes = "Diabetes"
+    case skin = "Skin"
+    case mentalHealth = "Mental Health"
+    case womensHealth = "Women's Health"
+    case generalWellness = "General Wellness"
 }
 
 // MARK: - Database
@@ -52,9 +117,39 @@ final class IndianDrugDatabase {
     static let shared = IndianDrugDatabase()
 
     let medicines: [DrugEntry]
+    let ayurvedicMedicines: [AyurvedicMedicine]
 
     private init() {
         medicines = Self.buildDatabase()
+        ayurvedicMedicines = Self.buildAyurvedicDatabase()
+    }
+
+    // MARK: - Ayurvedic Search
+
+    func searchAyurvedic(query: String) -> [AyurvedicMedicine] {
+        let q = query.lowercased().trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !q.isEmpty else { return [] }
+
+        var exact: [AyurvedicMedicine] = []
+        var contains: [AyurvedicMedicine] = []
+
+        for med in ayurvedicMedicines {
+            let hindi = med.nameHindi.lowercased()
+            let english = med.nameEnglish.lowercased()
+            let uses = med.commonUses.joined(separator: " ").lowercased()
+
+            if hindi.hasPrefix(q) || english.hasPrefix(q) {
+                exact.append(med)
+            } else if hindi.contains(q) || english.contains(q) || uses.contains(q) {
+                contains.append(med)
+            }
+        }
+
+        return exact + contains
+    }
+
+    func ayurvedicByCategory(_ category: AyurvedicCategory) -> [AyurvedicMedicine] {
+        ayurvedicMedicines.filter { $0.category == category }
     }
 
     // MARK: - Search
@@ -6912,5 +7007,271 @@ final class IndianDrugDatabase {
         db.append(DrugEntry(id: "ciclesonide", brandName: "Alvesco", genericName: "Ciclesonide", saltComposition: "Ciclesonide 160mcg", category: .respiratory, manufacturer: "Cipla", commonDosages: ["80mcg", "160mcg"], typicalDoseForm: "inhaler", priceRange: "₹250-500", genericAlternatives: [], foodInteractions: ["No food interactions", "No need to rinse mouth (activated in lungs)"], commonSideEffects: ["Headache", "Nasopharyngitis", "Oral thrush (minimal)"], storageInstructions: "Store below 30°C.", description: "Inhaled corticosteroid prodrug with minimal oral side effects. Once-daily.", isScheduleH: true))
 
         return db
+    }
+
+    // MARK: - Ayurvedic Database Builder
+
+    private static func buildAyurvedicDatabase() -> [AyurvedicMedicine] {
+        [
+            // ────────────────────────────────────────────
+            // DIGESTIVE
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "triphala-churna", nameHindi: "त्रिफला चूर्ण", nameEnglish: "Triphala Churna", form: .churna, commonUses: ["Constipation", "Detoxification", "Digestive health", "Eye health"], dosageGuidance: "3-6g powder with warm water", timing: "Before bed on empty stomach, with warm water", contraindications: ["Pregnancy", "Diarrhoea", "Dysentery"], category: .digestive),
+
+            AyurvedicMedicine(id: "hingvastak-churna", nameHindi: "हिंग्वाष्टक चूर्ण", nameEnglish: "Hingvastak Churna", form: .churna, commonUses: ["Bloating", "Gas", "Indigestion", "Loss of appetite"], dosageGuidance: "1-3g with first morsel of food", timing: "Before food, mixed with ghee or first bite", contraindications: ["Hyperacidity", "Gastric ulcers", "Pregnancy"], category: .digestive),
+
+            AyurvedicMedicine(id: "avipattikar-churna", nameHindi: "अविपत्तिकर चूर्ण", nameEnglish: "Avipattikar Churna", form: .churna, commonUses: ["Acidity", "Heartburn", "Hyperacidity", "Gastritis"], dosageGuidance: "3-6g with water or milk", timing: "Before food with cold water or milk", contraindications: ["Hypoglycemia", "Diarrhoea"], category: .digestive),
+
+            AyurvedicMedicine(id: "lavan-bhaskar-churna", nameHindi: "लवण भास्कर चूर्ण", nameEnglish: "Lavan Bhaskar Churna", form: .churna, commonUses: ["Loss of appetite", "Indigestion", "Abdominal pain", "Flatulence"], dosageGuidance: "1-3g with buttermilk", timing: "Before food with buttermilk or warm water", contraindications: ["Hypertension (high salt content)", "Kidney disease", "Edema"], category: .digestive),
+
+            AyurvedicMedicine(id: "chitrakadi-vati", nameHindi: "चित्रकादि वटी", nameEnglish: "Chitrakadi Vati", form: .vati, commonUses: ["Weak digestion", "Loss of appetite", "Flatulence", "Abdominal heaviness"], dosageGuidance: "1-2 tablets twice daily", timing: "Before food with warm water", contraindications: ["Hyperacidity", "Gastric ulcers", "Pregnancy"], category: .digestive),
+
+            AyurvedicMedicine(id: "ajwain-ark", nameHindi: "अजवाइन अर्क", nameEnglish: "Ajwain Ark (Carom Water)", form: .ark, commonUses: ["Flatulence", "Indigestion", "Colic pain", "Nausea"], dosageGuidance: "10-20ml with equal water", timing: "After food with water", contraindications: ["Hyperacidity", "Gastric ulcers"], category: .digestive),
+
+            AyurvedicMedicine(id: "panchsakar-churna", nameHindi: "पंचसकार चूर्ण", nameEnglish: "Panchsakar Churna", form: .churna, commonUses: ["Constipation", "Abdominal distension", "Flatulence"], dosageGuidance: "3-6g at bedtime", timing: "Before bed with warm water", contraindications: ["Diarrhoea", "Pregnancy", "Intestinal obstruction"], category: .digestive),
+
+            AyurvedicMedicine(id: "isabgol", nameHindi: "ईसबगोल", nameEnglish: "Isabgol (Psyllium Husk)", form: .churna, commonUses: ["Constipation", "IBS", "Diarrhoea", "Cholesterol"], dosageGuidance: "5-10g with water or curd", timing: "Before bed with water; for diarrhoea with curd", contraindications: ["Intestinal obstruction", "Difficulty swallowing"], category: .digestive),
+
+            AyurvedicMedicine(id: "kumari-asava", nameHindi: "कुमार्यासव", nameEnglish: "Kumaryasava", form: .asava, commonUses: ["Liver disorders", "Loss of appetite", "Urinary disorders", "Abdominal tumors"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Diabetes (contains sugar)", "Pregnancy"], category: .digestive),
+
+            AyurvedicMedicine(id: "bhumiamla", nameHindi: "भूम्यामलकी", nameEnglish: "Bhumyamalaki (Phyllanthus)", form: .tablet, commonUses: ["Liver protection", "Hepatitis", "Jaundice", "Fatty liver"], dosageGuidance: "250-500mg twice daily", timing: "After food with water", contraindications: ["Hypoglycemia (may lower blood sugar)"], category: .digestive),
+
+            // ────────────────────────────────────────────
+            // IMMUNITY
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "chyawanprash", nameHindi: "च्यवनप्राश", nameEnglish: "Chyawanprash", form: .avaleha, commonUses: ["Immunity booster", "Respiratory health", "General vitality", "Antioxidant"], dosageGuidance: "1-2 teaspoons (10-20g)", timing: "Morning before breakfast with warm milk", contraindications: ["Diabetes (high sugar)", "Obesity"], category: .immunity),
+
+            AyurvedicMedicine(id: "giloy-guduchi", nameHindi: "गिलोय / गुडूची", nameEnglish: "Giloy / Guduchi", form: .tablet, commonUses: ["Immunity", "Fever", "Dengue platelet support", "Detoxification", "Arthritis"], dosageGuidance: "500mg-1g twice daily or 20ml juice", timing: "Before food with warm water", contraindications: ["Autoimmune diseases", "Pre-surgery (may lower blood sugar)", "Pregnancy"], category: .immunity),
+
+            AyurvedicMedicine(id: "tulsi", nameHindi: "तुलसी", nameEnglish: "Tulsi (Holy Basil)", form: .capsule, commonUses: ["Immunity", "Cold & cough", "Stress relief", "Respiratory health", "Antibacterial"], dosageGuidance: "300-600mg extract or 5-10 leaves", timing: "Morning on empty stomach or as tea", contraindications: ["Blood-thinning medication", "Fertility concerns (anti-fertility in high doses)", "Pre-surgery"], category: .immunity),
+
+            AyurvedicMedicine(id: "ashwagandha", nameHindi: "अश्वगंधा", nameEnglish: "Ashwagandha (Withania)", form: .churna, commonUses: ["Stress & anxiety", "Energy & vitality", "Immunity", "Muscle strength", "Sleep", "Thyroid support"], dosageGuidance: "3-6g powder or 300-600mg extract", timing: "Before bed with warm milk or after food", contraindications: ["Hyperthyroidism", "Pregnancy", "Autoimmune diseases", "Sedative medications"], category: .immunity),
+
+            AyurvedicMedicine(id: "amla", nameHindi: "आँवला", nameEnglish: "Amla (Indian Gooseberry)", form: .tablet, commonUses: ["Vitamin C", "Immunity", "Hair health", "Digestion", "Antioxidant", "Eye health"], dosageGuidance: "500mg-1g or 20ml juice", timing: "Morning on empty stomach with water", contraindications: ["Hyperacidity (in excess)", "Diabetes medication (may potentiate)"], category: .immunity),
+
+            AyurvedicMedicine(id: "samshamani-vati", nameHindi: "संशमनी वटी", nameEnglish: "Samshamani Vati (Guduchi Ghana)", form: .vati, commonUses: ["Chronic fever", "Immunity", "Gout", "Skin allergies"], dosageGuidance: "250-500mg twice daily", timing: "Before food with warm water", contraindications: ["Autoimmune conditions", "Pregnancy"], category: .immunity),
+
+            AyurvedicMedicine(id: "haldi-turmeric", nameHindi: "हल्दी", nameEnglish: "Haldi (Turmeric/Curcumin)", form: .capsule, commonUses: ["Anti-inflammatory", "Immunity", "Joint pain", "Wound healing", "Antioxidant"], dosageGuidance: "500mg-1g curcumin extract", timing: "After food with black pepper for absorption", contraindications: ["Gallstones", "Blood-thinning medication", "Pre-surgery"], category: .immunity),
+
+            AyurvedicMedicine(id: "mulethi-yashtimadhu", nameHindi: "मुलेठी / यष्टिमधु", nameEnglish: "Mulethi / Yashtimadhu (Licorice)", form: .churna, commonUses: ["Sore throat", "Cough", "Gastritis", "Immunity"], dosageGuidance: "1-3g with honey", timing: "After food with honey or warm water", contraindications: ["Hypertension", "Hypokalemia", "Kidney disease", "Pregnancy"], category: .immunity),
+
+            AyurvedicMedicine(id: "kalmegh", nameHindi: "कालमेघ", nameEnglish: "Kalmegh (Andrographis)", form: .tablet, commonUses: ["Fever", "Liver protection", "Immunity", "Cold & flu"], dosageGuidance: "250-500mg twice daily", timing: "After food with water", contraindications: ["Pregnancy", "Autoimmune conditions", "Blood pressure medication"], category: .immunity),
+
+            AyurvedicMedicine(id: "moringa", nameHindi: "सहजन / मोरिंगा", nameEnglish: "Moringa (Drumstick Leaves)", form: .capsule, commonUses: ["Nutrition", "Immunity", "Anemia", "Lactation support", "Antioxidant"], dosageGuidance: "500mg-1g twice daily", timing: "After food with water", contraindications: ["Thyroid medication (may interact)", "Pregnancy (bark and root)"], category: .immunity),
+
+            // ────────────────────────────────────────────
+            // JOINT & PAIN
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "yograj-guggulu", nameHindi: "योगराज गुग्गुलु", nameEnglish: "Yograj Guggulu", form: .guggulu, commonUses: ["Joint pain", "Arthritis", "Rheumatism", "Sciatica", "Muscle stiffness"], dosageGuidance: "2-4 tablets twice daily", timing: "After food with warm water", contraindications: ["Pregnancy", "Thyroid medication", "Diarrhoea"], category: .jointPain),
+
+            AyurvedicMedicine(id: "mahayograj-guggulu", nameHindi: "महायोगराज गुग्गुलु", nameEnglish: "Mahayograj Guggulu", form: .guggulu, commonUses: ["Severe arthritis", "Rheumatoid arthritis", "Gout", "Neuralgia", "Paralysis"], dosageGuidance: "1-2 tablets twice daily", timing: "After food with warm water or milk", contraindications: ["Pregnancy", "Thyroid medication", "Liver disease"], category: .jointPain),
+
+            AyurvedicMedicine(id: "dashmool-kwath", nameHindi: "दशमूल क्वाथ", nameEnglish: "Dashmool Kwath (Decoction)", form: .kwath, commonUses: ["Body pain", "Inflammation", "Fever", "Postpartum care", "Respiratory issues"], dosageGuidance: "15-30ml with equal water", timing: "Before food with warm water", contraindications: ["Pregnancy (unless prescribed)", "Dehydration"], category: .jointPain),
+
+            AyurvedicMedicine(id: "nirgundi", nameHindi: "निर्गुंडी", nameEnglish: "Nirgundi (Vitex negundo)", form: .tablet, commonUses: ["Joint pain", "Swelling", "Headache", "Sinusitis", "Muscle spasm"], dosageGuidance: "250-500mg twice daily or oil for external use", timing: "After food with warm water", contraindications: ["Pregnancy", "Lactation"], category: .jointPain),
+
+            AyurvedicMedicine(id: "shallaki-boswellia", nameHindi: "शल्लकी / बोसवेलिया", nameEnglish: "Shallaki (Boswellia)", form: .tablet, commonUses: ["Osteoarthritis", "Joint inflammation", "Asthma", "IBD"], dosageGuidance: "400-800mg twice daily", timing: "After food with water", contraindications: ["Pregnancy", "Blood-thinning medication"], category: .jointPain),
+
+            AyurvedicMedicine(id: "rasna-saptak-kwath", nameHindi: "रास्ना सप्तक क्वाथ", nameEnglish: "Rasna Saptak Kwath", form: .kwath, commonUses: ["Rheumatism", "Sciatica", "Lumbar pain", "Joint stiffness"], dosageGuidance: "15-30ml twice daily", timing: "Before food with warm water", contraindications: ["Gastric ulcers", "Pregnancy"], category: .jointPain),
+
+            AyurvedicMedicine(id: "maharasnadi-kwath", nameHindi: "महारास्नादि क्वाथ", nameEnglish: "Maharasnadi Kwath", form: .kwath, commonUses: ["Vata disorders", "Sciatica", "Paralysis", "Joint pain", "Facial palsy"], dosageGuidance: "15-30ml twice daily", timing: "Before food with warm water", contraindications: ["Pregnancy", "Kapha disorders"], category: .jointPain),
+
+            AyurvedicMedicine(id: "kaishore-guggulu", nameHindi: "कैशोर गुग्गुलु", nameEnglish: "Kaishore Guggulu", form: .guggulu, commonUses: ["Gout", "Skin diseases", "Joint inflammation", "Blood purification"], dosageGuidance: "2-4 tablets twice daily", timing: "After food with warm water", contraindications: ["Pregnancy", "Diarrhoea", "Thyroid medication"], category: .jointPain),
+
+            AyurvedicMedicine(id: "vishgarbha-taila", nameHindi: "विषगर्भ तैल", nameEnglish: "Vishgarbha Taila", form: .taila, commonUses: ["Joint pain (external)", "Muscle pain", "Sciatica", "Stiffness"], dosageGuidance: "Apply externally, massage gently", timing: "Before bath or at bedtime, external use only", contraindications: ["Open wounds", "Skin infections", "Internal use"], category: .jointPain),
+
+            AyurvedicMedicine(id: "mahanarayan-taila", nameHindi: "महानारायण तैल", nameEnglish: "Mahanarayan Taila", form: .taila, commonUses: ["Joint pain (external)", "Paralysis", "Muscle weakness", "Stiffness"], dosageGuidance: "Apply externally, warm massage", timing: "Before bath, apply warm and massage", contraindications: ["Open wounds", "Acute inflammation", "Internal use"], category: .jointPain),
+
+            // ────────────────────────────────────────────
+            // RESPIRATORY
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "sitopaladi-churna", nameHindi: "सितोपलादि चूर्ण", nameEnglish: "Sitopaladi Churna", form: .churna, commonUses: ["Cough", "Cold", "Bronchitis", "Fever", "Loss of appetite"], dosageGuidance: "1-3g with honey", timing: "After food with honey, 3-4 times daily", contraindications: ["Diabetes (contains sugar)", "Hyperacidity"], category: .respiratory),
+
+            AyurvedicMedicine(id: "talisadi-churna", nameHindi: "तालीसादि चूर्ण", nameEnglish: "Talisadi Churna", form: .churna, commonUses: ["Chronic cough", "Bronchitis", "Tuberculosis support", "Weak digestion"], dosageGuidance: "1-3g with honey", timing: "After food with honey", contraindications: ["Diabetes", "Hyperacidity", "Pregnancy"], category: .respiratory),
+
+            AyurvedicMedicine(id: "kantakari", nameHindi: "कंटकारी", nameEnglish: "Kantakari (Solanum)", form: .tablet, commonUses: ["Asthma", "Chronic cough", "Bronchitis", "Sore throat"], dosageGuidance: "250-500mg twice daily or 10ml juice", timing: "After food with honey", contraindications: ["Pregnancy", "Gastric ulcers"], category: .respiratory),
+
+            AyurvedicMedicine(id: "vasaka-adulsa", nameHindi: "वासा / अडूसा", nameEnglish: "Vasaka / Adulsa", form: .syrup, commonUses: ["Cough", "Bronchitis", "Asthma", "Hemoptysis", "Expectorant"], dosageGuidance: "10-20ml syrup or 500mg tablet", timing: "After food, twice daily", contraindications: ["Pregnancy (uterine stimulant)", "Bleeding disorders"], category: .respiratory),
+
+            AyurvedicMedicine(id: "lavangadi-vati", nameHindi: "लवंगादि वटी", nameEnglish: "Lavangadi Vati", form: .vati, commonUses: ["Cough", "Sore throat", "Hiccups", "Nausea"], dosageGuidance: "1-2 tablets, suck slowly", timing: "As needed, dissolve in mouth", contraindications: ["Children under 5 (choking risk)"], category: .respiratory),
+
+            AyurvedicMedicine(id: "khadiradi-vati", nameHindi: "खदिरादि वटी", nameEnglish: "Khadiradi Vati", form: .vati, commonUses: ["Sore throat", "Mouth ulcers", "Dental problems", "Tonsillitis"], dosageGuidance: "1-2 tablets, suck slowly", timing: "As needed, dissolve in mouth", contraindications: ["None significant"], category: .respiratory),
+
+            AyurvedicMedicine(id: "haridra-khanda-resp", nameHindi: "हरिद्रा खण्ड", nameEnglish: "Haridra Khanda", form: .churna, commonUses: ["Allergic rhinitis", "Urticaria", "Skin allergy", "Cough"], dosageGuidance: "3-6g with milk", timing: "After food with warm milk", contraindications: ["Diabetes (contains sugar)", "Gallstones"], category: .respiratory),
+
+            AyurvedicMedicine(id: "kanakasava", nameHindi: "कनकासव", nameEnglish: "Kanakasava", form: .asava, commonUses: ["Asthma", "Chronic bronchitis", "Cough", "Dyspnea"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Diabetes", "Pregnancy"], category: .respiratory),
+
+            AyurvedicMedicine(id: "talishadi-vati", nameHindi: "तालीशादि वटी", nameEnglish: "Talishadi Vati", form: .vati, commonUses: ["Cough", "Indigestion", "Fever", "Respiratory congestion"], dosageGuidance: "1-2 tablets twice daily", timing: "After food with honey or warm water", contraindications: ["Diabetes", "Pregnancy"], category: .respiratory),
+
+            AyurvedicMedicine(id: "bharangi", nameHindi: "भारंगी", nameEnglish: "Bharangi (Clerodendrum)", form: .tablet, commonUses: ["Asthma", "Bronchitis", "Fever", "Inflammation"], dosageGuidance: "250-500mg twice daily", timing: "After food with warm water", contraindications: ["Pregnancy", "Lactation"], category: .respiratory),
+
+            // ────────────────────────────────────────────
+            // CARDIAC
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "arjunarishta", nameHindi: "अर्जुनारिष्ट", nameEnglish: "Arjunarishta", form: .arishta, commonUses: ["Heart health", "Chest pain", "Heart failure support", "Blood pressure", "Cholesterol"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water, twice daily", contraindications: ["Low blood pressure", "Pregnancy", "Diabetes (contains sugar)"], category: .cardiac),
+
+            AyurvedicMedicine(id: "pushyanug-churna", nameHindi: "पुष्यानुग चूर्ण", nameEnglish: "Pushyanug Churna", form: .churna, commonUses: ["Menorrhagia", "Leucorrhoea", "Uterine disorders"], dosageGuidance: "3-6g with rice water or honey", timing: "After food with rice water", contraindications: ["Pregnancy", "Constipation"], category: .cardiac),
+
+            AyurvedicMedicine(id: "hridayarnav-ras", nameHindi: "हृदयार्णव रस", nameEnglish: "Hridayarnav Ras", form: .ras, commonUses: ["Heart tonic", "Cardiac weakness", "Palpitations", "Angina support"], dosageGuidance: "125-250mg with honey", timing: "After food with honey and Arjuna bark decoction", contraindications: ["Self-medication (contains metals)", "Pregnancy", "Kidney disease"], category: .cardiac),
+
+            AyurvedicMedicine(id: "arjuna-bark", nameHindi: "अर्जुन छाल", nameEnglish: "Arjuna Bark (Terminalia arjuna)", form: .churna, commonUses: ["Heart tonic", "Blood pressure", "Cholesterol", "Chest pain"], dosageGuidance: "3-6g boiled in milk", timing: "Morning with milk, on empty stomach", contraindications: ["Low blood pressure", "Blood-thinning medication", "Pregnancy"], category: .cardiac),
+
+            AyurvedicMedicine(id: "mrityunjay-ras", nameHindi: "मृत्युंजय रस", nameEnglish: "Mrityunjay Ras", form: .ras, commonUses: ["High fever", "Pneumonia support", "Cardiac tonic"], dosageGuidance: "125mg with honey (physician supervision only)", timing: "With honey, under physician guidance", contraindications: ["Self-medication", "Pregnancy", "Kidney/liver disease"], category: .cardiac),
+
+            AyurvedicMedicine(id: "prabhakar-vati", nameHindi: "प्रभाकर वटी", nameEnglish: "Prabhakar Vati", form: .vati, commonUses: ["Heart disease", "Dyspnea", "Edema", "Cardiac weakness"], dosageGuidance: "1-2 tablets twice daily", timing: "After food with Arjuna decoction", contraindications: ["Self-medication", "Pregnancy", "Low BP"], category: .cardiac),
+
+            AyurvedicMedicine(id: "nagarjunabhra-ras", nameHindi: "नागार्जुनाभ्र रस", nameEnglish: "Nagarjunabhra Ras", form: .ras, commonUses: ["Liver disorders", "Anemia", "Spleen enlargement"], dosageGuidance: "125-250mg with honey", timing: "After food with honey", contraindications: ["Self-medication", "Pregnancy", "Kidney disease"], category: .cardiac),
+
+            AyurvedicMedicine(id: "mrigmadasava", nameHindi: "मृगमदासव", nameEnglish: "Mrigmadasava", form: .asava, commonUses: ["Heart weakness", "Cardiac tonic", "General debility"], dosageGuidance: "15-30ml with equal water", timing: "After food with water", contraindications: ["Diabetes", "Pregnancy"], category: .cardiac),
+
+            // ────────────────────────────────────────────
+            // DIABETES
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "chandraprabha-vati", nameHindi: "चन्द्रप्रभा वटी", nameEnglish: "Chandraprabha Vati", form: .vati, commonUses: ["Diabetes support", "Urinary disorders", "Kidney stones", "General weakness", "Reproductive health"], dosageGuidance: "2-4 tablets twice daily", timing: "After food with water or milk", contraindications: ["Pregnancy", "Hypoglycemia (with diabetes medication)"], category: .diabetes),
+
+            AyurvedicMedicine(id: "shilajit", nameHindi: "शिलाजीत", nameEnglish: "Shilajit (Mineral Pitch)", form: .capsule, commonUses: ["Diabetes support", "Energy & vitality", "Kidney health", "Anti-aging", "Testosterone support"], dosageGuidance: "250-500mg twice daily", timing: "After food with warm milk", contraindications: ["Gout", "Hemochromatosis (high iron)", "Pregnancy"], category: .diabetes),
+
+            AyurvedicMedicine(id: "karela", nameHindi: "करेला", nameEnglish: "Karela (Bitter Gourd)", form: .tablet, commonUses: ["Blood sugar control", "Diabetes support", "Liver health", "Blood purification"], dosageGuidance: "500mg-1g or 30ml juice", timing: "Morning on empty stomach", contraindications: ["Hypoglycemia", "Pregnancy", "G6PD deficiency", "Surgery (stop 2 weeks prior)"], category: .diabetes),
+
+            AyurvedicMedicine(id: "jamun", nameHindi: "जामुन", nameEnglish: "Jamun (Java Plum) Seeds", form: .churna, commonUses: ["Blood sugar control", "Diabetes support", "Diarrhoea", "Dysentery"], dosageGuidance: "3-6g seed powder twice daily", timing: "Before food with water", contraindications: ["Hypoglycemia", "Surgery preparation"], category: .diabetes),
+
+            AyurvedicMedicine(id: "vijaysar", nameHindi: "विजयसार", nameEnglish: "Vijaysar (Pterocarpus)", form: .tablet, commonUses: ["Blood sugar control", "Diabetes support", "Obesity", "Cholesterol"], dosageGuidance: "1-2g powder or use tumbler", timing: "Water soaked overnight in Vijaysar tumbler, drink morning", contraindications: ["Hypoglycemia", "Pregnancy"], category: .diabetes),
+
+            AyurvedicMedicine(id: "gudmar-meshashringi", nameHindi: "गुड़मार / मेषशृंगी", nameEnglish: "Gudmar / Meshashringi (Gymnema)", form: .tablet, commonUses: ["Blood sugar control", "Sugar craving reduction", "Diabetes support", "Weight management"], dosageGuidance: "400-600mg twice daily", timing: "Before food with water", contraindications: ["Hypoglycemia", "Diabetes medication (potentiates)", "Pregnancy"], category: .diabetes),
+
+            AyurvedicMedicine(id: "nisha-amalaki", nameHindi: "निशामलकी", nameEnglish: "Nishamalaki (Turmeric + Amla)", form: .churna, commonUses: ["Prediabetes", "Blood sugar control", "Immunity"], dosageGuidance: "3-6g with warm water", timing: "Before food with warm water", contraindications: ["Gallstones", "Blood-thinning medication"], category: .diabetes),
+
+            AyurvedicMedicine(id: "mamejawa", nameHindi: "मामेजवा", nameEnglish: "Mamejawa (Enicostemma)", form: .tablet, commonUses: ["Blood sugar control", "Diabetes support", "Fever"], dosageGuidance: "250-500mg twice daily", timing: "Before food with water", contraindications: ["Hypoglycemia", "Pregnancy"], category: .diabetes),
+
+            AyurvedicMedicine(id: "trivang-bhasma", nameHindi: "त्रिवंग भस्म", nameEnglish: "Trivang Bhasma", form: .bhasma, commonUses: ["Diabetes", "Urinary disorders", "Reproductive disorders"], dosageGuidance: "125-250mg with honey", timing: "After food with honey or cream of milk", contraindications: ["Self-medication", "Kidney disease", "Pregnancy"], category: .diabetes),
+
+            AyurvedicMedicine(id: "vasant-kusumakar-ras", nameHindi: "वसंत कुसुमाकर रस", nameEnglish: "Vasant Kusumakar Ras", form: .ras, commonUses: ["Diabetes", "Urinary disorders", "Memory", "General debility"], dosageGuidance: "125mg with honey and cream (physician only)", timing: "Morning with honey and cream of milk", contraindications: ["Self-medication (contains metals)", "Pregnancy", "Kidney disease"], category: .diabetes),
+
+            // ────────────────────────────────────────────
+            // SKIN
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "neem", nameHindi: "नीम", nameEnglish: "Neem (Azadirachta indica)", form: .tablet, commonUses: ["Skin diseases", "Acne", "Blood purification", "Anti-fungal", "Anti-bacterial", "Diabetes support"], dosageGuidance: "250-500mg twice daily or as external paste", timing: "After food with water; external as paste", contraindications: ["Pregnancy", "Infertility concerns", "Autoimmune conditions", "Hypoglycemia"], category: .skin),
+
+            AyurvedicMedicine(id: "manjishtha", nameHindi: "मंजिष्ठा", nameEnglish: "Manjishtha (Indian Madder)", form: .tablet, commonUses: ["Blood purification", "Skin diseases", "Pigmentation", "Acne", "Eczema", "Lymphatic detox"], dosageGuidance: "250-500mg twice daily", timing: "After food with warm water", contraindications: ["Pregnancy", "Heavy menstruation", "Blood-thinning medication"], category: .skin),
+
+            AyurvedicMedicine(id: "khadirarishta", nameHindi: "खदिरारिष्ट", nameEnglish: "Khadirarishta", form: .arishta, commonUses: ["Skin diseases", "Eczema", "Psoriasis", "Acne", "Blood purification", "Obesity"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Diabetes (contains sugar)", "Pregnancy"], category: .skin),
+
+            AyurvedicMedicine(id: "haridra-khanda", nameHindi: "हरिद्रा खण्ड", nameEnglish: "Haridra Khanda (Turmeric Preparation)", form: .churna, commonUses: ["Allergic skin reactions", "Urticaria", "Rhinitis", "Skin allergy"], dosageGuidance: "3-6g with warm milk", timing: "After food with warm milk", contraindications: ["Diabetes (contains sugar)", "Gallstones"], category: .skin),
+
+            AyurvedicMedicine(id: "sariva-anantmool", nameHindi: "सारिवा / अनंतमूल", nameEnglish: "Sariva / Anantmool (Hemidesmus)", form: .tablet, commonUses: ["Blood purification", "Skin diseases", "Urinary infections", "Heat rash"], dosageGuidance: "250-500mg twice daily", timing: "After food with water", contraindications: ["Pregnancy", "Lactation"], category: .skin),
+
+            AyurvedicMedicine(id: "gandhak-rasayan", nameHindi: "गंधक रसायन", nameEnglish: "Gandhak Rasayan", form: .vati, commonUses: ["Skin diseases", "Scabies", "Ringworm", "Chronic itching", "Blood purification"], dosageGuidance: "250-500mg twice daily", timing: "After food with warm water", contraindications: ["Pregnancy", "Kidney disease"], category: .skin),
+
+            AyurvedicMedicine(id: "arogyavardhini-vati", nameHindi: "आरोग्यवर्धिनी वटी", nameEnglish: "Arogyavardhini Vati", form: .vati, commonUses: ["Liver disorders", "Skin diseases", "Obesity", "Fever", "Jaundice", "Acne"], dosageGuidance: "1-2 tablets twice daily", timing: "After food with warm water", contraindications: ["Pregnancy", "Diarrhoea", "Severe liver disease"], category: .skin),
+
+            AyurvedicMedicine(id: "mahamanjishthadi-kwath", nameHindi: "महामंजिष्ठादि क्वाथ", nameEnglish: "Mahamanjishthadi Kwath", form: .kwath, commonUses: ["Chronic skin diseases", "Blood purification", "Syphilis", "Non-healing ulcers"], dosageGuidance: "15-30ml with equal water", timing: "Before food with water", contraindications: ["Pregnancy", "Anemia"], category: .skin),
+
+            AyurvedicMedicine(id: "bakuchi", nameHindi: "बाकुची", nameEnglish: "Bakuchi (Psoralea)", form: .tablet, commonUses: ["Vitiligo", "Leucoderma", "Psoriasis", "Skin pigmentation"], dosageGuidance: "250-500mg or external oil", timing: "After food; external: apply and expose to sunlight", contraindications: ["Pregnancy", "Photosensitivity", "Liver disease"], category: .skin),
+
+            AyurvedicMedicine(id: "kumkumadi-taila", nameHindi: "कुमकुमादि तैल", nameEnglish: "Kumkumadi Taila", form: .taila, commonUses: ["Skin glow", "Pigmentation", "Acne scars", "Anti-aging (external)"], dosageGuidance: "2-3 drops, massage on face", timing: "Night before bed, external use on face", contraindications: ["Sensitive skin (patch test first)", "Oily acne-prone skin (use sparingly)"], category: .skin),
+
+            // ────────────────────────────────────────────
+            // MENTAL HEALTH
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "brahmi", nameHindi: "ब्राह्मी", nameEnglish: "Brahmi (Bacopa monnieri)", form: .tablet, commonUses: ["Memory enhancement", "Concentration", "Anxiety", "Stress", "Epilepsy support", "ADHD support"], dosageGuidance: "300-600mg extract or 3-6g powder", timing: "After food with milk or water", contraindications: ["Thyroid medication", "Sedatives", "Pregnancy", "Bradycardia"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "shankhpushpi", nameHindi: "शंखपुष्पी", nameEnglish: "Shankhpushpi (Convolvulus)", form: .syrup, commonUses: ["Memory", "Anxiety", "Insomnia", "Mental fatigue", "Stress relief"], dosageGuidance: "10-20ml syrup or 3-6g powder", timing: "After food with milk", contraindications: ["Thyroid medication (may decrease thyroid hormones)", "Pregnancy"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "jatamansi", nameHindi: "जटामांसी", nameEnglish: "Jatamansi (Nardostachys)", form: .tablet, commonUses: ["Insomnia", "Anxiety", "Epilepsy", "Memory", "Hypertension", "Hair health"], dosageGuidance: "250-500mg twice daily", timing: "Before bed with milk for sleep; after food otherwise", contraindications: ["Pregnancy", "Sedative medications", "Low blood pressure"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "saraswatarishta", nameHindi: "सारस्वतारिष्ट", nameEnglish: "Saraswatarishta", form: .arishta, commonUses: ["Memory", "Speech disorders", "Epilepsy", "Mental retardation", "Anxiety", "Insomnia"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Diabetes (contains sugar)", "Pregnancy"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "vacha", nameHindi: "वचा", nameEnglish: "Vacha (Acorus calamus)", form: .churna, commonUses: ["Memory", "Speech disorders", "Epilepsy", "Mental clarity", "Detoxification"], dosageGuidance: "250-500mg with honey", timing: "After food with honey", contraindications: ["Pregnancy", "High doses (emetic)", "Children (low doses only)"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "tagara", nameHindi: "तगर", nameEnglish: "Tagara (Indian Valerian)", form: .tablet, commonUses: ["Insomnia", "Anxiety", "Restlessness", "Hysteria"], dosageGuidance: "250-500mg before bed", timing: "Before bed with warm milk", contraindications: ["Pregnancy", "Sedative medication", "Driving after intake"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "manasamitra-vatakam", nameHindi: "मानसमित्र वटकम्", nameEnglish: "Manasamitra Vatakam", form: .vati, commonUses: ["Mental disorders", "Epilepsy", "Speech disorders", "Memory", "Insomnia"], dosageGuidance: "1-2 tablets with milk", timing: "After food with warm milk", contraindications: ["Self-medication (complex formulation)", "Pregnancy"], category: .mentalHealth),
+
+            AyurvedicMedicine(id: "sarpagandha-vati", nameHindi: "सर्पगंधा वटी", nameEnglish: "Sarpagandha Vati", form: .vati, commonUses: ["Hypertension", "Insomnia", "Anxiety", "Psychosis support"], dosageGuidance: "1 tablet at bedtime", timing: "Before bed with water", contraindications: ["Depression", "Pregnancy", "Peptic ulcer", "Parkinsonism", "Low BP"], category: .mentalHealth),
+
+            // ────────────────────────────────────────────
+            // WOMEN'S HEALTH
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "dashmoolarishta", nameHindi: "दशमूलारिष्ट", nameEnglish: "Dashmoolarishta", form: .arishta, commonUses: ["Postpartum care", "Weakness", "Vata disorders", "Joint pain", "Uterine tonic"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Diabetes (contains sugar)", "First trimester pregnancy"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "ashokarishta", nameHindi: "अशोकारिष्ट", nameEnglish: "Ashokarishta", form: .arishta, commonUses: ["Menorrhagia", "Irregular periods", "Leucorrhoea", "Uterine tonic", "Hormonal balance"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water, twice daily", contraindications: ["Pregnancy", "Diabetes (contains sugar)", "Uterine fibroids"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "shatavari", nameHindi: "शतावरी", nameEnglish: "Shatavari (Asparagus racemosus)", form: .tablet, commonUses: ["Hormonal balance", "Lactation support", "Menopause", "Female reproductive health", "Immunity"], dosageGuidance: "500mg-1g twice daily", timing: "After food with warm milk", contraindications: ["Estrogen-sensitive conditions", "Kidney disease", "Asparagus allergy"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "lodhra", nameHindi: "लोध्र", nameEnglish: "Lodhra (Symplocos racemosa)", form: .churna, commonUses: ["Leucorrhoea", "Heavy periods", "Uterine disorders", "PCOS support", "Skin brightening"], dosageGuidance: "3-6g with water or honey", timing: "After food with water", contraindications: ["Pregnancy", "Constipation"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "rajah-pravartini-vati", nameHindi: "राजः प्रवर्तिनी वटी", nameEnglish: "Rajah Pravartini Vati", form: .vati, commonUses: ["Amenorrhea", "Delayed periods", "Scanty periods", "Dysmenorrhea"], dosageGuidance: "1-2 tablets twice daily", timing: "After food with warm water, start from expected date", contraindications: ["Pregnancy (abortifacient)", "Heavy periods", "Bleeding disorders"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "phala-ghrita", nameHindi: "फल घृत", nameEnglish: "Phala Ghrita", form: .ghrita, commonUses: ["Female infertility", "Recurrent miscarriage", "Uterine health", "Hormonal balance"], dosageGuidance: "5-10g with warm milk", timing: "Before food with warm milk", contraindications: ["Obesity", "High cholesterol", "Kapha disorders"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "sukumara-kashayam", nameHindi: "सुकुमार कषायम्", nameEnglish: "Sukumara Kashayam", form: .kwath, commonUses: ["Gynecological disorders", "Constipation", "Infertility", "Abdominal tumors"], dosageGuidance: "15ml with warm water", timing: "Before food with warm water", contraindications: ["Pregnancy (first trimester)", "Diarrhoea"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "pradarantak-ras", nameHindi: "प्रदरान्तक रस", nameEnglish: "Pradarantak Ras", form: .ras, commonUses: ["Leucorrhoea", "White discharge", "Uterine weakness"], dosageGuidance: "125-250mg with honey", timing: "After food with honey and rice water", contraindications: ["Self-medication", "Pregnancy", "Kidney disease"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "supari-pak", nameHindi: "सुपारी पाक", nameEnglish: "Supari Pak", form: .avaleha, commonUses: ["Leucorrhoea", "General weakness (women)", "Postpartum recovery", "Uterine tonic"], dosageGuidance: "5-10g with warm milk", timing: "After food with warm milk", contraindications: ["Diabetes (high sugar)", "Obesity"], category: .womensHealth),
+
+            AyurvedicMedicine(id: "kumari-asava-wh", nameHindi: "कुमार्यासव", nameEnglish: "Kumaryasava (for Women)", form: .asava, commonUses: ["Menstrual disorders", "Liver disorders", "Urinary infections", "Uterine health"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Pregnancy", "Diabetes"], category: .womensHealth),
+
+            // ────────────────────────────────────────────
+            // GENERAL WELLNESS
+            // ────────────────────────────────────────────
+            AyurvedicMedicine(id: "swarna-bhasma", nameHindi: "स्वर्ण भस्म", nameEnglish: "Swarna Bhasma (Gold Ash)", form: .bhasma, commonUses: ["Rejuvenation", "Immunity", "Infertility", "Cardiac tonic", "Intelligence", "Anti-aging"], dosageGuidance: "15-30mg with honey (physician only)", timing: "Morning with honey and ghee, under physician supervision", contraindications: ["Self-medication (toxic if improperly prepared)", "Pregnancy", "Kidney disease", "Children"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "praval-pishti", nameHindi: "प्रवाल पिष्टी", nameEnglish: "Praval Pishti (Coral Calcium)", form: .pishti, commonUses: ["Calcium supplement", "Acidity", "Pitta disorders", "Bleeding disorders", "Bone health"], dosageGuidance: "250-500mg with honey or gulkand", timing: "After food with honey or rose preserve", contraindications: ["Kapha disorders", "Renal calculi (discuss with doctor)"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "godanti-bhasma", nameHindi: "गोदंती भस्म", nameEnglish: "Godanti Bhasma (Gypsum)", form: .bhasma, commonUses: ["Migraine", "Chronic fever", "Calcium deficiency", "Headache"], dosageGuidance: "250-500mg with honey", timing: "After food with honey or warm water", contraindications: ["Kidney disease", "Pregnancy"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "abhrak-bhasma", nameHindi: "अभ्रक भस्म", nameEnglish: "Abhrak Bhasma (Mica Ash)", form: .bhasma, commonUses: ["Respiratory diseases", "Anemia", "Liver disorders", "General debility", "Malabsorption"], dosageGuidance: "125-250mg with honey", timing: "After food with honey", contraindications: ["Self-medication", "Pregnancy", "Kidney disease"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "loha-bhasma", nameHindi: "लौह भस्म", nameEnglish: "Loha Bhasma (Iron Ash)", form: .bhasma, commonUses: ["Iron-deficiency anemia", "Liver disorders", "Jaundice", "Skin diseases", "Weakness"], dosageGuidance: "125-250mg with honey and Triphala", timing: "After food with honey and Triphala juice", contraindications: ["Hemochromatosis", "Self-medication", "Pregnancy"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "swarna-makshik-bhasma", nameHindi: "स्वर्णमाक्षिक भस्म", nameEnglish: "Swarna Makshik Bhasma (Chalcopyrite)", form: .bhasma, commonUses: ["Anemia", "Eye diseases", "Jaundice", "Urinary disorders", "Diabetes"], dosageGuidance: "125-250mg with honey", timing: "After food with honey", contraindications: ["Self-medication", "Pregnancy", "Copper excess"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "navratna-ras", nameHindi: "नवरत्न रस", nameEnglish: "Navratna Ras", form: .ras, commonUses: ["Chronic fatigue", "Debility", "Rejuvenation", "Neurological disorders"], dosageGuidance: "125mg with honey (physician only)", timing: "Morning with honey, physician supervision only", contraindications: ["Self-medication", "Pregnancy", "Children", "Kidney/liver disease"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "dhatri-lauh", nameHindi: "धात्री लौह", nameEnglish: "Dhatri Lauh", form: .vati, commonUses: ["Anemia", "Bleeding disorders", "Pitta disorders", "Eye health"], dosageGuidance: "250-500mg with honey", timing: "After food with honey and amla juice", contraindications: ["Hemochromatosis", "Pregnancy (physician guidance)"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "suvarna-raj-vangeshwar", nameHindi: "सुवर्ण राज वंगेश्वर", nameEnglish: "Suvarna Raj Vangeshwar Ras", form: .ras, commonUses: ["Diabetes", "Reproductive disorders", "Urinary disorders", "General tonic"], dosageGuidance: "125mg with honey (physician only)", timing: "With honey and milk, physician supervision", contraindications: ["Self-medication", "Pregnancy", "Children"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "musli-pak", nameHindi: "मूसली पाक", nameEnglish: "Musli Pak", form: .avaleha, commonUses: ["General tonic", "Vitality", "Reproductive health", "Stamina", "Weight gain"], dosageGuidance: "5-10g with warm milk", timing: "Before bed with warm milk", contraindications: ["Diabetes (high sugar)", "Obesity", "Ama (toxin accumulation)"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "ashwagandha-pak", nameHindi: "अश्वगंधा पाक", nameEnglish: "Ashwagandha Pak", form: .avaleha, commonUses: ["Strength", "Vitality", "Weight gain", "Stress relief", "Immunity"], dosageGuidance: "10-20g with warm milk", timing: "Before bed with warm milk", contraindications: ["Diabetes (high sugar)", "Obesity", "Thyroid medication"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "drakshasava", nameHindi: "द्राक्षासव", nameEnglish: "Drakshasava", form: .asava, commonUses: ["General tonic", "Anemia", "Constipation", "Respiratory disorders", "Cardiac tonic"], dosageGuidance: "15-30ml with equal water", timing: "After food with equal water", contraindications: ["Diabetes", "Pregnancy"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "kesari-kalp", nameHindi: "केसरी कल्प", nameEnglish: "Kesari Kalp Royal Chyawanprash", form: .avaleha, commonUses: ["Immunity", "Vitality", "Saffron-enriched rejuvenator", "Winter health"], dosageGuidance: "10-20g with warm milk", timing: "Morning with warm milk", contraindications: ["Diabetes", "Obesity"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "badam-pak", nameHindi: "बादाम पाक", nameEnglish: "Badam Pak (Almond Preparation)", form: .avaleha, commonUses: ["Brain tonic", "Memory", "Strength", "Winter health", "Weight gain"], dosageGuidance: "10-20g with warm milk", timing: "Morning or before bed with warm milk", contraindications: ["Diabetes", "Obesity", "Nut allergy"], category: .generalWellness),
+
+            // Additional common remedies across categories
+
+            AyurvedicMedicine(id: "trikatu-churna", nameHindi: "त्रिकटु चूर्ण", nameEnglish: "Trikatu Churna (Three Pungents)", form: .churna, commonUses: ["Metabolism boost", "Cold & cough", "Indigestion", "Obesity", "Kapha disorders"], dosageGuidance: "1-3g with honey", timing: "Before food with honey", contraindications: ["Hyperacidity", "Gastric ulcers", "Pregnancy", "Bleeding disorders"], category: .digestive),
+
+            AyurvedicMedicine(id: "amalaki-rasayan", nameHindi: "आमलकी रसायन", nameEnglish: "Amalaki Rasayan", form: .avaleha, commonUses: ["Rejuvenation", "Immunity", "Pitta disorders", "Acidity", "Eye health"], dosageGuidance: "3-6g with milk or water", timing: "After food with milk", contraindications: ["Diarrhoea", "Diabetes (if sweetened)"], category: .immunity),
+
+            AyurvedicMedicine(id: "kutki", nameHindi: "कुटकी", nameEnglish: "Kutki (Picrorhiza)", form: .churna, commonUses: ["Liver protection", "Fever", "Asthma", "Skin diseases", "Jaundice"], dosageGuidance: "1-3g with honey", timing: "Before food with honey", contraindications: ["Pregnancy", "Autoimmune conditions"], category: .digestive),
+
+            AyurvedicMedicine(id: "punarnava", nameHindi: "पुनर्नवा", nameEnglish: "Punarnava (Boerhavia)", form: .tablet, commonUses: ["Kidney health", "Edema", "Urinary infections", "Liver health", "Obesity"], dosageGuidance: "250-500mg twice daily or 20ml juice", timing: "After food with water", contraindications: ["Pregnancy", "Low blood pressure"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "gokshura", nameHindi: "गोक्षुर", nameEnglish: "Gokshura (Tribulus)", form: .tablet, commonUses: ["Kidney stones", "Urinary health", "Prostate", "Vitality", "Muscle strength"], dosageGuidance: "250-500mg twice daily", timing: "After food with water", contraindications: ["Pregnancy", "Prostate cancer", "Hormone-sensitive conditions"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "vidanga", nameHindi: "विडंग", nameEnglish: "Vidanga (Embelia ribes)", form: .churna, commonUses: ["Deworming", "Flatulence", "Skin diseases", "Obesity"], dosageGuidance: "1-3g with honey", timing: "Before food with honey", contraindications: ["Pregnancy", "Male infertility (anti-spermatogenic in excess)"], category: .digestive),
+
+            AyurvedicMedicine(id: "pippalimool", nameHindi: "पिप्पलीमूल", nameEnglish: "Pippalimool (Long Pepper Root)", form: .churna, commonUses: ["Cough", "Asthma", "Indigestion", "Liver disorders", "Fever"], dosageGuidance: "1-3g with honey", timing: "After food with honey", contraindications: ["Hyperacidity", "Pregnancy", "Gastric ulcers"], category: .respiratory),
+
+            AyurvedicMedicine(id: "arogya-pacha", nameHindi: "आरोग्य पाचा", nameEnglish: "Arogya Pacha (Trichopus)", form: .tablet, commonUses: ["Anti-fatigue", "Stamina", "Immunity", "Aphrodisiac", "Adaptogen"], dosageGuidance: "250-500mg twice daily", timing: "After food with water", contraindications: ["Pregnancy", "Lactation"], category: .generalWellness),
+
+            AyurvedicMedicine(id: "musta-nagarmotha", nameHindi: "मुस्ता / नागरमोथा", nameEnglish: "Musta / Nagarmotha (Cyperus)", form: .churna, commonUses: ["Diarrhoea", "Indigestion", "Fever", "Breast milk purification", "IBS"], dosageGuidance: "1-3g with warm water", timing: "Before food with warm water", contraindications: ["Constipation", "Pregnancy"], category: .digestive),
+
+            AyurvedicMedicine(id: "haritaki", nameHindi: "हरीतकी / हर्रे", nameEnglish: "Haritaki (Terminalia chebula)", form: .churna, commonUses: ["Constipation", "Detoxification", "Eye health", "Rejuvenation", "Digestive health"], dosageGuidance: "3-6g with warm water", timing: "Before bed with warm water; season-specific anupana", contraindications: ["Pregnancy", "Dehydration", "Emaciation", "Diarrhoea"], category: .digestive),
+
+            AyurvedicMedicine(id: "vibhitaki", nameHindi: "बिभीतकी / बहेड़ा", nameEnglish: "Vibhitaki (Terminalia bellirica)", form: .churna, commonUses: ["Cough", "Eye health", "Hair health", "Kidney stones", "Cholesterol"], dosageGuidance: "3-6g with honey", timing: "After food with honey", contraindications: ["Pregnancy", "Diarrhoea"], category: .respiratory),
+
+            AyurvedicMedicine(id: "guduchi-satva", nameHindi: "गुडूची सत्व", nameEnglish: "Guduchi Satva (Giloy Extract)", form: .churna, commonUses: ["Burning sensation", "Urinary burning", "Pitta disorders", "Fever", "Acidity"], dosageGuidance: "500mg-1g with sugar and honey", timing: "After food with honey or cold water", contraindications: ["Autoimmune conditions", "Pregnancy"], category: .immunity),
+
+            AyurvedicMedicine(id: "yashtimadhu-churna", nameHindi: "यष्टिमधु चूर्ण", nameEnglish: "Yashtimadhu Churna (Licorice Powder)", form: .churna, commonUses: ["Gastritis", "Peptic ulcer", "Sore throat", "Adrenal support"], dosageGuidance: "1-3g with ghee and honey", timing: "Before food with ghee and honey", contraindications: ["Hypertension", "Edema", "Pregnancy", "Hypokalemia"], category: .digestive),
+
+            AyurvedicMedicine(id: "shatavari-gulam", nameHindi: "शतावरी गुलम", nameEnglish: "Shatavari Gulam", form: .avaleha, commonUses: ["Lactation", "Female reproductive tonic", "Gastritis", "Hyperacidity"], dosageGuidance: "5-10g with warm milk", timing: "After food with warm milk", contraindications: ["Estrogen-sensitive conditions", "Kidney disease"], category: .womensHealth),
+        ]
     }
 }

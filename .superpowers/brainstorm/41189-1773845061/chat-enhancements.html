@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Feature A: AI Chat Enhancements</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'SF Pro Display', system-ui, sans-serif; background: #f0f2f5; color: #1a2332; }
+
+  .header { background: white; padding: 16px 24px; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 10; }
+  .header h1 { font-size: 20px; font-weight: 700; }
+  .header p { font-size: 13px; color: #64748b; margin-top: 2px; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 8px; font-size: 10px; font-weight: 600; margin-right: 4px; }
+
+  .content { max-width: 1200px; margin: 0 auto; padding: 24px; }
+
+  .section { margin-bottom: 32px; }
+  .section h2 { font-size: 16px; font-weight: 700; margin-bottom: 12px; color: #1a2332; }
+  .section-desc { font-size: 13px; color: #64748b; margin-bottom: 16px; }
+
+  .phone-frame { width: 320px; min-height: 580px; background: white; border-radius: 36px; border: 3px solid #1a2332; overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,0.15); position: relative; }
+  .phone-notch { width: 120px; height: 28px; background: #1a2332; border-radius: 0 0 16px 16px; margin: 0 auto; }
+  .phone-content { padding: 8px; }
+
+  .mockup-row { display: flex; gap: 32px; flex-wrap: wrap; align-items: flex-start; }
+
+  /* Chat mockup styles */
+  .chat-header { display: flex; align-items: center; justify-content: center; padding: 10px 12px; gap: 6px; }
+  .chat-header .icon { color: #0A7E8C; font-size: 14px; }
+  .chat-header .title { font-size: 15px; font-weight: 700; }
+  .chat-header .sub { font-size: 10px; color: #94a3b8; }
+
+  .disclaimer { background: rgba(10,126,140,0.08); padding: 6px 10px; font-size: 10px; color: #0A7E8C; text-align: center; }
+
+  .messages { padding: 10px; min-height: 280px; }
+  .msg { margin-bottom: 8px; max-width: 85%; }
+  .msg-user { margin-left: auto; }
+  .msg-ai { margin-right: auto; }
+  .msg-bubble { padding: 10px 12px; border-radius: 14px; font-size: 12px; line-height: 1.5; }
+  .msg-user .msg-bubble { background: #0A7E8C; color: white; border-bottom-right-radius: 4px; }
+  .msg-ai .msg-bubble { background: #f0f2f5; color: #1a2332; border-bottom-left-radius: 4px; }
+  .ai-badge { display: inline-flex; align-items: center; gap: 3px; font-size: 9px; font-weight: 700; color: #0A7E8C; background: rgba(10,126,140,0.1); padding: 2px 6px; border-radius: 8px; margin-bottom: 4px; }
+
+  /* Dynamic chips */
+  .dynamic-chips { display: flex; gap: 4px; flex-wrap: wrap; margin-top: 6px; }
+  .dynamic-chip { font-size: 10px; padding: 4px 8px; border-radius: 10px; border: 1px solid rgba(10,126,140,0.2); color: #0A7E8C; background: rgba(10,126,140,0.05); cursor: pointer; }
+  .dynamic-chip:hover { background: rgba(10,126,140,0.12); }
+
+  /* Voice input */
+  .input-bar { display: flex; align-items: center; gap: 8px; padding: 8px 10px; background: white; border-top: 1px solid #e2e8f0; }
+  .input-field { flex: 1; background: #f0f2f5; border: none; border-radius: 18px; padding: 8px 14px; font-size: 12px; color: #1a2332; }
+  .send-btn { width: 32px; height: 32px; border-radius: 50%; border: none; display: flex; align-items: center; justify-content: center; font-size: 16px; cursor: pointer; }
+  .send-btn.mic { background: none; color: #94a3b8; }
+  .send-btn.mic.active { color: #ef4444; background: #fef2f2; }
+  .send-btn.send { background: #0A7E8C; color: white; }
+
+  /* Voice recording overlay */
+  .voice-overlay { background: rgba(10,126,140,0.04); border: 2px dashed #0A7E8C; border-radius: 12px; margin: 6px; padding: 16px; text-align: center; }
+  .voice-wave { display: flex; align-items: center; justify-content: center; gap: 3px; height: 30px; margin: 8px 0; }
+  .voice-bar { width: 3px; border-radius: 2px; background: #0A7E8C; }
+  .voice-time { font-size: 11px; color: #64748b; }
+  .voice-label { font-size: 12px; font-weight: 600; color: #0A7E8C; }
+
+  /* Session list */
+  .session-list { background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
+  .session-item { display: flex; align-items: center; padding: 12px 16px; border-bottom: 1px solid #f1f5f9; gap: 12px; cursor: pointer; }
+  .session-item:hover { background: #f8fafb; }
+  .session-item:last-child { border-bottom: none; }
+  .session-icon { width: 36px; height: 36px; border-radius: 10px; background: rgba(10,126,140,0.08); display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .session-info { flex: 1; }
+  .session-title { font-size: 13px; font-weight: 600; }
+  .session-preview { font-size: 11px; color: #94a3b8; margin-top: 1px; }
+  .session-time { font-size: 10px; color: #94a3b8; }
+  .session-badge { font-size: 10px; background: #0A7E8C; color: white; padding: 2px 6px; border-radius: 6px; font-weight: 600; }
+
+  .annotation { position: absolute; background: #0A7E8C; color: white; padding: 4px 10px; border-radius: 8px; font-size: 10px; font-weight: 600; z-index: 5; white-space: nowrap; }
+  .annotation::after { content: ''; position: absolute; border: 5px solid transparent; }
+  .annotation.right { right: -12px; }
+  .annotation.right::after { right: -10px; top: 50%; transform: translateY(-50%); border-left-color: #0A7E8C; }
+  .annotation.left { left: -12px; }
+  .annotation.left::after { left: -10px; top: 50%; transform: translateY(-50%); border-right-color: #0A7E8C; }
+  .annotation.top::after { top: -10px; left: 50%; transform: translateX(-50%); border-bottom-color: #0A7E8C; }
+
+  .feature-card { background: white; border-radius: 12px; padding: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.06); border-left: 3px solid #0A7E8C; }
+  .feature-card h3 { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+  .feature-card p { font-size: 12px; color: #64748b; line-height: 1.5; }
+  .feature-card .tech { margin-top: 8px; display: flex; gap: 4px; flex-wrap: wrap; }
+  .tech-tag { font-size: 9px; padding: 2px 6px; border-radius: 6px; background: #e8f5f6; color: #0A7E8C; font-weight: 500; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 16px; }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>Feature A: AI Chat Enhancement Pack</h1>
+  <p>3 enhancements to make MedCare AI feel like a real health companion</p>
+  <div style="margin-top:8px">
+    <span class="tag" style="background:#fef2f2;color:#ef4444">P0 - Build First</span>
+    <span class="tag" style="background:#e8f5f6;color:#0A7E8C">SwiftUI + Speech.framework</span>
+    <span class="tag" style="background:#f0fdf4;color:#22c55e">Retention Driver</span>
+  </div>
+</div>
+
+<div class="content">
+
+  <!-- Enhancement 1: Voice Input -->
+  <div class="section">
+    <h2>1. Voice Input — Hands-free health queries</h2>
+    <p class="section-desc">Tap the mic to speak naturally. iOS Speech framework handles recognition. Supports English + Hindi. Auto-sends after pause or manual confirm.</p>
+
+    <div class="mockup-row">
+      <!-- Idle state -->
+      <div>
+        <p style="font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:8px;text-transform:uppercase">Idle — tap mic to start</p>
+        <div class="phone-frame" style="min-height:auto">
+          <div style="padding:12px">
+            <div class="messages" style="min-height:120px">
+              <div class="msg msg-ai">
+                <div class="ai-badge">✨ MedCare AI</div>
+                <div class="msg-bubble">Your Thyronorm course is on track! 85% adherence this week.</div>
+              </div>
+            </div>
+            <div class="input-bar" style="position:relative">
+              <input class="input-field" placeholder="Ask about your health..." disabled>
+              <div class="send-btn mic">🎤</div>
+              <div class="annotation" style="bottom:46px;right:4px;background:#f59e0b">
+                Mic icon when input is empty
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Recording state -->
+      <div>
+        <p style="font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:8px;text-transform:uppercase">Recording — speak naturally</p>
+        <div class="phone-frame" style="min-height:auto">
+          <div style="padding:12px">
+            <div class="voice-overlay">
+              <div class="voice-label">🎤 Listening...</div>
+              <div class="voice-wave">
+                <div class="voice-bar" style="height:8px;opacity:0.4"></div>
+                <div class="voice-bar" style="height:18px;opacity:0.6"></div>
+                <div class="voice-bar" style="height:26px"></div>
+                <div class="voice-bar" style="height:14px;opacity:0.7"></div>
+                <div class="voice-bar" style="height:22px;opacity:0.8"></div>
+                <div class="voice-bar" style="height:10px;opacity:0.5"></div>
+                <div class="voice-bar" style="height:20px;opacity:0.9"></div>
+                <div class="voice-bar" style="height:6px;opacity:0.3"></div>
+              </div>
+              <p style="font-size:12px;color:#1a2332;font-weight:500;margin:6px 0">"I'm feeling dizzy after taking..."</p>
+              <div class="voice-time">0:03</div>
+            </div>
+            <div class="input-bar">
+              <input class="input-field" value="I'm feeling dizzy after taking..." disabled style="border:1.5px solid #0A7E8C">
+              <div class="send-btn mic active">⏹</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhancement 2: Dynamic Quick Reply Chips -->
+  <div class="section">
+    <h2>2. Dynamic Quick Reply Chips — Context-aware follow-ups</h2>
+    <p class="section-desc">After each AI response, show 2-3 contextual follow-up chips based on what was discussed. Replaces the static hardcoded chips.</p>
+
+    <div class="mockup-row">
+      <div class="phone-frame">
+        <div class="phone-notch"></div>
+        <div class="phone-content">
+          <div class="chat-header">
+            <span class="icon">✨</span>
+            <div>
+              <div class="title">MedCare AI</div>
+              <div class="sub">Health Companion</div>
+            </div>
+          </div>
+          <div class="disclaimer">ℹ️ I'm your health companion, not your doctor.</div>
+          <div class="messages">
+            <div class="msg msg-user">
+              <div class="msg-bubble">I have a headache after taking Metformin</div>
+            </div>
+            <div class="msg msg-ai">
+              <div class="ai-badge">✨ MedCare AI</div>
+              <div class="msg-bubble">
+                Headaches can be a common side effect when starting Metformin. Here's what you should know:<br><br>
+                <strong>Usually temporary</strong> — most people see this improve within 1-2 weeks<br><br>
+                <strong>Stay hydrated</strong> — Metformin works better with adequate water intake<br><br>
+                <strong>Take with food</strong> — this reduces side effects significantly
+
+                <div class="dynamic-chips" style="position:relative">
+                  <span class="dynamic-chip">😵 Other side effects?</span>
+                  <span class="dynamic-chip">📝 Log this symptom</span>
+                  <span class="dynamic-chip">👨‍⚕️ Talk to doctor?</span>
+                </div>
+              </div>
+              <div class="annotation top" style="position:relative;display:inline-block;margin-top:8px;margin-left:8px">
+                NEW: Chips generated from response context
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:280px">
+        <div class="feature-card" style="margin-bottom:12px">
+          <h3>How chips are generated</h3>
+          <p>The AI response includes a structured <code>suggested_replies</code> field. The LLM system prompt instructs it to suggest 2-3 natural follow-ups based on the conversation context.</p>
+          <div class="tech">
+            <span class="tech-tag">LLM system prompt</span>
+            <span class="tech-tag">JSON parsing</span>
+            <span class="tech-tag">Fallback to static</span>
+          </div>
+        </div>
+        <div class="feature-card" style="margin-bottom:12px">
+          <h3>Chip types</h3>
+          <p><strong>Explore deeper:</strong> "Other side effects?", "Is this normal?"<br>
+          <strong>Take action:</strong> "Log symptom", "Talk to doctor"<br>
+          <strong>Navigate:</strong> "View my timeline", "Check medicines"</p>
+        </div>
+        <div class="feature-card">
+          <h3>Fallback behavior</h3>
+          <p>If LLM doesn't return chips (or mock mode), fall back to context-based rules: symptom mentioned → offer "Log symptom", medicine mentioned → offer "Side effects?", etc.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Enhancement 3: Chat Sessions -->
+  <div class="section">
+    <h2>3. Chat Session Management — Organized conversation history</h2>
+    <p class="section-desc">Instead of one endless thread, organize chats into sessions. New session per day or manual "New Chat". Browse past conversations.</p>
+
+    <div class="mockup-row">
+      <div>
+        <p style="font-size:11px;font-weight:600;color:#94a3b8;margin-bottom:8px;text-transform:uppercase">Chat history menu (from ••• menu)</p>
+        <div class="session-list" style="width:320px">
+          <div style="padding:12px 16px;border-bottom:1px solid #e2e8f0;display:flex;align-items:center;justify-content:space-between">
+            <span style="font-size:14px;font-weight:700">Chat History</span>
+            <button style="background:#0A7E8C;color:white;border:none;border-radius:8px;padding:6px 12px;font-size:11px;font-weight:600;cursor:pointer">+ New Chat</button>
+          </div>
+          <div class="session-item" style="background:#f8fafb">
+            <div class="session-icon">💊</div>
+            <div class="session-info">
+              <div class="session-title">Metformin side effects</div>
+              <div class="session-preview">Headaches can be a common side effect...</div>
+            </div>
+            <div style="text-align:right">
+              <div class="session-badge">Active</div>
+              <div class="session-time" style="margin-top:4px">Just now</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-icon">📊</div>
+            <div class="session-info">
+              <div class="session-title">Recovery progress check</div>
+              <div class="session-preview">Your adherence is improving! 85% this week...</div>
+            </div>
+            <div style="text-align:right">
+              <div class="session-time">Yesterday</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-icon">🍽️</div>
+            <div class="session-info">
+              <div class="session-title">Diet with blood thinners</div>
+              <div class="session-preview">Avoid excessive vitamin K foods like...</div>
+            </div>
+            <div style="text-align:right">
+              <div class="session-time">Mar 15</div>
+            </div>
+          </div>
+          <div class="session-item">
+            <div class="session-icon">😰</div>
+            <div class="session-info">
+              <div class="session-title">Anxiety about surgery</div>
+              <div class="session-preview">It's completely natural to feel nervous...</div>
+            </div>
+            <div style="text-align:right">
+              <div class="session-time">Mar 12</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="flex:1;min-width:280px">
+        <div class="feature-card" style="margin-bottom:12px">
+          <h3>Session data model</h3>
+          <p>New <code>ChatSession</code> SwiftData model: id, title (auto-generated from first user message), createdAt, profileId. ChatMessage gets a <code>sessionId</code> field.</p>
+          <div class="tech">
+            <span class="tech-tag">SwiftData @Model</span>
+            <span class="tech-tag">Migration</span>
+          </div>
+        </div>
+        <div class="feature-card" style="margin-bottom:12px">
+          <h3>Auto-title generation</h3>
+          <p>Session title = first user message, truncated to 40 chars. Can optionally ask LLM for a better title after 3+ messages.</p>
+        </div>
+        <div class="feature-card" style="margin-bottom:12px">
+          <h3>Multi-turn context</h3>
+          <p>When loading a session, pass last 10 messages as context to LLM. This gives the AI memory within a conversation.</p>
+          <div class="tech">
+            <span class="tech-tag">Context window management</span>
+          </div>
+        </div>
+        <div class="feature-card">
+          <h3>New session triggers</h3>
+          <p>Auto-create new session: first message of the day, or manually via "New Chat" button. Old sessions are read-only browsable.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Summary -->
+  <div class="section">
+    <h2>Implementation Summary</h2>
+    <div class="grid-3">
+      <div class="feature-card" style="border-left-color:#ef4444">
+        <h3>🎤 Voice Input</h3>
+        <p>New: <code>SpeechService.swift</code><br>
+        Modify: <code>AIChatView.swift</code> (input bar)<br>
+        Permission: <code>NSSpeechRecognitionUsageDescription</code></p>
+        <div class="tech">
+          <span class="tech-tag">Speech.framework</span>
+          <span class="tech-tag">AVAudioSession</span>
+          <span class="tech-tag">en-IN + hi-IN</span>
+        </div>
+      </div>
+      <div class="feature-card" style="border-left-color:#f59e0b">
+        <h3>💬 Dynamic Chips</h3>
+        <p>Modify: <code>AIChatService.swift</code> (prompt)<br>
+        Modify: <code>AIChatView.swift</code> (chip rendering)<br>
+        Modify: <code>ChatMessage.swift</code> (add suggestedReplies)</p>
+        <div class="tech">
+          <span class="tech-tag">LLM prompt engineering</span>
+          <span class="tech-tag">JSON parsing</span>
+        </div>
+      </div>
+      <div class="feature-card" style="border-left-color:#0A7E8C">
+        <h3>📋 Chat Sessions</h3>
+        <p>New: <code>ChatSession.swift</code> model<br>
+        New: <code>ChatHistoryView.swift</code><br>
+        Modify: <code>AIChatService.swift</code> (session mgmt)<br>
+        Migration: add sessionId to ChatMessage</p>
+        <div class="tech">
+          <span class="tech-tag">SwiftData migration</span>
+          <span class="tech-tag">NavigationStack</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

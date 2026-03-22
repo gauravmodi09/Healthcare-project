@@ -7,6 +7,10 @@ import {
   DashboardStats,
   DemographicData,
   ConditionData,
+  PaymentTransaction,
+  StaffMember,
+  Department,
+  WorkingHours,
 } from "@/types";
 
 export const hospital: Hospital = {
@@ -483,4 +487,53 @@ export const adherenceData = [
   { range: "75-89%", count: 377, percentage: 30 },
   { range: "50-74%", count: 302, percentage: 24 },
   { range: "Below 50%", count: 175, percentage: 14 },
+];
+
+export const paymentTransactions: PaymentTransaction[] = [
+  { id: "txn1", date: "2026-03-21", patientId: "p1", patientName: "Ramesh Kumar", doctorId: "d1", doctorName: "Dr. Ananya Sharma", amount: 800, mode: "upi", status: "paid", invoiceId: "INV-2026-0042", description: "Consultation - Cardiology" },
+  { id: "txn2", date: "2026-03-21", patientId: "p2", patientName: "Sunita Devi", doctorId: "d4", doctorName: "Dr. Arjun Mehta", amount: 500, mode: "cash", status: "paid", invoiceId: "INV-2026-0043", description: "Consultation - General Medicine" },
+  { id: "txn3", date: "2026-03-21", patientId: "p10", patientName: "Asha Bhosale", doctorId: "d1", doctorName: "Dr. Ananya Sharma", amount: 800, mode: "upi", status: "pending", description: "Consultation - Cardiology" },
+  { id: "txn4", date: "2026-03-20", patientId: "p5", patientName: "Suresh Jadhav", doctorId: "d2", doctorName: "Dr. Vikram Patel", amount: 700, mode: "insurance", status: "paid", invoiceId: "INV-2026-0040", description: "Consultation - Orthopedics" },
+  { id: "txn5", date: "2026-03-20", patientId: "p4", patientName: "Meena Kulkarni", doctorId: "d3", doctorName: "Dr. Priya Deshmukh", amount: 600, mode: "upi", status: "paid", invoiceId: "INV-2026-0039", description: "Consultation - Dermatology" },
+  { id: "txn6", date: "2026-03-20", patientId: "p8", patientName: "Lakshmi Menon", doctorId: "d4", doctorName: "Dr. Arjun Mehta", amount: 500, mode: "card", status: "paid", invoiceId: "INV-2026-0038", description: "Consultation - General Medicine" },
+  { id: "txn7", date: "2026-03-19", patientId: "p3", patientName: "Anil Patil", doctorId: "d1", doctorName: "Dr. Ananya Sharma", amount: 1200, mode: "insurance", status: "paid", invoiceId: "INV-2026-0036", description: "Consultation + ECG - Cardiology" },
+  { id: "txn8", date: "2026-03-19", patientId: "p7", patientName: "Govind Rao", doctorId: "d8", doctorName: "Dr. Sanjay Gupta", amount: 1000, mode: "upi", status: "paid", invoiceId: "INV-2026-0035", description: "Consultation - Neurology" },
+  { id: "txn9", date: "2026-03-18", patientId: "p11", patientName: "Manoj Shirke", doctorId: "d4", doctorName: "Dr. Arjun Mehta", amount: 500, mode: "cash", status: "refunded", invoiceId: "INV-2026-0033", description: "Consultation - General Medicine" },
+  { id: "txn10", date: "2026-03-18", patientId: "p6", patientName: "Priya Nair", doctorId: "d5", doctorName: "Dr. Sneha Iyer", amount: 600, mode: "upi", status: "paid", invoiceId: "INV-2026-0032", description: "Consultation - Pediatrics" },
+  { id: "txn11", date: "2026-03-17", patientId: "p9", patientName: "Deepak Chavan", doctorId: "d6", doctorName: "Dr. Rohan Joshi", amount: 550, mode: "cash", status: "paid", invoiceId: "INV-2026-0030", description: "Consultation - ENT" },
+  { id: "txn12", date: "2026-03-17", patientId: "p12", patientName: "Rekha Sawant", doctorId: "d7", doctorName: "Dr. Kavita Nair", amount: 700, mode: "upi", status: "failed", description: "Consultation - Gynecology" },
+];
+
+export const staffMembers: StaffMember[] = [
+  { id: "s1", name: "Dr. Ananya Sharma", role: "doctor", department: "Cardiology", phone: "+91 98765 43210", status: "active", joinedAt: "2023-03-01" },
+  { id: "s2", name: "Dr. Vikram Patel", role: "doctor", department: "Orthopedics", phone: "+91 98765 43211", status: "active", joinedAt: "2023-04-15" },
+  { id: "s3", name: "Nurse Priyanka", role: "nurse", department: "General Ward", phone: "+91 98765 11111", status: "active", joinedAt: "2023-05-01" },
+  { id: "s4", name: "Nurse Shalini", role: "nurse", department: "ICU", phone: "+91 98765 11112", status: "active", joinedAt: "2023-06-10" },
+  { id: "s5", name: "Ravi Desai", role: "receptionist", department: "Front Desk", phone: "+91 98765 22222", status: "active", joinedAt: "2023-07-01" },
+  { id: "s6", name: "Amit Joshi", role: "lab-tech", department: "Pathology", phone: "+91 98765 33333", status: "active", joinedAt: "2023-08-15" },
+  { id: "s7", name: "Neha Patkar", role: "pharmacist", department: "Pharmacy", phone: "+91 98765 44444", status: "on-leave", joinedAt: "2023-09-01" },
+  { id: "s8", name: "Dr. Rajesh Kulkarni", role: "admin", department: "Administration", phone: "+91 98765 55555", status: "active", joinedAt: "2023-01-15" },
+];
+
+export const departments: Department[] = [
+  { id: "dep1", name: "Cardiology", headDoctorId: "d1", staffCount: 8 },
+  { id: "dep2", name: "Orthopedics", headDoctorId: "d2", staffCount: 6 },
+  { id: "dep3", name: "Dermatology", headDoctorId: "d3", staffCount: 4 },
+  { id: "dep4", name: "General Medicine", headDoctorId: "d4", staffCount: 12 },
+  { id: "dep5", name: "Pediatrics", headDoctorId: "d5", staffCount: 7 },
+  { id: "dep6", name: "ENT", headDoctorId: "d6", staffCount: 4 },
+  { id: "dep7", name: "Gynecology", headDoctorId: "d7", staffCount: 6 },
+  { id: "dep8", name: "Neurology", headDoctorId: "d8", staffCount: 5 },
+  { id: "dep9", name: "Pathology", staffCount: 3 },
+  { id: "dep10", name: "Pharmacy", staffCount: 2 },
+];
+
+export const workingHours: WorkingHours[] = [
+  { day: "Monday", open: "08:00", close: "20:00", isOpen: true },
+  { day: "Tuesday", open: "08:00", close: "20:00", isOpen: true },
+  { day: "Wednesday", open: "08:00", close: "20:00", isOpen: true },
+  { day: "Thursday", open: "08:00", close: "20:00", isOpen: true },
+  { day: "Friday", open: "08:00", close: "20:00", isOpen: true },
+  { day: "Saturday", open: "09:00", close: "14:00", isOpen: true },
+  { day: "Sunday", open: "09:00", close: "13:00", isOpen: false },
 ];

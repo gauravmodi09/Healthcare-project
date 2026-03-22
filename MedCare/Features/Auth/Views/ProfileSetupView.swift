@@ -2,9 +2,10 @@ import SwiftUI
 
 struct ProfileSetupView: View {
     let phoneNumber: String
+    @Environment(\.dismiss) private var dismiss
     @Environment(DataService.self) private var dataService
     @State private var name = ""
-    @State private var dateOfBirth = Calendar.current.date(byAdding: .year, value: -25, to: Date())!
+    @State private var dateOfBirth = Calendar.current.date(byAdding: .year, value: -25, to: Date()) ?? Date()
     @State private var showDatePicker = false
     @State private var selectedGender: Gender?
     @State private var knownConditions: [String] = []
@@ -167,6 +168,14 @@ struct ProfileSetupView: View {
         }
         .background(Color.white)
         .navigationBarBackButtonHidden(true)
+        .navigationTitle("Profile Setup")
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .cancellationAction) {
+                Button("Skip") { dismiss() }
+                    .foregroundStyle(MCColors.textSecondary)
+            }
+        }
     }
 
     private func completeSetup() {
@@ -180,6 +189,7 @@ struct ProfileSetupView: View {
         )
         profile.knownConditions = knownConditions
         dataService.save()
+        dismiss()
     }
 }
 

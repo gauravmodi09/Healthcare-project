@@ -14,6 +14,9 @@ struct EpisodeDetailView: View {
     @State private var selectedTab: EpisodeTab = .plan
     @State private var showQuickAddMedicine = false
     @State private var showSymptomLog = false
+    @State private var isLoading = true
+    @State private var showSnoozeOptions = false
+    @State private var pendingSnoozeDose: DoseLog?
 
     private var episode: Episode? {
         episodes.first { $0.id == episodeId }
@@ -29,36 +32,52 @@ struct EpisodeDetailView: View {
     var body: some View {
         if let episode {
             VStack(spacing: 0) {
-                // Episode header
-                episodeHeader(episode)
-
-                // Tab picker
-                Picker("Tab", selection: $selectedTab) {
-                    ForEach(EpisodeTab.allCases, id: \.self) { tab in
-                        Text(tab.rawValue).tag(tab)
+                if isLoading {
+                    VStack(spacing: MCSpacing.md) {
+                        SkeletonCardView()
+                        SkeletonCardView()
+                        SkeletonCardView()
                     }
-                }
-                .pickerStyle(.segmented)
-                .padding(.horizontal, MCSpacing.screenPadding)
-                .padding(.vertical, MCSpacing.sm)
+                    .padding(.horizontal, MCSpacing.screenPadding)
+                    .padding(.top, MCSpacing.lg)
+                } else {
+                    // Episode header
+                    episodeHeader(episode)
 
-                // Tab content
-                ScrollView {
-                    switch selectedTab {
-                    case .plan:
-                        planTab(episode)
-                    case .reminders:
-                        remindersTab(episode)
-                    case .symptoms:
-                        symptomsTab(episode)
-                    case .files:
-                        EpisodeFilesTabView(episode: episode)
+                    // Tab picker
+                    Picker("Tab", selection: $selectedTab) {
+                        ForEach(EpisodeTab.allCases, id: \.self) { tab in
+                            Text(tab.rawValue).tag(tab)
+                        }
+                    }
+                    .pickerStyle(.segmented)
+                    .padding(.horizontal, MCSpacing.screenPadding)
+                    .padding(.vertical, MCSpacing.sm)
+
+                    // Tab content
+                    ScrollView {
+                        switch selectedTab {
+                        case .plan:
+                            planTab(episode)
+                        case .reminders:
+                            remindersTab(episode)
+                        case .symptoms:
+                            symptomsTab(episode)
+                        case .files:
+                            EpisodeFilesTabView(episode: episode)
+                        }
                     }
                 }
             }
             .background(MCColors.backgroundLight)
             .navigationTitle(episode.title)
             .navigationBarTitleDisplayMode(.inline)
+            .task {
+                try? await Task.sleep(nanoseconds: 300_000_000)
+                withAnimation(.easeOut(duration: 0.3)) {
+                    isLoading = false
+                }
+            }
             .navigationDestination(for: DocumentNavID.self) { nav in
                 DocumentDetailView(documentId: nav.id)
             }
@@ -71,6 +90,14 @@ struct EpisodeDetailView: View {
                     SymptomLogView(episodeId: episode.id)
                         .environment(dataService)
                 }
+            }
+            .confirmationDialog("Snooze Duration", isPresented: $showSnoozeOptions, titleVisibility: .visible) {
+                Button("5 minutes") { handleEpisodeSnooze(minutes: 5) }
+                Button("10 minutes") { handleEpisodeSnooze(minutes: 10) }
+                Button("15 minutes") { handleEpisodeSnooze(minutes: 15) }
+                Button("30 minutes") { handleEpisodeSnooze(minutes: 30) }
+                Button("1 hour") { handleEpisodeSnooze(minutes: 60) }
+                Button("Cancel", role: .cancel) { pendingSnoozeDose = nil }
             }
         } else {
             ContentUnavailableView("Episode not found", systemImage: "doc.questionmark")
@@ -94,12 +121,16 @@ struct EpisodeDetailView: View {
                         Label(doctor, systemImage: "stethoscope")
                             .font(MCTypography.footnote)
                             .foregroundStyle(MCColors.textSecondary)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.85)
                     }
 
                     if let diagnosis = episode.diagnosis {
                         Label(diagnosis, systemImage: "heart.text.clipboard")
                             .font(MCTypography.footnote)
                             .foregroundStyle(MCColors.textSecondary)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.85)
                     }
                 }
 
@@ -232,23 +263,17 @@ struct EpisodeDetailView: View {
                         case .skipped:
                             UIImpactFeedbackGenerator(style: .light).impactOccurred()
                         case .snoozed:
-                            UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+                            // Show snooze duration picker instead of hardcoded 15 min
+                            pendingSnoozeDose = dose
+                            showSnoozeOptions = true
+                            return
                         default:
                             break
                         }
                         dataService.logDose(dose, status: status)
-                        // End or update Live Activity
                         Task {
                             if status == .taken || status == .skipped {
                                 await liveActivityService.endActivity(doseLogId: dose.id)
-                            } else if status == .snoozed {
-                                let snoozedUntil = Date().addingTimeInterval(15 * 60)
-                                await liveActivityService.updateActivity(
-                                    doseLogId: dose.id,
-                                    status: .snoozed,
-                                    minutesRemaining: 15,
-                                    snoozedUntil: snoozedUntil
-                                )
                             }
                         }
                     }
@@ -257,6 +282,35 @@ struct EpisodeDetailView: View {
             }
         }
         .padding(.vertical, MCSpacing.md)
+    }
+
+    // MARK: - Snooze Handler
+
+    private func handleEpisodeSnooze(minutes: Int) {
+        guard let dose = pendingSnoozeDose else { return }
+        pendingSnoozeDose = nil
+
+        UIImpactFeedbackGenerator(style: .soft).impactOccurred()
+        dataService.logDose(dose, status: .snoozed)
+
+        Task {
+            if let med = dose.medicine {
+                await NotificationService.shared.scheduleSnooze(
+                    medicineId: med.id,
+                    medicineName: med.brandName,
+                    dosage: med.dosage,
+                    doseLogId: dose.id,
+                    minutes: minutes
+                )
+            }
+            let snoozedUntil = Date().addingTimeInterval(Double(minutes) * 60)
+            await liveActivityService.updateActivity(
+                doseLogId: dose.id,
+                status: .snoozed,
+                minutesRemaining: minutes,
+                snoozedUntil: snoozedUntil
+            )
+        }
     }
 
     // MARK: - Symptoms Tab
@@ -319,6 +373,8 @@ struct MedicineCard: View {
                         Text(medicine.brandName)
                             .font(MCTypography.bodyMedium)
                             .foregroundStyle(MCColors.textPrimary)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
                         if let generic = medicine.genericName {
                             Text(generic)
                                 .font(MCTypography.caption)
@@ -685,6 +741,8 @@ struct DoseActionCard: View {
                     VStack(alignment: .leading, spacing: 2) {
                         Text(doseLog.medicine?.brandName ?? "Medicine")
                             .font(MCTypography.bodyMedium)
+                            .lineLimit(2)
+                            .minimumScaleFactor(0.8)
                         if let generic = doseLog.medicine?.genericName {
                             Text(generic)
                                 .font(MCTypography.caption)
@@ -787,7 +845,7 @@ struct DoseActionCard: View {
                             .clipShape(RoundedRectangle(cornerRadius: 8))
                         }
                         .accessibilityLabel("Snooze \(doseLog.medicine?.brandName ?? "medicine")")
-                        .accessibilityHint("Double tap to snooze this reminder for 15 minutes")
+                        .accessibilityHint("Double tap to choose a snooze duration")
                     }
                 }
             }

@@ -22,14 +22,27 @@ final class DataService {
             ChatSession.self,
             Nudge.self,
             CustomReminder.self,
-            Message.self
+            Message.self,
+            Doctor.self
         ])
         let config = ModelConfiguration(isStoredInMemoryOnly: false)
         do {
             modelContainer = try ModelContainer(for: schema, configurations: config)
             modelContext = ModelContext(modelContainer)
         } catch {
-            fatalError("Failed to create ModelContainer: \(error)")
+            // Schema migration failed — delete old store and recreate
+            let storeURL = config.url
+            try? FileManager.default.removeItem(at: storeURL)
+            // Also remove WAL and SHM files
+            try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("wal"))
+            try? FileManager.default.removeItem(at: storeURL.appendingPathExtension("shm"))
+            do {
+                modelContainer = try ModelContainer(for: schema, configurations: config)
+                modelContext = ModelContext(modelContainer)
+                UserDefaults.standard.removeObject(forKey: "mc_has_seeded_demo")
+            } catch {
+                fatalError("Failed to create ModelContainer after reset: \(error)")
+            }
         }
     }
 
@@ -265,7 +278,7 @@ final class DataService {
     func todaysDoses(for profile: UserProfile) -> [DoseLog] {
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date())
-        let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay)!
+        guard let endOfDay = calendar.date(byAdding: .day, value: 1, to: startOfDay) else { return [] }
 
         return profile.episodes
             .flatMap { $0.medicines }
@@ -347,7 +360,9 @@ final class DataService {
             try imageData.write(to: fileURL)
             return fileURL.path
         } catch {
+            #if DEBUG
             print("Failed to save image: \(error)")
+            #endif
             return nil
         }
     }
@@ -750,7 +765,7 @@ final class DataService {
     func extendDoseLogsIfNeeded(for profile: UserProfile) {
         let calendar = Calendar.current
         let now = Date()
-        let threeDaysFromNow = calendar.date(byAdding: .day, value: 3, to: now)!
+        guard let threeDaysFromNow = calendar.date(byAdding: .day, value: 3, to: now) else { return }
 
         let chronicMedicines = profile.episodes
             .flatMap { $0.medicines }
@@ -769,7 +784,7 @@ final class DataService {
 
             // If latest log is within 3 days from now, extend
             if lastDate < threeDaysFromNow {
-                let dayAfterLast = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: lastDate))!
+                guard let dayAfterLast = calendar.date(byAdding: .day, value: 1, to: calendar.startOfDay(for: lastDate)) else { continue }
 
                 for dayOffset in 0..<7 {
                     guard let date = calendar.date(byAdding: .day, value: dayOffset, to: dayAfterLast) else { continue }
@@ -875,7 +890,8 @@ final class DataService {
         }.count
 
         // Missed days this week
-        let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now))!
+        guard let startOfWeek = calendar.date(from: calendar.dateComponents([.yearForWeekOfYear, .weekOfYear], from: now)) else { return }
+
         let weekLogs = logsByDay.filter { $0.key >= startOfWeek && $0.key <= now }
         let missedDaysThisWeek = weekLogs.values.filter { dayLogs in
             dayLogs.contains { $0.status == .missed || $0.status == .skipped }
@@ -993,7 +1009,9 @@ final class DataService {
             try csv.write(to: tempURL, atomically: true, encoding: .utf8)
             return tempURL
         } catch {
+            #if DEBUG
             print("Failed to write CSV: \(error)")
+            #endif
             return nil
         }
     }
@@ -1011,7 +1029,9 @@ final class DataService {
         do {
             try modelContext.save()
         } catch {
+            #if DEBUG
             print("Failed to save: \(error)")
+            #endif
         }
     }
 }

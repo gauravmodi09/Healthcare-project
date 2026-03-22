@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dail.ai — Full App Redesign Plan</title>
+<style>
+  *{margin:0;padding:0;box-sizing:border-box}
+  body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:#0f0f0f;color:#f0ede8;line-height:1.6}
+  .header{padding:24px 32px;border-bottom:1px solid rgba(255,255,255,0.06)}
+  .header h1{font-size:24px;font-weight:700;letter-spacing:-0.5px}
+  .header p{font-size:13px;color:rgba(255,255,255,0.4);margin-top:4px}
+  .content{max-width:1100px;margin:0 auto;padding:24px 32px}
+  .section{margin-bottom:40px}
+  .section h2{font-size:18px;font-weight:700;margin-bottom:16px;color:#f0ede8;display:flex;align-items:center;gap:8px}
+  .badge{display:inline-block;padding:3px 10px;border-radius:8px;font-size:10px;font-weight:700}
+  .badge-red{background:rgba(200,82,42,0.15);color:#C8522A}
+  .badge-teal{background:rgba(42,124,111,0.15);color:#2A7C6F}
+  .badge-purple{background:rgba(90,74,138,0.15);color:#9b8ec4}
+  .badge-gold{background:rgba(196,150,42,0.15);color:#C4962A}
+  .card{background:rgba(255,255,255,0.03);border:1px solid rgba(255,255,255,0.06);border-radius:14px;padding:20px;margin-bottom:12px}
+  .card h3{font-size:15px;font-weight:700;margin-bottom:6px}
+  .card p{font-size:13px;color:rgba(255,255,255,0.55);line-height:1.7}
+  .card .highlight{color:#C8522A;font-weight:600}
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .problem-card{border-left:3px solid #C0392B;padding-left:16px;margin-bottom:12px}
+  .problem-card h4{font-size:13px;font-weight:700;color:#f0ede8;margin-bottom:4px}
+  .problem-card p{font-size:12px;color:rgba(255,255,255,0.4);line-height:1.6}
+  .solution-card{border-left:3px solid #2A7C6F;padding-left:16px;margin-bottom:12px}
+  .solution-card h4{font-size:13px;font-weight:700;color:#2A7C6F;margin-bottom:4px}
+  .solution-card p{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6}
+  .feature-row{display:flex;gap:16px;align-items:stretch;margin-bottom:16px}
+  .feature-num{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;margin-top:2px}
+  .feature-detail{flex:1}
+  .feature-detail h3{font-size:14px;font-weight:700;margin-bottom:4px}
+  .feature-detail p{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.6}
+  .tech-tag{display:inline-block;font-size:9px;padding:2px 6px;border-radius:6px;font-weight:600;margin-right:4px;margin-top:6px}
+  .divider{height:1px;background:rgba(255,255,255,0.06);margin:32px 0}
+  .accent{color:#C8522A}
+  @media(max-width:768px){.grid-2,.grid-3{grid-template-columns:1fr}}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<div class="header">
+  <h1>Dail.ai — Full App Redesign</h1>
+  <p>Making the value obvious. Every screen must answer: "Why should I open this instead of ChatGPT?"</p>
+</div>
+
+<div class="content">
+
+  <!-- Problem -->
+  <div class="section">
+    <h2><span class="badge badge-red">PROBLEM</span> Why users don't see the value today</h2>
+    <div class="grid-2">
+      <div class="problem-card">
+        <h4>Looks like another notes app</h4>
+        <p>The home screen shows tasks + memories but doesn't demonstrate the AI intelligence. Users think "this is just Todoist with a different font."</p>
+      </div>
+      <div class="problem-card">
+        <h4>Meeting recording feels hidden</h4>
+        <p>The #1 wow feature — bot-free meeting recording — is buried in a small button. Should be front-and-center, impossible to miss.</p>
+      </div>
+      <div class="problem-card">
+        <h4>No "aha moment" in first 30 seconds</h4>
+        <p>The app opens to sample data. There's no guided first experience that makes users go "oh wow, this is different."</p>
+      </div>
+      <div class="problem-card">
+        <h4>Streaks feel like homework</h4>
+        <p>The streak is a number in a corner. No story, no motivation, no "why should I care?" The reflection feels optional, not essential.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core Redesign -->
+  <div class="section">
+    <h2><span class="badge badge-teal">REDESIGN</span> The 5 Pillars</h2>
+
+    <!-- Pillar 1: Meeting Intelligence -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="feature-num" style="background:rgba(192,57,43,0.15);color:#C0392B">1</div>
+        <div>
+          <h3>Meeting Intelligence — The Hero Feature</h3>
+          <span class="badge badge-red">Genspark-level</span>
+        </div>
+      </div>
+      <p>Meeting recording becomes the <span class="highlight">centerpiece</span>, not a side feature. One tap from anywhere — widget, home, calendar. The summary output is best-in-class.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="solution-card">
+          <h4>Big Record Button on Home</h4>
+          <p>Floating red ⏺ button always visible. Tap → recording starts in 500ms. No consent screen (already approved). System notification shows timer.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Genspark-style Meeting Summary</h4>
+          <p>After recording: TL;DR (2 sentences), Key Decisions (bullet), Action Items (with owners + due dates auto-linked to tasks), Open Questions, Full Transcript with speaker labels. Shareable as PDF.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Pre-Meeting Brief</h4>
+          <p>5 min before meeting: notification with context from last meeting with same title/attendees. "Last time you discussed X. Action item Y is still open."</p>
+        </div>
+        <div class="solution-card">
+          <h4>Meeting Analytics</h4>
+          <p>Talk-time ratio, meeting duration trends, action item completion rate. "You've had 12h of meetings this week — 3h more than average."</p>
+        </div>
+      </div>
+      <div>
+        <span class="tech-tag" style="background:rgba(200,82,42,0.1);color:#C8522A">Whisper large-v3</span>
+        <span class="tech-tag" style="background:rgba(42,124,111,0.1);color:#2A7C6F">Claude Sonnet</span>
+        <span class="tech-tag" style="background:rgba(196,150,42,0.1);color:#C4962A">Speaker diarization</span>
+      </div>
+    </div>
+
+    <!-- Pillar 2: Smart Todo -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="feature-num" style="background:rgba(42,124,111,0.15);color:#2A7C6F">2</div>
+        <div>
+          <h3>Smart Todo — Voice-First Task Management</h3>
+          <span class="badge badge-teal">Differentiator</span>
+        </div>
+      </div>
+      <p>Todos aren't just checkboxes. They're <span class="highlight">voice-recordable, AI-enriched, context-aware</span> items that know where they came from.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="solution-card">
+          <h4>Voice Todo Recording</h4>
+          <p>Hold mic button on any task → record voice note attached to that todo. "Let me explain what I mean by this task..." Transcribed and searchable.</p>
+        </div>
+        <div class="solution-card">
+          <h4>AI Task Enrichment</h4>
+          <p>"Send proposal" → AI adds context: "Related to Meijer BTEQ migration. Last discussed March 15 in ART call. Spot instance config doc due Thursday."</p>
+        </div>
+        <div class="solution-card">
+          <h4>Work/Personal Toggle</h4>
+          <p>Clear visual separation. Work = teal theme, Professional context, meeting-linked tasks. Personal = purple theme, life tasks, habits, reminders.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Natural Language Input</h4>
+          <p>"Add send proposal to work tasks due Thursday" → creates task, tags work, sets due date. "Remind me to call mom at 7pm" → task + reminder.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillar 3: Calendar -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="feature-num" style="background:rgba(196,150,42,0.15);color:#C4962A">3</div>
+        <div>
+          <h3>Calendar Intelligence — Not Just a Timeline</h3>
+          <span class="badge badge-gold">Must be strong</span>
+        </div>
+      </div>
+      <p>The calendar isn't a view of events — it's a <span class="highlight">command center</span> that shows what happened, what's coming, and what needs attention.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="solution-card">
+          <h4>Day View with Meeting Notes Inline</h4>
+          <p>Each meeting event shows: status (recorded/upcoming/missed), quick summary preview, action item count. Tap to expand full notes without leaving calendar.</p>
+        </div>
+        <div class="solution-card">
+          <h4>AI Focus Blocks</h4>
+          <p>Dail auto-detects your peak focus hours and suggests blocking them. Shows "2h deep work available" or "Today is fully booked — 6.5h meetings."</p>
+        </div>
+        <div class="solution-card">
+          <h4>Week Heat Map</h4>
+          <p>Color-coded week strip: green (light day), yellow (balanced), red (overloaded). At a glance know which days need protection.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Tasks on Timeline</h4>
+          <p>Tasks with due times appear on the calendar timeline alongside meetings. See your full day — meetings + tasks + focus blocks — in one view.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillar 4: Streaks & Purpose -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="feature-num" style="background:rgba(200,82,42,0.15);color:#C8522A">4</div>
+        <div>
+          <h3>Streaks & Purpose — Why You Keep Coming Back</h3>
+          <span class="badge badge-red">Retention engine</span>
+        </div>
+      </div>
+      <p>Streaks aren't a number — they're a <span class="highlight">story about who you are becoming</span>. The reflection becomes the most meaningful 30 seconds of your day.</p>
+      <div class="grid-2" style="margin-top:12px">
+        <div class="solution-card">
+          <h4>Streak Story on Home</h4>
+          <p>Not just "🔥 7" — show "7 days of showing up. Your longest streak: 15. Last break: 3 weeks ago." Make it personal, make it a narrative.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Weekly Wins Summary</h4>
+          <p>Every Sunday: "This week: 42 tasks completed, 6 meetings recorded, 5 reflections. Your most productive day: Wednesday." AI-generated celebration.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Streak Milestones</h4>
+          <p>7 days → "Week warrior" badge. 30 days → "Monthly master". 100 days → special animation. Share-worthy achievements that feel earned.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Evening Reflection Redesign</h4>
+          <p>Show the AI-generated day summary FIRST (wow factor), then mood picker, then optional journal. End with: "Streak extended! See you tomorrow at 7:30am."</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Pillar 5: AI Wow -->
+    <div class="card">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <div class="feature-num" style="background:rgba(90,74,138,0.15);color:#9b8ec4">5</div>
+        <div>
+          <h3>AI Wow Moments — Make Intelligence Visible</h3>
+          <span class="badge badge-purple">Differentiation</span>
+        </div>
+      </div>
+      <p>Every screen should have at least one moment where the user thinks <span class="highlight">"how did it know that?"</span></p>
+      <div class="grid-3" style="margin-top:12px">
+        <div class="solution-card">
+          <h4>Proactive Morning Brief</h4>
+          <p>"Today you have 3 meetings. The Meijer call has an open action item from last time. Your busiest block is 1-4pm."</p>
+        </div>
+        <div class="solution-card">
+          <h4>Context-Rich Reminders</h4>
+          <p>When "Plan Paris" reminder fires: attached is the flight research, hotel options, and your March 12 note about wanting to visit Le Marais.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Cross-Memory Connections</h4>
+          <p>"You mentioned headaches 3 times this week in reflections. Last time this happened was during the Meijer project crunch."</p>
+        </div>
+        <div class="solution-card">
+          <h4>Smart Capture Classification</h4>
+          <p>Type naturally → AI instantly classifies as task/reminder/note/question. Shows visual confirmation: "✓ Task created" with the right tags auto-applied.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Meeting Prep Nudge</h4>
+          <p>5 min before each meeting: push notification with last meeting's context, open action items, and key decisions to reference.</p>
+        </div>
+        <div class="solution-card">
+          <h4>Weekly Pattern Insights</h4>
+          <p>"You're most productive 9-11am. Your mood dips on Mondays. You complete 80% of tasks when set with due dates."</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Execution Plan -->
+  <div class="section">
+    <h2><span class="badge badge-gold">EXECUTION</span> Parallel Agent Strategy</h2>
+    <div class="grid-3">
+      <div class="card" style="border-left:3px solid #C8522A">
+        <h3>Agent 1: UI Redesign</h3>
+        <p>Redesign all 5 tabs using frontend-design plugin. Home, Calendar, Memory, Insights, Reflect. Mobile-first, following Dail design system.</p>
+        <div>
+          <span class="tech-tag" style="background:rgba(200,82,42,0.1);color:#C8522A">SwiftUI</span>
+          <span class="tech-tag" style="background:rgba(200,82,42,0.1);color:#C8522A">Design System</span>
+        </div>
+      </div>
+      <div class="card" style="border-left:3px solid #2A7C6F">
+        <h3>Agent 2: AI Features</h3>
+        <p>Meeting summaries (Genspark-level), voice todo recording, AI task enrichment, context cards, proactive briefs, pattern insights.</p>
+        <div>
+          <span class="tech-tag" style="background:rgba(42,124,111,0.1);color:#2A7C6F">Claude API</span>
+          <span class="tech-tag" style="background:rgba(42,124,111,0.1);color:#2A7C6F">Whisper</span>
+        </div>
+      </div>
+      <div class="card" style="border-left:3px solid #5A4A8A">
+        <h3>Agent 3: Backend + Data</h3>
+        <p>Supabase edge functions, meeting processing pipeline, embedding generation, streak persistence, notification scheduling.</p>
+        <div>
+          <span class="tech-tag" style="background:rgba(90,74,138,0.1);color:#9b8ec4">Supabase</span>
+          <span class="tech-tag" style="background:rgba(90,74,138,0.1);color:#9b8ec4">Edge Functions</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

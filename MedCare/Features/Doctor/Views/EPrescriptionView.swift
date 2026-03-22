@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct EPrescriptionView: View {
-    let patient: DoctorMockPatient
+    let patient: DoctorPatientData
     @Environment(\.dismiss) private var dismiss
 
     // Doctor info (mock)
@@ -741,5 +741,28 @@ struct PrescriptionEntry: Identifiable {
 }
 
 #Preview {
-    EPrescriptionView(patient: DoctorMockData.patients.first!)
+    EPrescriptionView(patient: DoctorPatientData(
+        id: UUID(),
+        name: "Preview Patient",
+        age: 45,
+        avatarEmoji: "\u{1F468}",
+        primaryCondition: "Hypertension",
+        status: .warning,
+        lastVitalLabel: "BP",
+        lastVitalValue: "142/92",
+        lastVitalTime: "2h ago",
+        adherencePercent: 68,
+        heartRate: 82,
+        bpSystolic: 142,
+        bpDiastolic: 92,
+        spO2: 97,
+        glucose: 110,
+        hrTrend: .stable,
+        bpTrend: .up,
+        spO2Trend: .stable,
+        glucoseTrend: .stable,
+        medications: [],
+        recentSymptoms: [],
+        dailyAdherence7Days: [100, 67, 100, 33, 100, 67, 100]
+    ))
 }

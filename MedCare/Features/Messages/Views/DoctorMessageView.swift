@@ -2,7 +2,7 @@ import SwiftUI
 import SwiftData
 
 struct DoctorMessageView: View {
-    let doctor: DoctorInfo
+    let doctor: Doctor
     @Environment(DataService.self) private var dataService
     @Environment(\.dismiss) private var dismiss
 
@@ -10,6 +10,7 @@ struct DoctorMessageView: View {
     @State private var isUrgent = false
     @State private var messages: [Message] = []
     @FocusState private var isInputFocused: Bool
+    @AppStorage("mc_demo_auto_reply") private var demoAutoReply = false
 
     private var threadId: UUID { doctor.id }
 
@@ -289,8 +290,8 @@ struct DoctorMessageView: View {
 
         UIImpactFeedbackGenerator(style: .light).impactOccurred()
 
-        // Simulate doctor auto-reply if online
-        if doctor.isOnline {
+        // Simulate doctor auto-reply only in demo mode
+        if demoAutoReply && doctor.isOnline {
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 let reply = Message(
                     threadId: threadId,
